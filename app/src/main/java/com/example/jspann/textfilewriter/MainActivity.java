@@ -1,6 +1,10 @@
 package com.example.jspann.textfilewriter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.*;
@@ -19,6 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        /*Intent intent = new Intent();
+        String pkgName = getApplicationContext().getPackageName();
+        PowerManager pm = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        //if(pm.isIgnoringBatteryOptimizations(pkgName)){
+        if(pm.isPowerSaveMode()){
+            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        }else{
+            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+            intent.setData(Uri.parse("package:"+pkgName));
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
