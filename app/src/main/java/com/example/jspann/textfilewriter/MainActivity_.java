@@ -18,7 +18,7 @@ import java.util.*;
 import android.os.Environment;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity_ extends AppCompatActivity {
     private String StrCorePath = (Environment.getExternalStorageDirectory()).toString();
 
     @Override
