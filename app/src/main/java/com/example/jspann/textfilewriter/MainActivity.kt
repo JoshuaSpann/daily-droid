@@ -70,9 +70,7 @@ class MainActivity : AppCompatActivity() {
 
             val file = File(rootPath, strLatestFilename)
 
-            var blnAppendToFile = true
             if (!file.exists()) {
-                blnAppendToFile = false
                 strDataBody = dteToday + "\n\n---\n\n" + strDataBody
             }
 
@@ -94,14 +92,14 @@ class MainActivity : AppCompatActivity() {
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
-    fun getCurrentTimeStampAsString(): String {
+    private fun getCurrentTimeStampAsString(): String {
         return SimpleDateFormat("HHmm").format(Date()).toString()
     }
 
 
     /* /  TEXT FIELD FUNCTIONS / */
     @Throws(Exception::class)
-    fun setTextFieldToFile(file: File) {
+    private fun setTextFieldToFile(file: File) {
         val strOriginalText = readFileContentsToString(file)
         (findViewById<View>(R.id.editText) as EditText).setText(strOriginalText)
         val ctx = applicationContext
@@ -109,7 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Throws(Exception::class)
-    fun setTextFieldToLatestFile() {
+    private fun setTextFieldToLatestFile() {
         val files = getListOfAllFilesInDir(getDirectoryPathToString())
         val latestFile = files[0]
         setTextFieldToFile(latestFile)
@@ -117,13 +115,13 @@ class MainActivity : AppCompatActivity() {
 
 
     /* /  HELPER FUNCTIONS  / */
-    fun getCurrentFormattedDateAsString(): String {
+    private fun getCurrentFormattedDateAsString(): String {
         val dteCurrentDate = Date()
         val dteFormat = SimpleDateFormat("yyyyMMdd")
         return dteFormat.format(dteCurrentDate).toString()
     }
 
-    fun getDirectoryPathToString(): String {
+    private fun getDirectoryPathToString(): String {
         val ctx = applicationContext
         val strDefaultDir = ctx.filesDir.toString() + "/DailyDroid/"
         val projectDir = File(strDefaultDir)
@@ -131,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         return strDefaultDir
     }
 
-    fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
+    private fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
         val filesInDir = getListOfAllFilesInDir(pathString)
 
         var intFileCounter = 0
@@ -145,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         return filenamesInDir
     }
 
-    fun getListOfAllFilesInDir(pathString: String): Array<File> {
+    private fun getListOfAllFilesInDir(pathString: String): Array<File> {
         val dir = File(pathString)
 
         val filesInDir = dir.listFiles()
@@ -153,12 +151,12 @@ class MainActivity : AppCompatActivity() {
         return filesInDir
     }
 
-    fun popup(data: Any) {
+    private fun popup(data: Any) {
         android.widget.Toast.makeText(applicationContext, data.toString(), Toast.LENGTH_LONG).show()
     }
 
     @Throws(Exception::class)
-    fun readFileContentsToString(file: File): String {
+    private fun readFileContentsToString(file: File): String {
         return Scanner(file).useDelimiter("\\A").next()
     }
 }
