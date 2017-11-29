@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //TODO - ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING!!!
+        //TODO - ADD COLORIZING FUNCTIONALITY
+        //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
+        /*TODO - ALLOW JOURNAL(entry)S TO BE GROUPED INTO FOLDER AND HAVE USER NAME JOURNAL FOLDER!!!
+          [-] MyNamedJournalFolder
+           |__[] Auto-JournalEntry.txt
+          [-] MyOtherNamedJournalFolder
+           |__[] Auto-JournalEntry2.txt
+           |__[] Auto-JournalEntryLatest.txt -- Put here by user choice
+         */
+
     }
 
     /*/  BUTTON CLICK FUNCTIONS /*/
@@ -57,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             FileWriter fwriter = new FileWriter(newFile);
-            fwriter.append("# " + getCurrentFormattedDateAsString() + "\n\n---\n\n");
+            fwriter.append("# " + getCurrentFormattedDateAsString()+getCurrentTimeStampAsString() + "\n\n---\n\n");
             fwriter.flush();
             fwriter.close();
             setTextFieldToLatestFile();
@@ -96,6 +106,19 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception e){
             popup(e);
         }
+    }
+    public void click_btnTimestamp(View view){
+        EditText txtMain = findViewById(R.id.editText);
+        String strDataBody = txtMain.getText().toString();
+        //Date dteCurrentTime = new Date();
+        //DateFormat dteCurrentTimeFormat = new SimpleDateFormat("HHmm");
+        //String strTimestamp = dteCurrentTimeFormat.format(dteCurrentTime).toString();
+        String strTimestamp = getCurrentTimeStampAsString();
+        txtMain.getText().insert(txtMain.getSelectionStart(), strTimestamp);
+    }
+
+    public String getCurrentTimeStampAsString(){
+        return new SimpleDateFormat("HHmm").format(new Date()).toString();
     }
 
 
