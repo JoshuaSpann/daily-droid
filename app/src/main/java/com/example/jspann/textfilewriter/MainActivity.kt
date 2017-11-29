@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     fun saveToFile(view: View) {
         val strFilenames = getListOfAllFilenamesInDir(getDirectoryPathToString())
         val strLatestFilename = strFilenames[0]
-        //((TextView) findViewById(R.id.debug_text)).setText(strLatestFilename);
 
         var strDataBody = (findViewById<View>(R.id.editText) as EditText).text.toString()
         try {
