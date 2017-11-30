@@ -10,6 +10,9 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.Toast
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +94,11 @@ class MainActivity : AppCompatActivity() {
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
+    fun click_btnColorLauncher(view: View){
+        val intent = Intent(this, ColorSelectorActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun getCurrentTimeStampAsString(): String {
         return SimpleDateFormat("HHmm").format(Date()).toString()
     }
@@ -103,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         (findViewById<View>(R.id.editText) as EditText).setText(strOriginalText)
         val ctx = applicationContext
         (findViewById<View>(R.id.debug_text) as TextView).text = ctx.filesDir.toString() + file.name
+        (findViewById<View>(R.id.textView_Title) as TextView).text = file.name
     }
 
     @Throws(Exception::class)

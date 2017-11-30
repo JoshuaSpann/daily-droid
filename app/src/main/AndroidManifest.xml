@@ -20,7 +20,7 @@
                 <!-- action android:name="android.intent.action.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/ -->
             </intent-filter>
         </activity>
-        <activity android:name=".ColorSelectorActivity"></activity>
+        <activity android:name=".ColorSelectorActivity" android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ class ColorSelectorActivity : AppCompatActivity() {
         btnBlueBright.setOnClickListener {
             popup("HI")
         }
+        //actionBar.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun popup(data: Any) {
