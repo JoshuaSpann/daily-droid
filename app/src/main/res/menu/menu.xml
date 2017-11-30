@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/menuitem_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="New" />
+    <item
+        android:id="@+id/menuitem_save"
+        android:icon="@drawable/ic_save_black_24dp"
+        android:title="Save" />
+    <item
+        android:id="@+id/menuitem_timestamp"
+        android:icon="@drawable/ic_timer_black_24dp"
+        android:title="Timestamp" />
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/menuitem_settings"
+        android:title="Settings" />
+</menu>

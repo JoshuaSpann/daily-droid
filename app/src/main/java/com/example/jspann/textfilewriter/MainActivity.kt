@@ -3,6 +3,7 @@ package com.example.jspann.textfilewriter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -16,9 +17,35 @@ class MainActivity : AppCompatActivity() {
 
     private val utils = Utils()
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean{
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val blnRetItem = super.onOptionsItemSelected(item)
+        when(item?.itemId){
+            R.id.menuitem_add -> {
+                this.createNewTextFile()
+                return blnRetItem
+            }
+            R.id.menuitem_save -> {
+                this.saveToFile()
+                return blnRetItem
+            }
+            R.id.menuitem_timestamp -> {
+                this.click_btnTimeStamp()
+            }
+        }
+        return blnRetItem
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //setSupportActionBar(findViewById<View>(R.id.toolbar2) as Toolbar)
 
         try {
             setTextFieldToLatestFile()
@@ -72,6 +99,9 @@ class MainActivity : AppCompatActivity() {
 
     /* /  BUTTON CLICK FUNCTIONS / */
     fun createNewTextFile(view: View) {
+        this.createNewTextFile()
+    }
+    private fun createNewTextFile(){
         val newFile = File(utils.getDirectoryPathToString(), utils.getCurrentFormattedDateAsString() + ".txt")
 
         if (newFile.exists()) {
@@ -92,6 +122,9 @@ class MainActivity : AppCompatActivity() {
 
     @Throws(Exception::class)
     fun saveToFile(view: View) {
+        this.saveToFile()
+    }
+    private fun saveToFile(){
         val strFilenames = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
         val strLatestFilename = strFilenames[0]
 
@@ -125,6 +158,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun click_btnTimestamp(view: View) {
+        this.click_btnTimeStamp()
+    }
+    private fun click_btnTimeStamp(){
         val txtMain = findViewById<EditText>(R.id.editText)
         val strDataBody = txtMain.text.toString()
         val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
@@ -143,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         val strOriginalText = utils.readFileContentsToString(file)
         (findViewById<View>(R.id.editText) as EditText).setText(strOriginalText)
         val ctx = applicationContext
-        (findViewById<View>(R.id.debug_text) as TextView).text = ctx.filesDir.toString() + file.name
+        (findViewById<View>(R.id.debug_text) as TextView).text = utils.getDirectoryPathToString() + file.name
         (findViewById<View>(R.id.textView_Title) as TextView).text = (file.name).substring(0,(file.name).length-4)
     }
 
