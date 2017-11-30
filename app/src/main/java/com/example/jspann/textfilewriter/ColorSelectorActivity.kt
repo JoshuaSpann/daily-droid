@@ -1,11 +1,10 @@
 package com.example.jspann.textfilewriter
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_color_selector.*
+import android.widget.Button
 
 class ColorSelectorActivity : AppCompatActivity() {
 
@@ -19,11 +18,19 @@ class ColorSelectorActivity : AppCompatActivity() {
             utils.popup(applicationContext, "HI")
         }
 
-        var buttons: List<View>
-        buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables()
-        //for(button: Button in buttons){
-        //
-        //}
+        var buttons: List<Button>
+        buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables() as List<Button>
+        for(button: Button in buttons){
+            button.setOnClickListener{
+                //utils.popup(applicationContext, button.background)
+                try {
+                    (findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.drawingCacheBackgroundColor)
+                }catch(e: Exception){
+                    utils.popup(applicationContext, e)
+                }
+                //this.finish()
+            }
+        }
         utils.popup(applicationContext, buttons[0].id)
     }
 

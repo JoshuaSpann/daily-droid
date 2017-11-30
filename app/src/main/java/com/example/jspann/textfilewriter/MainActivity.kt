@@ -1,17 +1,13 @@
 package com.example.jspann.textfilewriter
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
 
 import java.io.*
-import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.Toast
-import android.content.Intent
-import android.os.Environment
 
 
 class MainActivity : AppCompatActivity() {
@@ -93,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     fun click_btnTimestamp(view: View) {
         val txtMain = findViewById<EditText>(R.id.editText)
         val strDataBody = txtMain.text.toString()
-        val strTimestamp: String = utils.getCurrentTimeStampAsString()
+        val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
@@ -120,52 +116,4 @@ class MainActivity : AppCompatActivity() {
         setTextFieldToFile(latestFile)
     }
 
-
-    /* /  HELPER FUNCTIONS  / */
-    /*private fun getCurrentFormattedDateAsString(): String {
-        val dteCurrentDate = Date()
-        val dteFormat = SimpleDateFormat("yyyyMMdd")
-        return dteFormat.format(dteCurrentDate).toString()
-    }*/
-
-    /*private fun getDirectoryPathToString(): String {
-        //val ctx = applicationContext
-        //var strDefaultDir = ctx.filesDir.toString() + "/DailyDroid/"
-        var strDefaultDir = Environment.getExternalStorageDirectory().toString()
-        strDefaultDir+="/DailyDroid/"
-        val projectDir = File(strDefaultDir)
-        projectDir.mkdir()
-        return strDefaultDir
-    }
-    private fun getDirectoryPathToString(str_subdir: String): String {
-        var strDefaultDir:String = getDirectoryPathToString()+str_subdir
-        return strDefaultDir
-    }*/
-
-    /*private fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
-        val filesInDir = utils.getListOfAllFilesInDir(pathString)
-
-        var intFileCounter = 0
-        val filenamesInDir = arrayOfNulls<String>(filesInDir.size)
-
-        for (currFile in filesInDir) {
-            filenamesInDir[intFileCounter] = currFile.getName().toString()
-            intFileCounter++
-        }
-
-        return filenamesInDir
-    }*/
-
-    /*private fun getListOfAllFilesInDir(pathString: String): Array<File> {
-        val dir = File(pathString)
-
-        val filesInDir = dir.listFiles()
-        Arrays.sort(filesInDir!!, Collections.reverseOrder<Any>())
-        return filesInDir
-    }*/
-
-    /*@Throws(Exception::class)
-    private fun readFileContentsToString(file: File): String {
-        return Scanner(file).useDelimiter("\\A").next()
-    }*/
 }

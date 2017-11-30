@@ -24,7 +24,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@color/colorBlueDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@color/colorBlueLight"
         app:layout_constraintStart_toEndOf="@+id/btn_blue_dark"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -44,7 +44,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_blue_bright"
+        android:background="@color/colorBlueBright"
         app:layout_constraintStart_toEndOf="@+id/btn_blue_light"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -54,7 +54,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_green_light"
+        android:background="@color/colorGreenLight"
         app:layout_constraintStart_toEndOf="@+id/btn_green_dark"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
@@ -64,7 +64,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_green_dark"
+        android:background="@color/colorGreenDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
@@ -74,7 +74,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/colorOrangeDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
 
@@ -84,7 +84,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_orange_light"
+        android:background="@color/colorOrangeLight"
         app:layout_constraintStart_toEndOf="@+id/btn_orange"
         app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
 
@@ -94,7 +94,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_red_dark"
+        android:background="@color/colorRedDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_orange" />
 
@@ -103,7 +103,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:background="@android:color/holo_red_light"
+        android:background="@color/colorRedLight"
         app:layout_constraintStart_toEndOf="@+id/btn_red_dark"
         app:layout_constraintTop_toTopOf="@+id/btn_red_dark" />
 
@@ -113,7 +113,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_purple"
+        android:background="@color/colorPurpleLight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
 
@@ -133,7 +133,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#8f8"
+        android:background="@color/colorGreenBright"
         app:layout_constraintStart_toEndOf="@+id/btn_green_light"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 

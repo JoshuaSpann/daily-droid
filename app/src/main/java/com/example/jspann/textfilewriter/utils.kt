@@ -1,18 +1,12 @@
 package com.example.jspann.textfilewriter
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.view.*
-import android.widget.EditText
-import android.widget.TextView
+import android.os.Environment
+import android.widget.Toast
 
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.widget.Toast
-import android.content.Intent
-import android.os.Environment
 
 /**
  * Created by jspann on 11/29/2017.
