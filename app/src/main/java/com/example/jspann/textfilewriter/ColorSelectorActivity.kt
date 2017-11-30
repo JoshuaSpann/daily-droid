@@ -13,10 +13,6 @@ class ColorSelectorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_selector)
-        val btnBlueBright = findViewById<View>(R.id.btn_blue_bright)
-        btnBlueBright.setOnClickListener {
-            utils.popup(applicationContext, "HI")
-        }
 
         var buttons: List<Button>
         buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables() as List<Button>
@@ -24,14 +20,14 @@ class ColorSelectorActivity : AppCompatActivity() {
             button.setOnClickListener{
                 //utils.popup(applicationContext, button.background)
                 try {
-                    (findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.drawingCacheBackgroundColor)
+                    //TODO - Set MainActivity landing page color button bg to colorselector selected button, also store in config file?
+                    (findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
                 }catch(e: Exception){
                     utils.popup(applicationContext, e)
                 }
-                //this.finish()
+                this.finish()
             }
         }
-        utils.popup(applicationContext, buttons[0].id)
     }
 
 }
