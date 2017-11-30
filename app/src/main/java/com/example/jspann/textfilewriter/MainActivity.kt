@@ -3,6 +3,8 @@ package com.example.jspann.textfilewriter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
@@ -20,13 +22,43 @@ class MainActivity : AppCompatActivity() {
 
         try {
             setTextFieldToLatestFile()
+            setCursorToEndOfTxtField()
         } catch (e: Exception) {
-            utils.popup(applicationContext, e)
+            //utils.popup(applicationContext, e)
         }
 
         //TODO - ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING!!!
         //TODO - ADD COLORIZING FUNCTIONALITY
         //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
+        /*
+            Listener for characters time period after (x# characters?) entered?
+            Listen every few seconds and see if new content then save?
+        */
+        /*(findViewById<View>(R.id.editText) as EditText).addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?){
+
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){
+
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // Can Just Use without following code block, this method: saveToFile()
+            }
+        })
+        fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+            this.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun afterTextChanged(editable: Editable?) {
+                    afterTextChanged.invoke(editable.toString())
+                }
+            })
+        }
+        (findViewById<View>(R.id.editText) as EditText).afterTextChanged { saveToFile()  }*/
         /*TODO - ALLOW JOURNAL(entry)S TO BE GROUPED INTO FOLDER AND HAVE USER NAME JOURNAL FOLDER!!!
           [-] MyNamedJournalFolder
            |__[] Auto-JournalEntry.txt
@@ -55,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
+        setCursorToEndOfTxtField()
     }
 
     @Throws(Exception::class)
@@ -84,6 +117,11 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
+        setCursorToEndOfTxtField()
+    }
+    fun setCursorToEndOfTxtField(){
+        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
+        txtMain.setSelection(txtMain.text.length)
     }
 
     fun click_btnTimestamp(view: View) {
