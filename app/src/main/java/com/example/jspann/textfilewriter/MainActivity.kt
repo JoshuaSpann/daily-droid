@@ -1,11 +1,29 @@
+/**
+ * Daily Droid :: MainActivity
+ *
+ * PURPOSE:
+ *   Landing-point controller for the MainActivity, which is in charge of text editing, time-logging,
+ *   file creating/updating, and additional activity selection. Documenting input.
+ *
+ * MAIN CONTRIBUTORS:
+ *   Joshua Spann (jspann) - Author
+ *
+ * STRUCTURE:
+ *   imports
+ *   utilty and view declarations
+ *   launch controller
+ *   app bar menu controllers
+ *   button click functions
+ *   file management controllers
+ *   view controllers
+ **/
+
+/* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
@@ -15,35 +33,10 @@ import java.io.*
 
 class MainActivity : AppCompatActivity() {
 
+    /* /  UTILTY AND VIEW DECLARATIONS  / */
     private val utils = Utils()
 
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean{
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val blnRetItem = super.onOptionsItemSelected(item)
-        when(item?.itemId){
-            R.id.menuitem_add -> {
-                this.createNewTextFile()
-                return blnRetItem
-            }
-            R.id.menuitem_save -> {
-                this.saveToFile()
-                return blnRetItem
-            }
-            R.id.menuitem_timestamp -> {
-                this.click_btnTimeStamp()
-            }
-            R.id.menuitem_changecolor -> {
-                this.click_btnColorLauncher()
-            }
-        }
-        return blnRetItem
-    }
-
+    /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -99,11 +92,53 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /* /  APP BAR MENU CONTROLLERS  / */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean{
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
 
-    /* /  BUTTON CLICK FUNCTIONS / */
-    fun createNewTextFile(view: View) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val blnRetItem = super.onOptionsItemSelected(item)
+        when(item?.itemId){
+            R.id.menuitem_add -> {
+                this.createNewTextFile()
+                return blnRetItem
+            }
+            R.id.menuitem_save -> {
+                this.saveToFile()
+                return blnRetItem
+            }
+            R.id.menuitem_timestamp -> {
+                this.insertTimestampToEditText()
+            }
+            R.id.menuitem_changecolor -> {
+                this.launchColorSelectorActivity()
+            }
+        }
+        return blnRetItem
+    }
+
+    /* /  BUTTON CLICK FUNCTIONS  / */
+    fun button_toolbar_new__click(view: View) {
         this.createNewTextFile()
     }
+
+    @Throws(Exception::class)
+    fun button_toolbar_save__click(view: View) {
+        this.saveToFile()
+    }
+
+    fun button_toolbar_timestamp__click(view: View) {
+        this.insertTimestampToEditText()
+    }
+
+    fun button_toolbar_endoftext__click(view: View){
+        this.setCursorToEndOfTxtField()
+    }
+
+
+    /* /  FILE MANAGEMENT CONTROLLERS  / */
     private fun createNewTextFile(){
         val newFile = File(utils.getDirectoryPathToString(), utils.getCurrentFormattedDateAsString() + ".txt")
 
@@ -123,10 +158,6 @@ class MainActivity : AppCompatActivity() {
         setCursorToEndOfTxtField()
     }
 
-    @Throws(Exception::class)
-    fun saveToFile(view: View) {
-        this.saveToFile()
-    }
     private fun saveToFile(){
         val strFilenames = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
         val strLatestFilename = strFilenames[0]
@@ -156,44 +187,32 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
-        //setCursorToEndOfTxtField()
     }
 
-    fun click_endOfFileButton(view: View){
-        this.setCursorToEndOfTxtField()
-    }
-    private fun setCursorToEndOfTxtField(){
-        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
-        txtMain.setSelection(txtMain.text.length)
-    }
-    private fun resetCursorToLatestPosition(){
-        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
-        val latestPosition = txtMain.selectionStart
-        txtMain.setSelection(latestPosition)
+
+    /* /  VIEW CONTROLLERS  / */
+    /*   ACTIVITY MODIFIERS   */
+    private fun launchColorSelectorActivity(){
+        val intent = Intent(this, ColorSelectorActivity::class.java)
+        startActivity(intent)
     }
 
-    fun click_btnTimestamp(view: View) {
-        this.click_btnTimeStamp()
-    }
-    private fun click_btnTimeStamp(){
+    /*   EDIT TEXT FUNCTIONS   */
+    private fun insertTimestampToEditText(){
         val txtMain = findViewById<EditText>(R.id.editText)
         val strDataBody = txtMain.text.toString()
         val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
-    fun click_btnColorLauncher(view: View){
-        this.click_btnColorLauncher()
-    }
-    private fun click_btnColorLauncher(){
-        val intent = Intent(this, ColorSelectorActivity::class.java)
-        startActivity(intent)
+    private fun setCursorToEndOfTxtField(){
+        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
+        txtMain.setSelection(txtMain.text.length)
     }
 
-
-    /* /  TEXT FIELD FUNCTIONS / */
+    /*   TEXT FIELD FUNCTIONS  */
     @Throws(Exception::class)
-    private fun setTextFieldToFile(file: File) {
+    private fun setTextFieldToFileName(file: File) {
         val strOriginalText = utils.readFileContentsToString(file)
         (findViewById<View>(R.id.editText) as EditText).setText(strOriginalText)
         val ctx = applicationContext
@@ -205,7 +224,7 @@ class MainActivity : AppCompatActivity() {
     private fun setTextFieldToLatestFile() {
         val files = utils.getListOfAllFilesInDir(utils.getDirectoryPathToString())
         val latestFile = files[0]
-        setTextFieldToFile(latestFile)
+        setTextFieldToFileName(latestFile)
     }
 
 }

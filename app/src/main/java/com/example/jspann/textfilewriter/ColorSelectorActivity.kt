@@ -1,3 +1,20 @@
+/**
+ * Daily Droid :: ColorSelectorActivity
+ *
+ * PURPOSE:
+ *   Landing-point controller for the ColorSelectorActivity, which is in charge of selecting and
+ *   applying folder/document colors to color-configuration file.
+ *
+ * MAIN CONTRIBUTORS:
+ *   Joshua Spann (jspann) - Author
+ *
+ * STRUCTURE:
+ *   imports
+ *   utilty and view declarations
+ *   launch controller
+ **/
+
+/* /  INPORTS  / */
 package com.example.jspann.textfilewriter
 
 import android.os.Bundle
@@ -8,8 +25,10 @@ import android.widget.Button
 
 class ColorSelectorActivity : AppCompatActivity() {
 
+    /* /  UTILITY AND VIEW DECLARATIONS  / */
     private val utils = Utils()
 
+    /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_selector)
