@@ -21,7 +21,7 @@ class ColorSelectorActivity : AppCompatActivity() {
                 //utils.popup(applicationContext, button.background)
                 try {
                     //TODO - Set MainActivity landing page color button bg to colorselector selected button, also store in config file?
-                    (findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
+                    //(findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
                 }catch(e: Exception){
                     utils.popup(applicationContext, e)
                 }

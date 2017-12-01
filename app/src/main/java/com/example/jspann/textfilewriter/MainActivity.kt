@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity() {
             R.id.menuitem_timestamp -> {
                 this.click_btnTimeStamp()
             }
+            R.id.menuitem_changecolor -> {
+                this.click_btnColorLauncher()
+            }
         }
         return blnRetItem
     }
@@ -128,7 +131,8 @@ class MainActivity : AppCompatActivity() {
         val strFilenames = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
         val strLatestFilename = strFilenames[0]
 
-        var strDataBody = (findViewById<View>(R.id.editText) as EditText).text.toString()
+        var txtEditText = (findViewById<View>(R.id.editText) as EditText)
+        var strDataBody = txtEditText.text.toString()
         try {
             val dteToday = utils.getCurrentFormattedDateAsString()
 
@@ -142,19 +146,30 @@ class MainActivity : AppCompatActivity() {
             }
 
             val fwriter = FileWriter(file)
-            fwriter.append(strDataBody + "\n\n")
+            fwriter.append(strDataBody)
             fwriter.flush()
             fwriter.close()
 
+            val curCurrentPosition = txtEditText.selectionStart
             setTextFieldToLatestFile()
+            txtEditText.setSelection(curCurrentPosition)
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
-        setCursorToEndOfTxtField()
+        //setCursorToEndOfTxtField()
     }
-    fun setCursorToEndOfTxtField(){
+
+    fun click_endOfFileButton(view: View){
+        this.setCursorToEndOfTxtField()
+    }
+    private fun setCursorToEndOfTxtField(){
         val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
         txtMain.setSelection(txtMain.text.length)
+    }
+    private fun resetCursorToLatestPosition(){
+        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
+        val latestPosition = txtMain.selectionStart
+        txtMain.setSelection(latestPosition)
     }
 
     fun click_btnTimestamp(view: View) {
@@ -168,6 +183,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun click_btnColorLauncher(view: View){
+        this.click_btnColorLauncher()
+    }
+    private fun click_btnColorLauncher(){
         val intent = Intent(this, ColorSelectorActivity::class.java)
         startActivity(intent)
     }

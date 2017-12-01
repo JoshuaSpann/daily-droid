@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,93 +10,183 @@
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="353dp"
-        android:layout_height="368dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/debug_text"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="30dp"
+        android:layout_toEndOf="@id/toolbar3"
         android:ems="10"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/toolbar3"
         app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_colorLauncher" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <!--Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Save"
-        android:onClick="saveToFile"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/editText"
         android:drawableTop="@drawable/ic_save_black_24dp"
+        android:onClick="saveToFile"
+        android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
 
-    <Button
+    <!--Button
         android:id="@+id/button_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="New"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editText"
         android:drawableTop="@drawable/ic_add_black_24dp"
         android:onClick="createNewTextFile"
+        android:text="New"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
 
     <TextView
         android:id="@+id/debug_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_below="@+id/textView_Title"
+        android:layout_centerHorizontal="true"
         android:text="TextView"
+        android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <!--Button
         android:id="@+id/button_timestamp"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
         android:drawableTop="@drawable/ic_timer_black_24dp"
         android:onClick="click_btnTimestamp"
         android:text="Stamp"
         app:layout_constraintEnd_toStartOf="@+id/button_save"
         app:layout_constraintStart_toEndOf="@+id/button_new"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
 
-    <Button
+    <!--Button
         android:id="@+id/button_colorLauncher"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_alignBottom="@+id/textView_Title"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="11dp"
         android:background="#ccc"
         android:onClick="click_btnColorLauncher"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" /-->
 
     <TextView
         android:id="@+id/textView_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10sp"
         android:text="No Text File Loaded"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title"
         android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button_colorLauncher" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="9dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:elevation="4dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_toolbar_new"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2sp"
+                android:background="@color/colorPrimary"
+                android:drawableTop="@drawable/ic_add_black_24dp"
+                android:onClick="createNewTextFile"
+                android:text="New"
+                app:layout_constraintStart_toEndOf="@+id/button_new"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/button_toolbar_timestamp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2sp"
+                android:background="@color/colorPrimary"
+                android:drawableTop="@drawable/ic_timer_black_24dp"
+                android:onClick="click_btnTimestamp"
+                android:text="Stamp"
+                app:layout_constraintEnd_toStartOf="@+id/button_save"
+                app:layout_constraintStart_toEndOf="@+id/button_new"
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+            <Button
+                android:id="@+id/button_toolbar_save"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2sp"
+                android:background="@color/colorPrimary"
+                android:drawableTop="@drawable/ic_save_black_24dp"
+                android:onClick="saveToFile"
+                android:text="Save"
+                app:layout_constraintStart_toEndOf="@+id/button_toolbar_new"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/button_toolbar_endoftext"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:drawableTop="@drawable/ic_fast_forward_black_24dp"
+                android:onClick="click_endOfFileButton"
+                android:text="EOF"
+                app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <!--Button
+                android:id="@+id/bt_credit"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:background="@drawable/button_tab"
+                android:text="@string/bt_credit"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" /-->
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <!--android.support.v7.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -105,5 +197,6 @@
         android:minHeight="220dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /-->
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" /->
+</android.support.constraint.ConstraintLayout-->
+</RelativeLayout>

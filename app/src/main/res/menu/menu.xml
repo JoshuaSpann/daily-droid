@@ -13,6 +13,10 @@
         android:id="@+id/menuitem_timestamp"
         android:icon="@drawable/ic_timer_black_24dp"
         android:title="Timestamp" />
+    <item
+        android:id="@+id/menuitem_changecolor"
+        android:icon="@drawable/ic_color_lens_black_24dp"
+        android:title="Color" />
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/menuitem_settings"
