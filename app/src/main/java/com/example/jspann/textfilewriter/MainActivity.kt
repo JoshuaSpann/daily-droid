@@ -24,6 +24,7 @@ package com.example.jspann.textfilewriter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
@@ -34,6 +35,8 @@ import java.io.*
 class MainActivity : AppCompatActivity() {
 
     /* /  UTILTY AND VIEW DECLARATIONS  / */
+    //private var originalEditTextContent: String = ""
+    //private val editTextField = (findViewById<View>(R.id.editText) as EditText)
     private val utils = Utils()
 
     /* /  LAUNCH CONTROLLER  / */
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             setTextFieldToLatestFile()
+            //this.originalEditTextContent = this.editTextField.text.toString()
             setCursorToEndOfTxtField()
         } catch (e: Exception) {
             //utils.popup(applicationContext, e)
@@ -115,8 +119,21 @@ class MainActivity : AppCompatActivity() {
             R.id.menuitem_changecolor -> {
                 this.launchColorSelectorActivity()
             }
+            R.id.menuitem_resetText -> {
+                this.resetEditTextToGivenValue()
+            }
         }
         return blnRetItem
+    }
+    private fun resetEditTextToGivenValue(){
+        //this.editTextField.text = this.originalEditTextContent
+        setTextFieldToLatestFile()
+        setCursorToEndOfTxtField()
+    }
+    private fun refreshEditText(){
+        val curCurrentPosition = (findViewById<View>(R.id.editText) as EditText).selectionStart
+        setTextFieldToLatestFile()
+        (findViewById<View>(R.id.editText) as EditText).setSelection(curCurrentPosition)
     }
 
     /* /  BUTTON CLICK FUNCTIONS  / */
@@ -135,6 +152,10 @@ class MainActivity : AppCompatActivity() {
 
     fun button_toolbar_endoftext__click(view: View){
         this.setCursorToEndOfTxtField()
+    }
+
+    fun button_toolbar_refreshtext__click(view: View){
+        this.resetEditTextToGivenValue()
     }
 
 
@@ -181,9 +202,7 @@ class MainActivity : AppCompatActivity() {
             fwriter.flush()
             fwriter.close()
 
-            val curCurrentPosition = txtEditText.selectionStart
-            setTextFieldToLatestFile()
-            txtEditText.setSelection(curCurrentPosition)
+            this.refreshEditText()
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
