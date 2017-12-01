@@ -8,82 +8,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.jspann.textfilewriter.MainActivity">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/debug_text"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="30dp"
-        android:layout_toEndOf="@id/toolbar3"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toStartOf="@id/toolbar3"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!--Button
-        android:id="@+id/button_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/editText"
-        android:drawableTop="@drawable/ic_save_black_24dp"
-        android:onClick="saveToFile"
-        android:text="Save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
-
-    <!--Button
-        android:id="@+id/button_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText"
-        android:drawableTop="@drawable/ic_add_black_24dp"
-        android:onClick="createNewTextFile"
-        android:text="New"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
-
-    <TextView
-        android:id="@+id/debug_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_Title"
-        android:layout_centerHorizontal="true"
-        android:text="TextView"
-        android:textSize="8sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!--Button
-        android:id="@+id/button_timestamp"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true"
-        android:drawableTop="@drawable/ic_timer_black_24dp"
-        android:onClick="click_btnTimestamp"
-        android:text="Stamp"
-        app:layout_constraintEnd_toStartOf="@+id/button_save"
-        app:layout_constraintStart_toEndOf="@+id/button_new"
-        app:layout_constraintTop_toBottomOf="@+id/editText" /-->
-
-    <!--Button
-        android:id="@+id/button_colorLauncher"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignBottom="@+id/textView_Title"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="11dp"
-        android:background="#ccc"
-        android:onClick="click_btnColorLauncher"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /-->
-
     <TextView
         android:id="@+id/textView_Title"
         android:layout_width="wrap_content"
@@ -97,6 +21,33 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/debug_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_Title"
+        android:layout_centerHorizontal="true"
+        android:text="TextView"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/debug_text"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="30dp"
+        android:layout_toEndOf="@id/toolbar3"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toStartOf="@id/toolbar3"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.v7.widget.Toolbar
@@ -174,29 +125,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
 
-            <!--Button
-                android:id="@+id/bt_credit"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:background="@drawable/button_tab"
-                android:text="@string/bt_credit"
-                android:textColor="#ffffffff"
-                android:textStyle="bold" /-->
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
-
-    <!--android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="350dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:minHeight="220dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /->
-</android.support.constraint.ConstraintLayout-->
 </RelativeLayout>
