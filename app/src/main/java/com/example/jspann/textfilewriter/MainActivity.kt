@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun button_toolbar_refreshtext__click(view: View){
+        // Todo - Run check for no files in dir then return
         this.resetEditTextToGivenValue()
     }
 

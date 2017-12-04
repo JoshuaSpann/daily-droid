@@ -17,6 +17,8 @@
 /* /  INPORTS  / */
 package com.example.jspann.textfilewriter
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
@@ -26,6 +28,7 @@ import android.widget.Button
 class ColorSelectorActivity : AppCompatActivity() {
 
     /* /  UTILITY AND VIEW DECLARATIONS  / */
+    private var config = Config()
     private val utils = Utils()
 
     /* /  LAUNCH CONTROLLER  / */
@@ -37,10 +40,14 @@ class ColorSelectorActivity : AppCompatActivity() {
         buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables() as List<Button>
         for(button: Button in buttons){
             button.setOnClickListener{
-                //utils.popup(applicationContext, button.background)
+                val strButtonColor: String = Integer.toHexString((button.background as ColorDrawable).color)
+                utils.popup(applicationContext,strButtonColor)
                 try {
-                    //TODO - Set MainActivity landing page color button bg to colorselector selected button, also store in config file?
+                    //TODO - Set MainActivity landing page color bg to colorselector selected button, also store in config file?
                     //(findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
+                    val files = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
+                    config.fileColors.put(files[0].toString(), strButtonColor)
+                    config.write()
                 }catch(e: Exception){
                     utils.popup(applicationContext, e)
                 }

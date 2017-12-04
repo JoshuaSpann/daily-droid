@@ -13,6 +13,33 @@ import java.util.*
  */
 
 class Utils{
+    fun configFile_Create(config: Config){
+        val configFile = File(this.getDirectoryPathToString(),".config")
+        if(configFile.exists()){
+           return
+        }
+
+        // TODO - Create JSON of Config options array and save it to this file???
+        var strJsonProps = "{colors:[main: \"#fff\",accent: \"#222\"]}"
+        this.fileWrite(configFile, strJsonProps)
+    }
+    fun configFile_Read(): Config{
+        // TODO - Pull JSON of Config options and save it to array???
+        return Config()
+    }
+    //TODO - Create Data Model of config opts in array/propclass and modify using predefined set of functions
+    fun convertMutMapToJSONString(p_map: MutableMap<String,String>): String{
+        var strOutput = "["
+        var i = 0
+        for(currItem in p_map){
+            strOutput += currItem.key+": \""+currItem.value+"\""
+            if(i<p_map.size){
+                strOutput+=", "
+            }
+        }
+        strOutput+="]"
+        return strOutput
+    }
     fun getCurrentFormattedDateAsString(): String {
         val dteCurrentDate = Date()
         val dteFormat = SimpleDateFormat("yyyyMMdd")
@@ -62,5 +89,20 @@ class Utils{
     @Throws(Exception::class)
     fun readFileContentsToString(file: File): String {
         return Scanner(file).useDelimiter("\\A").next()
+    }
+
+    fun fileAppend(file: File, content: Any){
+        var strTextContent = content.toString()
+        val fwriter = FileWriter(file)
+        fwriter.append(strTextContent)
+        fwriter.flush()
+        fwriter.close()
+    }
+    fun fileWrite(file: File, content: Any){
+        var strTextContent = content.toString()
+        val fwriter = FileWriter(file)
+        fwriter.write(strTextContent)
+        fwriter.flush()
+        fwriter.close()
     }
 }
