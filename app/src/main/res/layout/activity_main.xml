@@ -8,13 +8,23 @@
     android:layout_height="match_parent"
     tools:context="com.example.jspann.textfilewriter.MainActivity">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/debug_text"
+        android:layout_centerHorizontal="true"
+        android:spinnerMode="dialog"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/textView_Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="No Text File Loaded"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
@@ -158,13 +168,5 @@
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText"
-        android:layout_toStartOf="@+id/textView_Title"
-        android:spinnerMode="dialog" />
 
 </RelativeLayout>

@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private var _textView_Title: TextView ?= null
     private var _debug_text: TextView ?= null
     private var _editText: EditText ?= null
+    private var _spinner: Spinner ?= null
 
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +49,15 @@ class MainActivity : AppCompatActivity() {
 
         //setSupportActionBar(findViewById<View>(R.id.toolbar2) as Toolbar)
         _textView_Title = (findViewById(R.id.textView_Title))
+        (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
+        /*(_textView_Title!!).setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                (_spinner!!).performClick()
+            }
+        })*/
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)
+        _spinner = findViewById<View>(R.id.spinner) as Spinner
 
         try {
             setTextFieldToLatestFile()
@@ -63,9 +71,9 @@ class MainActivity : AppCompatActivity() {
         (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                var spinner = findViewById<View>(R.id.spinner) as Spinner
-                setEditTextToFileContents(spinner.selectedItem.toString())
-                setChosenFilename(spinner.selectedItem.toString())
+                //var spinner = findViewById<View>(R.id.spinner) as Spinner
+                setEditTextToFileContents((_spinner!!).selectedItem.toString())
+                setChosenFilename((_spinner!!).selectedItem.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -123,6 +131,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val blnRetItem = super.onOptionsItemSelected(item)
         when(item?.itemId){
+            R.id.menuitem_open -> {
+                (_spinner!!).performClick()
+            }
             R.id.menuitem_changecolor -> {
                 this.launchColorSelectorActivity()
             }

@@ -15,6 +15,7 @@
     <color name="colorRedDark">#cc0000</color>
     <color name="colorRedLight">#ff4444</color>
     <color name="colorPurpleLight">#aa66cc</color>
+    <color name="colorWhite">#eee</color>
 
     <color name="colorText">#222</color>
     <color name="colorTextLight">#eee</color>
