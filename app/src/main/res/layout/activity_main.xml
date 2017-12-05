@@ -40,7 +40,8 @@
         android:layout_height="2dip"
         android:layout_below="@+id/debug_text"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorAccent" />
+        android:background="@color/colorAccent"
+        android:id="@+id/view" />
 
     <EditText
         android:id="@+id/editText"
@@ -157,4 +158,13 @@
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText"
+        android:layout_toStartOf="@+id/textView_Title"
+        android:spinnerMode="dialog" />
+
 </RelativeLayout>

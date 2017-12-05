@@ -24,10 +24,8 @@ package com.example.jspann.textfilewriter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
 import android.view.*
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 
 import java.io.*
 
@@ -35,9 +33,13 @@ import java.io.*
 class MainActivity : AppCompatActivity() {
 
     /* /  UTILTY AND VIEW DECLARATIONS  / */
-    //private var originalEditTextContent: String = ""
-    //private val editTextField = (findViewById<View>(R.id.editText) as EditText)
     private val utils = Utils()
+    private var _strDirPath = utils.getDirectoryPathToString()
+    private var _strCurrentFileName = ""
+
+    private var _textView_Title: TextView ?= null
+    private var _debug_text: TextView ?= null
+    private var _editText: EditText ?= null
 
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,23 +47,39 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //setSupportActionBar(findViewById<View>(R.id.toolbar2) as Toolbar)
+        _textView_Title = (findViewById(R.id.textView_Title))
+        _debug_text = (findViewById(R.id.debug_text))
+        _editText = (findViewById<View>(R.id.editText) as EditText)
 
         try {
             setTextFieldToLatestFile()
-            //this.originalEditTextContent = this.editTextField.text.toString()
             setCursorToEndOfTxtField()
         } catch (e: Exception) {
             //utils.popup(applicationContext, e)
         }
 
         //TODO - ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING!!!
+        this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+        (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                var spinner = findViewById<View>(R.id.spinner) as Spinner
+                setEditTextToFileContents(spinner.selectedItem.toString())
+                setChosenFilename(spinner.selectedItem.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("not needed") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
+
         //TODO - ADD COLORIZING FUNCTIONALITY
         //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
         /*
             Listener for characters time period after (x# characters?) entered?
             Listen every few seconds and see if new content then save?
         */
-        /*(findViewById<View>(R.id.editText) as EditText).addTextChangedListener(object: TextWatcher{
+        /*_editText.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?){
 
             }
@@ -85,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
-        (findViewById<View>(R.id.editText) as EditText).afterTextChanged { saveToFile()  }*/
+        _editText.afterTextChanged { saveToFile()  }*/
         /*TODO - ALLOW JOURNAL(entry)S TO BE GROUPED INTO FOLDER AND HAVE USER NAME JOURNAL FOLDER!!!
           [-] MyNamedJournalFolder
            |__[] Auto-JournalEntry.txt
@@ -105,35 +123,21 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val blnRetItem = super.onOptionsItemSelected(item)
         when(item?.itemId){
-            R.id.menuitem_add -> {
-                this.createNewTextFile()
-                return blnRetItem
-            }
-            R.id.menuitem_save -> {
-                this.saveToFile()
-                return blnRetItem
-            }
-            R.id.menuitem_timestamp -> {
-                this.insertTimestampToEditText()
-            }
             R.id.menuitem_changecolor -> {
                 this.launchColorSelectorActivity()
-            }
-            R.id.menuitem_resetText -> {
-                this.resetEditTextToGivenValue()
             }
         }
         return blnRetItem
     }
     private fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
-        setTextFieldToLatestFile()
+        setEditTextToFileContents(_strCurrentFileName)
         setCursorToEndOfTxtField()
     }
     private fun refreshEditText(){
-        val curCurrentPosition = (findViewById<View>(R.id.editText) as EditText).selectionStart
-        setTextFieldToLatestFile()
-        (findViewById<View>(R.id.editText) as EditText).setSelection(curCurrentPosition)
+        val curCurrentPosition = (_editText!!).selectionStart
+        setEditTextToFileContents(_strCurrentFileName)
+        (_editText!!).setSelection(curCurrentPosition)
     }
 
     /* /  BUTTON CLICK FUNCTIONS  / */
@@ -162,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
     /* /  FILE MANAGEMENT CONTROLLERS  / */
     private fun createNewTextFile(){
-        val newFile = File(utils.getDirectoryPathToString(), utils.getCurrentFormattedDateAsString() + ".txt")
+        val newFile = File(_strDirPath, utils.getCurrentFormattedDateAsString() + ".txt")
 
         if (newFile.exists()) {
             return
@@ -173,7 +177,8 @@ class MainActivity : AppCompatActivity() {
             fwriter.append("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n")
             fwriter.flush()
             fwriter.close()
-            setTextFieldToLatestFile()
+            this.setTextFieldToLatestFile()
+            this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
@@ -181,18 +186,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveToFile(){
-        val strFilenames = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
-        val strLatestFilename = strFilenames[0]
-
-        var txtEditText = (findViewById<View>(R.id.editText) as EditText)
+        var txtEditText = (_editText!!)
         var strDataBody = txtEditText.text.toString()
         try {
             val dteToday = utils.getCurrentFormattedDateAsString()
 
-            val rootPath = File(utils.getDirectoryPathToString())
+            val rootPath = File(_strDirPath)
             rootPath.mkdir()
 
-            val file = File(rootPath, strLatestFilename)
+            val file = File(rootPath, _strCurrentFileName)
 
             if (!file.exists()) {
                 strDataBody = dteToday + "\n\n---\n\n" + strDataBody
@@ -220,31 +222,46 @@ class MainActivity : AppCompatActivity() {
     /*   EDIT TEXT FUNCTIONS   */
     private fun insertTimestampToEditText(){
         val txtMain = findViewById<EditText>(R.id.editText)
-        val strDataBody = txtMain.text.toString()
         val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
     private fun setCursorToEndOfTxtField(){
-        val txtMain: EditText = (findViewById<View>(R.id.editText) as EditText)
+        val txtMain: EditText = (_editText!!)
         txtMain.setSelection(txtMain.text.length)
     }
 
+    /*   SPINNER FUNCTIONS   */
+    private fun setSpinnerItems(p_strItems: Array<String?>){
+        var spinner = findViewById<View>(R.id.spinner) as Spinner
+        spinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
+    }
+
     /*   TEXT FIELD FUNCTIONS  */
+    private fun setChosenFilename(p_strFileName: String){
+        (_debug_text!!).text = _strDirPath + p_strFileName
+        (_textView_Title!!).text = (p_strFileName).substring(0,(p_strFileName).length-4)
+    }
+
     @Throws(Exception::class)
-    private fun setTextFieldToFileName(file: File) {
+    private fun setEditTextToFileContents_and_setTextFieldToFileName(file: File) {
         val strOriginalText = utils.readFileContentsToString(file)
-        (findViewById<View>(R.id.editText) as EditText).setText(strOriginalText)
-        val ctx = applicationContext
-        (findViewById<View>(R.id.debug_text) as TextView).text = utils.getDirectoryPathToString() + file.name
-        (findViewById<View>(R.id.textView_Title) as TextView).text = (file.name).substring(0,(file.name).length-4)
+        (_editText!!).setText(strOriginalText)
+        this.setChosenFilename(file.name)
+    }
+
+    private fun setEditTextToFileContents(p_strFileName: String){
+        var file = File(_strDirPath, p_strFileName)
+        (_editText!!).setText(utils.readFileContentsToString(file))
+        this._strCurrentFileName = file.name
     }
 
     @Throws(Exception::class)
     private fun setTextFieldToLatestFile() {
-        val files = utils.getListOfAllFilesInDir(utils.getDirectoryPathToString())
+        val files = utils.getListOfAllFilesInDir(_strDirPath)
         val latestFile = files[0]
-        setTextFieldToFileName(latestFile)
+        this._strCurrentFileName = latestFile.name
+        setEditTextToFileContents_and_setTextFieldToFileName(latestFile)
     }
 
 }

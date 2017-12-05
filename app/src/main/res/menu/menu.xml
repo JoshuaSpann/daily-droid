@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
+    android:id="@+id/menuitem_open"
+    android:title="Open" />
+    <!--item
         android:id="@+id/menuitem_add"
         android:icon="@drawable/ic_add_black_24dp"
         android:title="New" />
@@ -12,16 +15,16 @@
     <item
         android:id="@+id/menuitem_timestamp"
         android:icon="@drawable/ic_timer_black_24dp"
-        android:title="Timestamp" />
+        android:title="Timestamp" /-->
     <item
         android:id="@+id/menuitem_changecolor"
         android:icon="@drawable/ic_color_lens_black_24dp"
         android:title="Color" />
 
-    <item
+    <!--item
         android:id="@+id/menuitem_resetText"
         android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="Reset" />
+        android:title="Reset" /-->
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/menuitem_settings"

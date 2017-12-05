@@ -40,6 +40,7 @@ class Utils{
         strOutput+="]"
         return strOutput
     }
+
     fun getCurrentFormattedDateAsString(): String {
         val dteCurrentDate = Date()
         val dteFormat = SimpleDateFormat("yyyyMMdd")
