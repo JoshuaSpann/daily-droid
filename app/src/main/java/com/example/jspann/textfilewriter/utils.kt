@@ -111,7 +111,11 @@ class Utils{
 
     @Throws(Exception::class)
     fun readFileContentsToString(file: File): String {
-        return Scanner(file).useDelimiter("\\A").next()
+        try {
+            return Scanner(file).useDelimiter("\\A").next()
+        }catch(e: Exception){
+            return ""
+        }
     }
 
 }

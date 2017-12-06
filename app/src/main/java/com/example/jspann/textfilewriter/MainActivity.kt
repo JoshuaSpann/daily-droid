@@ -113,7 +113,9 @@ class MainActivity : AppCompatActivity() {
                         strOldFileName = _strCurrentFileName
                         return
                     }
-                    if (charCount > _intAutoSaveTrigger && (_editText!!).length() > _intEditTextStartLength) {
+                    if (charCount > _intAutoSaveTrigger
+                            && (_editText!!).length() > _intEditTextStartLength
+                            && strOldFileName == _strCurrentFileName) {
                         utils.popup(applicationContext, "Saving...")
                         saveToFile()
                         charCount = 0
