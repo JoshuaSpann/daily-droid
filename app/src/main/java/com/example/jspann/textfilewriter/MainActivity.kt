@@ -21,15 +21,20 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 
 import java.io.*
+import kotlin.text.Typography.tm
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,10 +56,41 @@ class MainActivity : AppCompatActivity() {
     private var _editText: EditText ?= null
     private var _spinner: Spinner ?= null
 
+    // System Properties //
+//    private var _phoneStateListener: PhoneStateListener
+
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        /*var _phoneStateListener: PhoneStateListener = PhoneStateListener()
+        var tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        tm.listen(_phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+
+        if(tm.callState==TelephonyManager.CALL_STATE_RINGING){
+            println("_________________________________________________________________________________INCOMING CALL_________________________________________________________________________________")
+        }
+        if(tm.callState==TelephonyManager.CALL_STATE_IDLE){
+            println("_________________________________________________________________________________IDLE_________________________________________________________________________________")
+        }
+
+        utils.popup(applicationContext,tm.callState)*/
+        //var cm = CallManager(applicationContext)
+        //var p =PhoneStateReceiver
+
+        /*
+        // https://stackoverflow.com/questions/15563921/how-to-detect-incoming-calls-in-an-android-device
+        // https://developer.android.com/reference/android/telephony/PhoneStateListener.html
+        // http://www.truiton.com/2014/08/android-phonestatelistener-example/
+        
+        // https://stackoverflow.com/questions/27638462/simulating-incoming-call-or-sms-in-android-studio
+        var _phoneStateListener: PhoneStateListener = PhoneStateListener()
+        var tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        tm.listen(_phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+        _phoneStateListener.onCallStateChanged(PhoneStateListener.LISTEN_CALL_STATE,"")
+
+        */
 
         properties_Setup()
 
