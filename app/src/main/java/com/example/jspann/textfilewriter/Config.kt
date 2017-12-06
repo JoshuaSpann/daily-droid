@@ -24,7 +24,9 @@ class Config{
     var currentFile: String = ""
     var fileColors: MutableMap<String,String> = hashMapOf("" to "")
 
-    public constructor(){}
+    public constructor(){
+
+    }
     public fun read(){}
 
     public fun write(){

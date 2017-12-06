@@ -30,14 +30,20 @@ class Utils{
     //TODO - Create Data Model of config opts in array/propclass and modify using predefined set of functions
     fun convertMutMapToJSONString(p_map: MutableMap<String,String>): String{
         var strOutput = "["
-        var i = 0
+        var i = 1
         for(currItem in p_map){
-            strOutput += currItem.key+": \""+currItem.value+"\""
-            if(i < p_map.size){
+            if(currItem.key==""||currItem.value==""){
+                i++
+                continue
+            }
+            strOutput += "\""+currItem.key+"\": \""+currItem.value+"\""
+            if(i < (p_map.size-1)){
                 strOutput+=", "
             }
+            i++
         }
         strOutput+="]"
+        println("\n\n"+p_map.size+"\n\n"+strOutput)
         return strOutput
     }
 

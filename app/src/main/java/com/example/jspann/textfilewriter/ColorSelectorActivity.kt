@@ -47,7 +47,8 @@ class ColorSelectorActivity : AppCompatActivity() {
                     //(findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
                     val files = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
                     config.fileColors.put(files[0].toString(), strButtonColor)
-                    config.write()
+                    config.fileColors.put(files[1].toString(), strButtonColor)
+                    //TODO - config.write()
                 }catch(e: Exception){
                     utils.popup(applicationContext, e)
                 }

@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private val utils:Utils = Utils()
 
     // Base Type Properties //
-    private var _blnPerformAutoSave: Boolean = true
+    private var _blnPerformAutoSave: Boolean = false
     private var _intAutoSaveTrigger: Int = 0
     private var _intEditTextStartLength: Int = 0
     private var _strDirPath:String = utils.getDirectoryPathToString()
@@ -56,13 +56,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //setSupportActionBar(findViewById<View>(R.id.toolbar2) as Toolbar)
-        _textView_Title = (findViewById(R.id.textView_Title))
-        (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
-        _debug_text = (findViewById(R.id.debug_text))
-        _editText = (findViewById<View>(R.id.editText) as EditText)
-        _intEditTextStartLength = (_editText!!).length()
-        _spinner = findViewById<View>(R.id.spinner) as Spinner
+        properties_Setup()
 
         try {
             setTextFieldToLatestFile()
@@ -72,18 +66,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING //
-        this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
-        (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                setEditTextToFileContents((_spinner!!).selectedItem.toString())
-                setChosenFilename((_spinner!!).selectedItem.toString())
-            }
+        fileSelection_Setup()
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //not needed outside of making sure the object signature matches (allows use of above fn without errors//
-            }
-        }
         /*TODO - ALLOW JOURNAL(entry)S TO BE GROUPED INTO FOLDER AND HAVE USER NAME JOURNAL FOLDER!!!
           [-] MyNamedJournalFolder
            |__[] Auto-JournalEntry.txt
@@ -94,66 +78,12 @@ class MainActivity : AppCompatActivity() {
 
         //TODO - ADD COLORIZING FUNCTIONALITY
 
-        //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
-        /* Listener for characters time period after (x# characters?) entered? */
+        // AUTO-SAVE FUNCTIONALITY //
         if(_blnPerformAutoSave) {
-            var charCount = 0
-            property_ResetEditTextLength()
-
-            var strOldFileName = _strCurrentFileName
-
-            (_editText!!).addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
-                }
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(strOldFileName != _strCurrentFileName){
-                        strOldFileName = _strCurrentFileName
-                        return
-                    }
-                    if (charCount > _intAutoSaveTrigger
-                            && (_editText!!).length() > _intEditTextStartLength
-                            && strOldFileName == _strCurrentFileName) {
-                        utils.popup(applicationContext, "Saving...")
-                        saveToFile()
-                        charCount = 0
-                        property_ResetEditTextLength()
-                        return
-                    }
-                    charCount++
-                }
-            })
-
-
-            /*
-            //CODE FOR ADDING CUSTOM FUNCTION TO EXISTING ANDROID API OBJECT:
-            fun EditText.customOnTextChanged(afterTextChanged: (String) -> Unit) {
-                this.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    }
-
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        if (charCount > _intAutoSaveTrigger && (_editText!!).length() > _intEditTextStartLength) {
-                            //utils.popup(applicationContext, "Saving...")
-                            saveToFile()
-                            charCount = 0
-                            _intEditTextStartLength = (_editText!!).length()
-                            return
-                        }
-                        charCount++
-                    }
-
-                    override fun afterTextChanged(editable: Editable?) {
-                        //afterTextChanged.invoke(editable.toString())
-                    }
-                })
-            }
-            //IMPLEMENTATION OF THE ABOVE
-            (_editText!!).customOnTextChanged { saveToFile() }*/
+            autosave_Setup()
         }
-        /*TODO - Like above: Listen every few seconds and see if new content then save? Which is more efficient?*/
+
+        // TODO - ADD AUTO-LOG CALLS (starttime, endtime, missed, whom/#)
     }
 
 
@@ -179,11 +109,6 @@ class MainActivity : AppCompatActivity() {
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
         setCursorToEndOfTxtField()
-    }
-    private fun refreshEditText(){
-        val curCurrentPosition = (_editText!!).selectionStart
-        setEditTextToFileContents(_strCurrentFileName)
-        (_editText!!).setSelection(curCurrentPosition)
     }
 
 
@@ -212,6 +137,52 @@ class MainActivity : AppCompatActivity() {
 
 
     /* /  FILE MANAGEMENT CONTROLLERS  / */
+    private fun autosave_Setup(){
+        /* Listener for characters time period after (x# characters?) entered.
+           Listen every few seconds and see if new content then save?
+           Which is more efficient?
+        */
+        var charCount = 0
+        property_ResetEditTextLength()
+
+        var strOldFileName = _strCurrentFileName
+
+        (_editText!!).addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(strOldFileName != _strCurrentFileName){
+                    strOldFileName = _strCurrentFileName
+                    return
+                }
+                if (charCount > _intAutoSaveTrigger
+                        && (_editText!!).length() > _intEditTextStartLength
+                        && strOldFileName == _strCurrentFileName) {
+                    utils.popup(applicationContext, "Saving...")
+                    saveToFile()
+                    charCount = 0
+                    property_ResetEditTextLength()
+                    return
+                }
+                charCount++
+            }
+        })
+
+
+        /*
+        //CODE FOR ADDING CUSTOM FUNCTION TO EXISTING ANDROID API OBJECT:
+        fun EditText.customOnTextChanged(afterTextChanged: (String) -> Unit) {
+            this.addTextChangedListener(object : TextWatcher {
+                ...
+            })
+        }
+        //IMPLEMENTATION OF THE ABOVE
+        (_editText!!).customOnTextChanged { saveToFile() }*/
+    }
+
     private fun createNewTextFile(){
         val newFile = File(_strDirPath, utils.getCurrentFormattedDateAsString() + ".txt")
 
@@ -228,6 +199,21 @@ class MainActivity : AppCompatActivity() {
             utils.popup(applicationContext, e)
         }
         setCursorToEndOfTxtField()
+    }
+
+    private fun fileSelection_Setup(){
+        setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+        (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                setEditTextToFileContents((_spinner!!).selectedItem.toString())
+                setChosenFilename((_spinner!!).selectedItem.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //not needed outside of making sure the object signature matches (allows use of above fn without errors//
+            }
+        }
     }
 
     private fun saveToFile(){
@@ -254,6 +240,17 @@ class MainActivity : AppCompatActivity() {
     /* /  PROPERTY CONTROLLERS  / */
     private fun property_ResetEditTextLength(){
         _intEditTextStartLength = (_editText!!).length()
+    }
+
+    private fun properties_Setup(){
+        // TODO - Set up & Override by CONFIG Props Too!
+        _blnPerformAutoSave = true
+        _debug_text = (findViewById(R.id.debug_text))
+        _editText = (findViewById<View>(R.id.editText) as EditText)
+        _intEditTextStartLength = (_editText!!).length()
+        _spinner = findViewById<View>(R.id.spinner) as Spinner
+        _textView_Title = (findViewById(R.id.textView_Title))
+        (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
     }
 
 
@@ -302,7 +299,6 @@ class MainActivity : AppCompatActivity() {
         _strCurrentFileName = file.name
         _intEditTextStartLength = file.length().toInt()
         (_editText!!).setText(utils.readFileContentsToString(file))
-        //_strCurrentFileName = file.name
     }
 
     @Throws(Exception::class)
