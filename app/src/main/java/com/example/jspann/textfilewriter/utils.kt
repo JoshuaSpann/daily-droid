@@ -14,14 +14,14 @@ import java.util.*
 
 class Utils{
     fun configFile_Create(config: Config){
-        val configFile = File(this.getDirectoryPathToString(),".config")
+        val configFile = File(getDirectoryPathToString(),".config")
         if(configFile.exists()){
            return
         }
 
         // TODO - Create JSON of Config options array and save it to this file???
         var strJsonProps = "{colors:[main: \"#fff\",accent: \"#222\"]}"
-        this.fileWrite(configFile, strJsonProps)
+        file_Write(configFile, strJsonProps)
     }
     fun configFile_Read(): Config{
         // TODO - Pull JSON of Config options and save it to array???
@@ -33,7 +33,7 @@ class Utils{
         var i = 0
         for(currItem in p_map){
             strOutput += currItem.key+": \""+currItem.value+"\""
-            if(i<p_map.size){
+            if(i < p_map.size){
                 strOutput+=", "
             }
         }
@@ -47,6 +47,7 @@ class Utils{
     fun file_Write(file:File, data:Any){
         fileWriter(file,data,false)
     }
+
     private fun fileWriter(file:File, data:Any, isSafeWrite: Boolean){
         val fwriter = FileWriter(file)
         if(isSafeWrite == false){
@@ -79,12 +80,12 @@ class Utils{
         return strDefaultDir
     }
     fun getDirectoryPathToString(str_subdir: String): String {
-        var strDefaultDir:String = this.getDirectoryPathToString()+str_subdir
+        var strDefaultDir:String = getDirectoryPathToString()+str_subdir
         return strDefaultDir
     }
 
     fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
-        val filesInDir = this.getListOfAllFilesInDir(pathString)
+        val filesInDir = getListOfAllFilesInDir(pathString)
 
         var intFileCounter = 0
         val filenamesInDir = arrayOfNulls<String>(filesInDir.size)
@@ -113,18 +114,4 @@ class Utils{
         return Scanner(file).useDelimiter("\\A").next()
     }
 
-    fun fileAppend(file: File, content: Any){
-        var strTextContent = content.toString()
-        val fwriter = FileWriter(file)
-        fwriter.append(strTextContent)
-        fwriter.flush()
-        fwriter.close()
-    }
-    fun fileWrite(file: File, content: Any){
-        var strTextContent = content.toString()
-        val fwriter = FileWriter(file)
-        fwriter.write(strTextContent)
-        fwriter.flush()
-        fwriter.close()
-    }
 }

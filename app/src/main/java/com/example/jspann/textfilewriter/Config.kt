@@ -37,7 +37,7 @@ class Config{
             currentFile: """+this.currentFile+"""
             fileColors: """+utils.convertMutMapToJSONString(this.fileColors)+"""
         }"""
-        utils.fileWrite(configFile, strJsonProps)
+        utils.file_Write(configFile, strJsonProps)
     }
 }
 /*
