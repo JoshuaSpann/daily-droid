@@ -97,22 +97,30 @@ class MainActivity : AppCompatActivity() {
         //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
         /* Listener for characters time period after (x# characters?) entered? */
         if(_blnPerformAutoSave) {
+            var charCount = 0
+            _intEditTextStartLength = (_editText!!).length()
+
             (_editText!!).addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
-
                 }
-
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    // Can Just Use without following code block, this method: saveToFile()
+                    if (charCount > _intAutoSaveTrigger && (_editText!!).length() > _intEditTextStartLength) {
+                        utils.popup(applicationContext, "Saving...")
+                        saveToFile()
+                        charCount = 0
+                        _intEditTextStartLength = (_editText!!).length()
+                        return
+                    }
+                    charCount++
                 }
             })
 
-            var charCount = 0
-            _intEditTextStartLength = (_editText!!).length()
+
+            /*
+            //CODE FOR ADDING CUSTOM FUNCTION TO EXISTING ANDROID API OBJECT:
             fun EditText.customOnTextChanged(afterTextChanged: (String) -> Unit) {
                 this.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -134,11 +142,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
             }
-            (_editText!!).customOnTextChanged { saveToFile() }
+            //IMPLEMENTATION OF THE ABOVE
+            (_editText!!).customOnTextChanged { saveToFile() }*/
         }
         /*TODO - Like above: Listen every few seconds and see if new content then save? Which is more efficient?*/
-
     }
+
 
     /* /  APP BAR MENU CONTROLLERS  / */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean{
@@ -168,6 +177,7 @@ class MainActivity : AppCompatActivity() {
         setEditTextToFileContents(_strCurrentFileName)
         (_editText!!).setSelection(curCurrentPosition)
     }
+
 
     /* /  BUTTON CLICK FUNCTIONS  / */
     fun button_toolbar_new__click(view: View) {
@@ -202,10 +212,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         try {
-            val fwriter = FileWriter(newFile)
-            fwriter.append("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n")
-            fwriter.flush()
-            fwriter.close()
+            utils.file_Append(newFile, ("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n"))
+
             this.setTextFieldToLatestFile()
             this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         } catch (e: Exception) {
@@ -215,26 +223,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveToFile(){
-        var txtEditText = (_editText!!)
-        var strDataBody = txtEditText.text.toString()
+        var strDataBody = (_editText!!).text.toString()
         try {
             val dteToday = utils.getCurrentFormattedDateAsString()
-
             val rootPath = File(_strDirPath)
             rootPath.mkdir()
 
             val file = File(rootPath, _strCurrentFileName)
-
             if (!file.exists()) {
                 strDataBody = dteToday + "\n\n---\n\n" + strDataBody
             }
 
-            val fwriter = FileWriter(file)
-            fwriter.append(strDataBody)
-            fwriter.flush()
-            fwriter.close()
+            utils.file_Append(file, strDataBody)
 
-            //refreshEditText()
             _intEditTextStartLength = (_editText!!).length()
         } catch (e: Exception) {
             utils.popup(applicationContext, e)

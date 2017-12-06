@@ -41,6 +41,27 @@ class Utils{
         return strOutput
     }
 
+    fun file_Append(file:File, data:Any){
+        fileWriter(file,data,true)
+    }
+    fun file_Write(file:File, data:Any){
+        fileWriter(file,data,false)
+    }
+    private fun fileWriter(file:File, data:Any, isSafeWrite: Boolean){
+        val fwriter = FileWriter(file)
+        if(isSafeWrite == false){
+            fwriter.write(data.toString())
+        }
+        else if(isSafeWrite == true){
+            fwriter.append(data.toString())
+        }
+        else{
+            return //ERROR, no save
+        }
+        fwriter.flush()
+        fwriter.close()
+    }
+
     fun getCurrentFormattedDateAsString(): String {
         val dteCurrentDate = Date()
         val dteFormat = SimpleDateFormat("yyyyMMdd")
