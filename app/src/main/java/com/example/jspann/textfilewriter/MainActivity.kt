@@ -98,7 +98,9 @@ class MainActivity : AppCompatActivity() {
         /* Listener for characters time period after (x# characters?) entered? */
         if(_blnPerformAutoSave) {
             var charCount = 0
-            _intEditTextStartLength = (_editText!!).length()
+            property_ResetEditTextLength()
+
+            var strOldFileName = _strCurrentFileName
 
             (_editText!!).addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
@@ -107,11 +109,15 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(strOldFileName != _strCurrentFileName){
+                        strOldFileName = _strCurrentFileName
+                        return
+                    }
                     if (charCount > _intAutoSaveTrigger && (_editText!!).length() > _intEditTextStartLength) {
                         utils.popup(applicationContext, "Saving...")
                         saveToFile()
                         charCount = 0
-                        _intEditTextStartLength = (_editText!!).length()
+                        property_ResetEditTextLength()
                         return
                     }
                     charCount++
@@ -236,10 +242,16 @@ class MainActivity : AppCompatActivity() {
 
             utils.file_Append(file, strDataBody)
 
-            _intEditTextStartLength = (_editText!!).length()
+            property_ResetEditTextLength()
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
+    }
+
+
+    /* /  PROPERTY CONTROLLERS  / */
+    private fun property_ResetEditTextLength(){
+        _intEditTextStartLength = (_editText!!).length()
     }
 
 
@@ -276,15 +288,19 @@ class MainActivity : AppCompatActivity() {
 
     @Throws(Exception::class)
     private fun setEditTextToFileContents_and_setTextFieldToFileName(file: File) {
+        _strCurrentFileName = file.name
+        property_ResetEditTextLength()
         val strOriginalText = utils.readFileContentsToString(file)
         (_editText!!).setText(strOriginalText)
-        this.setChosenFilename(file.name)
+        setChosenFilename(file.name)
     }
 
     private fun setEditTextToFileContents(p_strFileName: String){
         var file = File(_strDirPath, p_strFileName)
-        (_editText!!).setText(utils.readFileContentsToString(file))
         _strCurrentFileName = file.name
+        _intEditTextStartLength = file.length().toInt()
+        (_editText!!).setText(utils.readFileContentsToString(file))
+        //_strCurrentFileName = file.name
     }
 
     @Throws(Exception::class)
