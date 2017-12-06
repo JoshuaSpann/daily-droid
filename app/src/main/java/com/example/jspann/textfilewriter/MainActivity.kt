@@ -24,6 +24,8 @@ package com.example.jspann.textfilewriter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 
@@ -33,10 +35,17 @@ import java.io.*
 class MainActivity : AppCompatActivity() {
 
     /* /  UTILTY AND VIEW DECLARATIONS  / */
-    private val utils = Utils()
-    private var _strDirPath = utils.getDirectoryPathToString()
-    private var _strCurrentFileName = ""
+    // Custom Classes //
+    private val utils:Utils = Utils()
 
+    // Base Type Properties //
+    private var _blnPerformAutoSave: Boolean = true
+    private var _intAutoSaveTrigger: Int = 0
+    private var _intEditTextStartLength: Int = 0
+    private var _strDirPath:String = utils.getDirectoryPathToString()
+    private var _strCurrentFileName:String = ""
+
+    // View-Widget Properties //
     private var _textView_Title: TextView ?= null
     private var _debug_text: TextView ?= null
     private var _editText: EditText ?= null
@@ -50,13 +59,9 @@ class MainActivity : AppCompatActivity() {
         //setSupportActionBar(findViewById<View>(R.id.toolbar2) as Toolbar)
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
-        /*(_textView_Title!!).setOnClickListener(object: View.OnClickListener{
-            override fun onClick(v: View?) {
-                (_spinner!!).performClick()
-            }
-        })*/
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)
+        _intEditTextStartLength = (_editText!!).length()
         _spinner = findViewById<View>(R.id.spinner) as Spinner
 
         try {
@@ -66,52 +71,19 @@ class MainActivity : AppCompatActivity() {
             //utils.popup(applicationContext, e)
         }
 
-        //TODO - ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING!!!
+        // ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING //
         this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                //var spinner = findViewById<View>(R.id.spinner) as Spinner
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("not needed") //To change body of created functions use File | Settings | File Templates.
+                //not needed outside of making sure the object signature matches (allows use of above fn without errors//
             }
         }
-
-        //TODO - ADD COLORIZING FUNCTIONALITY
-        //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
-        /*
-            Listener for characters time period after (x# characters?) entered?
-            Listen every few seconds and see if new content then save?
-        */
-        /*_editText.addTextChangedListener(object: TextWatcher{
-            override fun afterTextChanged(p0: Editable?){
-
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){
-
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                // Can Just Use without following code block, this method: saveToFile()
-            }
-        })
-        fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-            this.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun afterTextChanged(editable: Editable?) {
-                    afterTextChanged.invoke(editable.toString())
-                }
-            })
-        }
-        _editText.afterTextChanged { saveToFile()  }*/
         /*TODO - ALLOW JOURNAL(entry)S TO BE GROUPED INTO FOLDER AND HAVE USER NAME JOURNAL FOLDER!!!
           [-] MyNamedJournalFolder
            |__[] Auto-JournalEntry.txt
@@ -119,6 +91,52 @@ class MainActivity : AppCompatActivity() {
            |__[] Auto-JournalEntry2.txt
            |__[] Auto-JournalEntryLatest.txt -- Put here by user choice
          */
+
+        //TODO - ADD COLORIZING FUNCTIONALITY
+
+        //TODO - ADD AUTO-SAVE FUNCTIONALITY!!!
+        /* Listener for characters time period after (x# characters?) entered? */
+        if(_blnPerformAutoSave) {
+            (_editText!!).addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    // Can Just Use without following code block, this method: saveToFile()
+                }
+            })
+
+            var charCount = 0
+            _intEditTextStartLength = (_editText!!).length()
+            fun EditText.customOnTextChanged(afterTextChanged: (String) -> Unit) {
+                this.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        if (charCount > _intAutoSaveTrigger && (_editText!!).length() > _intEditTextStartLength) {
+                            //utils.popup(applicationContext, "Saving...")
+                            saveToFile()
+                            charCount = 0
+                            _intEditTextStartLength = (_editText!!).length()
+                            return
+                        }
+                        charCount++
+                    }
+
+                    override fun afterTextChanged(editable: Editable?) {
+                        //afterTextChanged.invoke(editable.toString())
+                    }
+                })
+            }
+            (_editText!!).customOnTextChanged { saveToFile() }
+        }
+        /*TODO - Like above: Listen every few seconds and see if new content then save? Which is more efficient?*/
 
     }
 
@@ -216,7 +234,8 @@ class MainActivity : AppCompatActivity() {
             fwriter.flush()
             fwriter.close()
 
-            this.refreshEditText()
+            //refreshEditText()
+            _intEditTextStartLength = (_editText!!).length()
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
@@ -264,7 +283,7 @@ class MainActivity : AppCompatActivity() {
     private fun setEditTextToFileContents(p_strFileName: String){
         var file = File(_strDirPath, p_strFileName)
         (_editText!!).setText(utils.readFileContentsToString(file))
-        this._strCurrentFileName = file.name
+        _strCurrentFileName = file.name
     }
 
     @Throws(Exception::class)
