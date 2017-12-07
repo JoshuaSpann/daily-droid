@@ -26,7 +26,6 @@ class CallReceiver : BroadcastReceiver() {
         // Outgoing Calls //
         if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
-
         }
         else {
             // Incoming Calls //
@@ -55,10 +54,30 @@ class CallReceiver : BroadcastReceiver() {
     }
 
 
+    private fun logCallToTodaysFile(content: Any){
+        var utils = Utils()
+        var todayFile = File(utils.getDirectoryPathToString(),utils.getCurrentFormattedDateAsString()+".txt")
+
+        if(todayFile.exists()){
+            // Add to File //
+            utils.file_Append(todayFile, utils.readFileContentsToString(todayFile)+content)
+        }
+
+        if(!todayFile.exists()){
+            // Create File //
+            utils.file_Append(todayFile, ("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n") + content)
+        }
+        intRingingWriteCount++
+        // TODO - FIND WAY TO MAKE THIS HAPPEN!
+        MainActivity::resetEditTextToGivenValue
+    }
+
     fun onCallStateChanged(context: Context, state: Int, number: String) {
         if (lastState === state) {
             return
         }
+
+        val utils = Utils()
 
         var isIncoming: Boolean = false
         var callStartTime: Any = java.util.Date()
@@ -72,27 +91,13 @@ class CallReceiver : BroadcastReceiver() {
                 callStartTime = java.util.Date()
                 savedNumber = number
 
-                val utils = Utils()
                 var strIncomingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Call from "+number
                 if(strIncomingCallLog != lastMsg) {
                     println("        JS3 DEBUG TEST:: " + strIncomingCallLog)
                     lastMsg = strIncomingCallLog
                 }
                 if(intRingingWriteCount == 0){
-                    var todayFile = File(utils.getDirectoryPathToString(),utils.getCurrentFormattedDateAsString()+".txt")
-
-                    if(todayFile.exists()){
-                        // Add to File //
-                        utils.file_Append(todayFile, utils.readFileContentsToString(todayFile)+strIncomingCallLog)
-                    }
-
-                    if(!todayFile.exists()){
-                        // Create File //
-                        utils.file_Append(todayFile, ("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n") + strIncomingCallLog)
-                    }
-                    intRingingWriteCount++
-                    // TODO - FIND WAY TO MAKE THIS HAPPEN!
-                    MainActivity::resetEditTextToGivenValue
+                    logCallToTodaysFile(strIncomingCallLog)
                 }
 
                 Toast.makeText(context, "Incoming Call Ringing", Toast.LENGTH_SHORT).show()
@@ -103,6 +108,10 @@ class CallReceiver : BroadcastReceiver() {
                 if (lastState !== TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false
                     callStartTime = java.util.Date()
+
+                    var strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Called "+number
+                    logCallToTodaysFile(strOutgoingCallLog)
+
                     Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
                 }
 
