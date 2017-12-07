@@ -5,8 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import android.view.View
 import android.widget.Toast
-
+import java.io.File
 
 
 /**
@@ -15,18 +16,20 @@ import android.widget.Toast
 
 class CallReceiver : BroadcastReceiver() {
 
+    var intRingingWriteCount: Int = 0
     private var lastState: Int = TelephonyManager.CALL_STATE_IDLE;
     private var lastMsg: String = ""
 
-
     override fun onReceive(context: Context, intent: Intent) {
-        //Log.w("intent " , intent.getAction().toString());
-        //We listen to two intents.  The new outgoing call only tells us of an outgoing call.  We use it to get the number.
         var savedNumber = ""
+
+        // Outgoing Calls //
         if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
 
-        } else {
+        }
+        else {
+            // Incoming Calls //
             var stateStr: String = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
 
             //var number: String = TelephonyManager.EXTRA_INCOMING_NUMBER
@@ -36,14 +39,7 @@ class CallReceiver : BroadcastReceiver() {
 
 
             if(stateStr == TelephonyManager.EXTRA_STATE_RINGING){
-                strIncomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                //println("____________________ "+"RINGING CALL: "+strIncomingNumber)
-                val utils = Utils()
-                var strIncomingCallLog = " - "+utils.getCurrentTimeStampAsString()+":  Call from "+strIncomingNumber
-                if(strIncomingCallLog != lastMsg) {
-                    println("        DEBUG TEST:: " + strIncomingCallLog)
-                    lastMsg = strIncomingCallLog
-                }
+                state = TelephonyManager.CALL_STATE_RINGING
             }
             if (stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 state = TelephonyManager.CALL_STATE_IDLE;
@@ -52,13 +48,15 @@ class CallReceiver : BroadcastReceiver() {
             } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 state = TelephonyManager.CALL_STATE_RINGING;
             }
+            try {
+                onCallStateChanged(context, state, intent.getStringExtra(strIncomingNumber))
+            }catch(e:Exception){}
         }
     }
 
 
     fun onCallStateChanged(context: Context, state: Int, number: String) {
         if (lastState === state) {
-            //No change, debounce extras
             return
         }
 
@@ -67,13 +65,39 @@ class CallReceiver : BroadcastReceiver() {
         var savedNumber: String = "NONE"
 
         when (state) {
+
+            // TODO - STOP FROM FIRING TWICE! BUG WHERE IT PERFORMS TWICE IMMEDIATELY IN SUCCESSION!
             TelephonyManager.CALL_STATE_RINGING -> {
                 isIncoming = true
                 callStartTime = java.util.Date()
                 savedNumber = number
 
+                val utils = Utils()
+                var strIncomingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Call from "+number
+                if(strIncomingCallLog != lastMsg) {
+                    println("        JS3 DEBUG TEST:: " + strIncomingCallLog)
+                    lastMsg = strIncomingCallLog
+                }
+                if(intRingingWriteCount == 0){
+                    var todayFile = File(utils.getDirectoryPathToString(),utils.getCurrentFormattedDateAsString()+".txt")
+
+                    if(todayFile.exists()){
+                        // Add to File //
+                        utils.file_Append(todayFile, utils.readFileContentsToString(todayFile)+strIncomingCallLog)
+                    }
+
+                    if(!todayFile.exists()){
+                        // Create File //
+                        utils.file_Append(todayFile, ("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n") + strIncomingCallLog)
+                    }
+                    intRingingWriteCount++
+                    // TODO - FIND WAY TO MAKE THIS HAPPEN!
+                    MainActivity::resetEditTextToGivenValue
+                }
+
                 Toast.makeText(context, "Incoming Call Ringing", Toast.LENGTH_SHORT).show()
             }
+
             TelephonyManager.CALL_STATE_OFFHOOK ->
                 //Transition of ringing->offhook are pickups of incoming calls.  Nothing done on them
                 if (lastState !== TelephonyManager.CALL_STATE_RINGING) {
@@ -81,6 +105,7 @@ class CallReceiver : BroadcastReceiver() {
                     callStartTime = java.util.Date()
                     Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
                 }
+
             TelephonyManager.CALL_STATE_IDLE ->
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)
                 if (lastState === TelephonyManager.CALL_STATE_RINGING) {
@@ -94,6 +119,7 @@ class CallReceiver : BroadcastReceiver() {
                     Toast.makeText(context, "outgoing " + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
 
                 }
+
         }
         lastState = state
     }

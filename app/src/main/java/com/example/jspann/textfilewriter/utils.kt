@@ -112,7 +112,7 @@ class Utils{
     }
 
     fun popup(applicationContext: Context, data: Any) {
-        android.widget.Toast.makeText(applicationContext, data.toString(), Toast.LENGTH_LONG).show()
+        android.widget.Toast.makeText(applicationContext, data.toString(), Toast.LENGTH_SHORT).show()
     }
 
     @Throws(Exception::class)

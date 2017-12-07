@@ -64,58 +64,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*var _phoneStateListener: PhoneStateListener = PhoneStateListener()
-        var tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        tm.listen(_phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
-
-        if(tm.callState==TelephonyManager.CALL_STATE_RINGING){
-            println("_________________________________________________________________________________INCOMING CALL_________________________________________________________________________________")
-        }
-        if(tm.callState==TelephonyManager.CALL_STATE_IDLE){
-            println("_________________________________________________________________________________IDLE_________________________________________________________________________________")
-        }
-
-        utils.popup(applicationContext,tm.callState)*/
-        //var cm = CallManager(applicationContext)
-        //var p =PhoneStateReceiver
-
-        /*
-        // https://stackoverflow.com/questions/15563921/how-to-detect-incoming-calls-in-an-android-device
-        // https://developer.android.com/reference/android/telephony/PhoneStateListener.html
-        // http://www.truiton.com/2014/08/android-phonestatelistener-example/
-
-        // https://stackoverflow.com/questions/27638462/simulating-incoming-call-or-sms-in-android-studio
-        var _phoneStateListener: PhoneStateListener = PhoneStateListener()
-        var tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        tm.listen(_phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
-        _phoneStateListener.onCallStateChanged(PhoneStateListener.LISTEN_CALL_STATE,"")
-
-        */
-
-        /*class PhoneStateListener : PhoneStateReceiver(){
-            override fun onReceive(context: Context?, intent: Intent?) {
-                super.onReceive(context, intent)
-                all(context, intent)
-            }
-            /*override fun onCallStateChanged(state: Int, incomingNumber: String) {
-                super.onCallStateChanged(state, incomingNumber)
-                var str = "________________________________________jspann:::"
-                when (state) {
-                    TelephonyManager.CALL_STATE_IDLE -> println(str+"onCallStateChanged: CALL_STATE_IDLE")
-                    TelephonyManager.CALL_STATE_RINGING -> println(str+"onCallStateChanged: CALL_STATE_RINGING")
-                    TelephonyManager.CALL_STATE_OFFHOOK -> println(str+"onCallStateChanged: CALL_STATE_OFFHOOK")
-                    else -> println(str+"UNKNOWN_STATE: " + state)
-                }
-            }*/
-
-            fun all(context: Context?, intent: Intent?){
-                var str = "________________________________________"+"INCOMING CALL"+(intent!!).getStringExtra(TelephonyManager.EXTRA_STATE)+"________________________________________"
-                utils.popup((context!!), str)
-            }
-        }
-
-        var pl = PhoneStateListener()*/
-
         properties_Setup()
 
         try {
@@ -165,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         }
         return blnRetItem
     }
-    private fun resetEditTextToGivenValue(){
+    fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
         setCursorToEndOfTxtField()
