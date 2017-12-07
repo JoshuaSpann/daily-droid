@@ -1,12 +1,17 @@
 package com.example.jspann.textfilewriter
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
 
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.provider.ContactsContract
+import android.net.Uri.withAppendedPath
+
+
 
 /**
  * Created by jspann on 11/29/2017.
@@ -67,6 +72,28 @@ class Utils{
         }
         fwriter.flush()
         fwriter.close()
+    }
+
+    fun getContactName(phoneNumber: String, context: Context): String {
+        val uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber))
+
+        val projection = arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME)
+
+        var contactName = ""
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactName = cursor.getString(0)
+            }
+            cursor.close()
+        }
+
+        if(contactName == ""){
+            return phoneNumber
+        }
+
+        return contactName //+ " ("+phoneNumber+")"
     }
 
     fun getCurrentFormattedDateAsString(): String {

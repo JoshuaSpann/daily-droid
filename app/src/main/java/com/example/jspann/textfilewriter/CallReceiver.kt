@@ -91,7 +91,7 @@ class CallReceiver : BroadcastReceiver() {
                 callStartTime = java.util.Date()
                 savedNumber = number
 
-                var strIncomingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Call from "+number
+                var strIncomingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Call from "+utils.getContactName(number,context)
                 if(strIncomingCallLog != lastMsg) {
                     println("        JS3 DEBUG TEST:: " + strIncomingCallLog)
                     lastMsg = strIncomingCallLog
@@ -109,7 +109,7 @@ class CallReceiver : BroadcastReceiver() {
                     isIncoming = false
                     callStartTime = java.util.Date()
 
-                    var strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Called "+number
+                    var strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Called "+utils.getContactName(number,context)
                     logCallToTodaysFile(strOutgoingCallLog)
 
                     Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
@@ -119,6 +119,7 @@ class CallReceiver : BroadcastReceiver() {
                 //Went to idle-  this is the end of a call.  What type depends on previous state(s)
                 if (lastState === TelephonyManager.CALL_STATE_RINGING) {
                     //Ring but no pickup-  a miss
+                    logCallToTodaysFile(" missed. ")
                     Toast.makeText(context, "Ringing but no pickup" + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
                 } else if (isIncoming) {
 
