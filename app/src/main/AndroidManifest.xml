@@ -22,6 +22,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ColorSelectorActivity" android:parentActivityName=".MainActivity"></activity>
+        <receiver android:name=".CallReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
