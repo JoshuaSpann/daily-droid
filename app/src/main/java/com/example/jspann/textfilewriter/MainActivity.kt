@@ -62,25 +62,42 @@ class MainActivity : AppCompatActivity() {
     //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
     fun setDefaultPreferences(){
+        // TODO - MOVE TO CONFIG!!!
         //println(_sharedPrefs.getString("pref_app_color",""))
-        //val prefs = this.getSharedPreferences("com.example.jspann.textfilewriter", Context.MODE_PRIVATE)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        var strAutoSave_k = "com.example.jspann.textfilewriter.blnAutoSave"
-        strAutoSave_k = "blnAutoSave"
 
-        //if(!prefs.contains(strAutoSave_k)) {
-        prefs.edit().putBoolean(strAutoSave_k, true).commit()
-        //}
+        // Define Keys //
+        var strAutoSave_k = "blnAutoSave"
         var strAutoLogCalls_k = "blnAutoLogCalls"
+        var strAppColor_k = "strAppColor"
+
+        // Remove Any Existing Values //
+        /**
+         * THE .commit() SUFFIX FN IS NEEDED IN ORDER FOR CHANGES TO PERSIST, ELSE NO VALUES SHOW!!!
+         */
+        prefs.edit().remove(strAutoSave_k).commit()
+        prefs.edit().remove(strAutoLogCalls_k).commit()
+        prefs.edit().remove(strAppColor_k).commit()
+
+        // Set Values if they do Not Exist //
+        if(!prefs.contains(strAutoSave_k)) {
+            prefs.edit().putBoolean(strAutoSave_k, true).commit()
+        }
         if(!prefs.contains(strAutoLogCalls_k)) {
-            prefs.edit().putBoolean(strAutoLogCalls_k, false)
+            prefs.edit().putBoolean(strAutoLogCalls_k, false).commit()
+        }
+        if(!prefs.contains(strAppColor_k)){
+            prefs.edit().putString(strAppColor_k, "ffee1100").commit()
         }
 
-        // GETTING DEFAULT PREFS
+        // Get Pref Values //
         var blnAutoSaveVal = prefs.getBoolean(strAutoSave_k, false)
         var blnAutoLogCalls_v = prefs.getBoolean(strAutoLogCalls_k, false)
-        utils.popup(applicationContext, blnAutoSaveVal)
-        utils.popup(applicationContext, blnAutoLogCalls_v)
+        var strAppColor_v = prefs.getString(strAppColor_k, "")
+
+        utils.popup(applicationContext, strAutoSave_k+":"+blnAutoSaveVal)
+        utils.popup(applicationContext, strAutoLogCalls_k+":"+blnAutoLogCalls_v)
+        utils.popup(applicationContext, strAppColor_k+":"+strAppColor_v)
     }
 
     /* /  LAUNCH CONTROLLER  / */
