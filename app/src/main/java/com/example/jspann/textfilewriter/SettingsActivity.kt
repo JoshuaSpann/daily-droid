@@ -16,6 +16,9 @@ import android.preference.PreferenceManager
 import android.preference.RingtonePreference
 import android.text.TextUtils
 import android.view.MenuItem
+import android.content.SharedPreferences
+
+
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -33,6 +36,26 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         super.onCreate(savedInstanceState)
         setupActionBar()
     }
+
+    /*override fun onResume() {
+        super.onResume()
+        preferenceScreen
+                .sharedPreferences
+                .registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        preferenceScreen
+                .sharedPreferences
+                .unregisterOnSharedPreferenceChangeListener(this)
+    }
+    fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        if (key == "username") {
+            val pref = findPreference(key)
+            pref.summary = sharedPreferences.getString(key, "")
+        }
+    }*/
 
     /**
      * Set up the [android.app.ActionBar], if the API is available.

@@ -60,6 +60,27 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="pref_example_color_titles">
+        <item>Default</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Violet</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="list_preference_color_values">
+        <item>#3F51B5</item>
+        <item>#cc0000</item>
+        <item>#ff8800</item>
+        <item>#ffbb33</item>
+        <item>#669900</item>
+        <item>#09c</item>
+        <item>#aa66cc</item>
+        <item>#222</item>
+    </string-array>
+
     <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>

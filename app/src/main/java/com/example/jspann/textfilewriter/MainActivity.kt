@@ -21,8 +21,10 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,6 +32,10 @@ import android.view.*
 import android.widget.*
 
 import java.io.*
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,12 +58,38 @@ class MainActivity : AppCompatActivity() {
     private var _spinner: Spinner ?= null
 
     // System Properties //
-//    private var _phoneStateListener: PhoneStateListener
+    //private var _phoneStateListener: PhoneStateListener
+    //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+    fun setDefaultPreferences(){
+        //println(_sharedPrefs.getString("pref_app_color",""))
+        //val prefs = this.getSharedPreferences("com.example.jspann.textfilewriter", Context.MODE_PRIVATE)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        var strAutoSave_k = "com.example.jspann.textfilewriter.blnAutoSave"
+        strAutoSave_k = "blnAutoSave"
+
+        //if(!prefs.contains(strAutoSave_k)) {
+        prefs.edit().putBoolean(strAutoSave_k, true).commit()
+        //}
+        var strAutoLogCalls_k = "blnAutoLogCalls"
+        if(!prefs.contains(strAutoLogCalls_k)) {
+            prefs.edit().putBoolean(strAutoLogCalls_k, false)
+        }
+
+        // GETTING DEFAULT PREFS
+        var blnAutoSaveVal = prefs.getBoolean(strAutoSave_k, false)
+        var blnAutoLogCalls_v = prefs.getBoolean(strAutoLogCalls_k, false)
+        utils.popup(applicationContext, blnAutoSaveVal)
+        utils.popup(applicationContext, blnAutoLogCalls_v)
+    }
 
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        setDefaultPreferences()
 
         properties_Setup()
 
