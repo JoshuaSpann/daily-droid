@@ -169,7 +169,6 @@ class MainActivity : AppCompatActivity() {
                 if (charCount > _intAutoSaveTrigger
                         && (_editText!!).length() > _intEditTextStartLength
                         && strOldFileName == _strCurrentFileName) {
-                    utils.popup(applicationContext, "Saving...")
                     saveToFile()
                     charCount = 0
                     property_ResetEditTextLength()
@@ -239,6 +238,7 @@ class MainActivity : AppCompatActivity() {
             utils.file_Append(file, strDataBody)
 
             property_ResetEditTextLength()
+            (_debug_text!!).text = "Last Saved: "+utils.getCurrentTimeStampAsString()
         } catch (e: Exception) {
             utils.popup(applicationContext, e)
         }
