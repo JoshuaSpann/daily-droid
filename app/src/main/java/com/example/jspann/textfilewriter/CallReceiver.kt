@@ -3,9 +3,7 @@ package com.example.jspann.textfilewriter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.view.View
 import android.widget.Toast
 import java.io.File
 
@@ -113,6 +111,10 @@ class CallReceiver : BroadcastReceiver() {
                     logCallToTodaysFile(strOutgoingCallLog)
 
                     Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
+                }
+            else{
+                    var strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Finished call. "
+                    logCallToTodaysFile(strOutgoingCallLog)
                 }
 
             TelephonyManager.CALL_STATE_IDLE ->

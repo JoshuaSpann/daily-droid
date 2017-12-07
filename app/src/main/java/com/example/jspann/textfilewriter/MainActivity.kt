@@ -21,20 +21,15 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.telephony.PhoneStateListener
-import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 
 import java.io.*
-import kotlin.text.Typography.tm
 
 
 class MainActivity : AppCompatActivity() {
@@ -90,8 +85,6 @@ class MainActivity : AppCompatActivity() {
         if(_blnPerformAutoSave) {
             autosave_Setup()
         }
-
-        // TODO - ADD AUTO-LOG CALLS (starttime, endtime, missed, whom/#)
     }
 
 
@@ -109,6 +102,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menuitem_changecolor -> {
                 this.launchColorSelectorActivity()
+            }
+            R.id.menuitem_settings -> {
+                launchSettingsActivity()
             }
         }
         return blnRetItem
@@ -212,9 +208,9 @@ class MainActivity : AppCompatActivity() {
         setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
+                setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -266,6 +262,10 @@ class MainActivity : AppCompatActivity() {
     /*   ACTIVITY MODIFIERS   */
     private fun launchColorSelectorActivity(){
         val intent = Intent(this, ColorSelectorActivity::class.java)
+        startActivity(intent)
+    }
+    private fun launchSettingsActivity(){
+        val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
 
