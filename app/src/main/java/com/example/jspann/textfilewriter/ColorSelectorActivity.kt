@@ -40,19 +40,22 @@ class ColorSelectorActivity : AppCompatActivity() {
         buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables() as List<Button>
         for(button: Button in buttons){
             button.setOnClickListener{
-                val strButtonColor: String = Integer.toHexString((button.background as ColorDrawable).color)
-                utils.popup(applicationContext,strButtonColor)
-                try {
-                    //TODO - Set MainActivity landing page color bg to colorselector selected button, also store in config file?
-                    //(findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
-                    //val files = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
-                    //config.fileColors.put(files[0].toString(), strButtonColor)
-                    //config.fileColors.put(files[1].toString(), strButtonColor)
-                    config.setPreference(this,"dailydroid__"+intent.getStringExtra("currentSelectedFile"), strButtonColor)
-                }catch(e: Exception){
-                    utils.popup(applicationContext, e)
+                val MainActivity__strFileName: String = "dailydroid__"+intent.getStringExtra("currentSelectedFile")
+                if(button.id == R.id.btn_default){
+                    config.removePreference(this,MainActivity__strFileName)
+                    utils.popup(this,"Color Reset to Default")
+                    this.finish()
                 }
-                this.finish()
+                else {
+                    val strButtonColor: String = Integer.toHexString((button.background as ColorDrawable).color)
+                    try {
+                        config.setPreference(this, MainActivity__strFileName, strButtonColor)
+                        utils.popup(this, "Color Set")
+                    } catch (e: Exception) {
+                        utils.popup(applicationContext, e)
+                    }
+                    this.finish()
+                }
             }
         }
     }

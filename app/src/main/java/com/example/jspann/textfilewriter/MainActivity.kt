@@ -35,7 +35,12 @@ import java.io.*
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.provider.ContactsContract
+import android.support.v7.app.ActionBar
+//import sun.swing.plaf.synth.Paint9Painter.PaintType
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -88,7 +93,8 @@ class MainActivity : AppCompatActivity() {
            |__[] Auto-JournalEntryLatest.txt -- Put here by user choice
          */
 
-        //TODO - ADD COLORIZING FUNCTIONALITY
+        // COLORIZING FUNCTIONALITY //
+        setApplicationColor()
 
         // AUTO-SAVE FUNCTIONALITY //
         if(_blnPerformAutoSave) {
@@ -249,7 +255,7 @@ class MainActivity : AppCompatActivity() {
             property_ResetEditTextLength()
             (_debug_text!!).text = "Last Saved: "+utils.getCurrentTimeStampAsString()
         } catch (e: Exception) {
-            utils.popup(applicationContext, e)
+            //utils.popup(applicationContext, e)
         }
     }
 
@@ -268,33 +274,41 @@ class MainActivity : AppCompatActivity() {
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
-        setApplicationColor()
-    }
-    fun setApplicationColor(){
-        if(_strCurrentFileName.isNullOrEmpty()) return
-        //var mapFileColorPrefs: MutableMap<String, Any> = mutableMapOf("dailydroid__"+_strCurrentFileName to "ff00aaee")
-        //config.setPreference(this,"dailydroid__"+_strCurrentFileName, "ff00aaee")
-        //(findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
-
-        var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
-        if(!str.isNullOrEmpty()) {
-            //utils.popup(applicationContext, _strCurrentFileName+" FILE COLOR: " + str)
-            (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(Color.parseColor("#"+str))
-        }else{
-            //utils.popup(applicationContext, _strCurrentFileName+" HAS NO FILE COLOR ASSIGNED ")
-            (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
-        }
-        //config.showAllPreferences(this)
     }
 
 
     /* /  VIEW CONTROLLERS  / */
+    /*   ALL/MANY VIEW ELEMENTS   */
+    fun setApplicationColor(){
+        if(_strCurrentFileName.isNullOrEmpty()) {
+            return
+        }
+    config.showAllPreferences(this)
+        var color = resources.getColor(R.color.colorPrimary)
+        var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and resources.getColor(R.color.colorAccent)))
+        var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
+
+        if(!str.isNullOrEmpty()) {
+            color = Color.parseColor("#"+str)
+            var hexColor = String.format("#%06X", 0xBBBBCC and color)
+            accentColor = Color.parseColor(hexColor)//color-11_11_11_11
+        }
+
+        (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(color)
+        (_textView_Title!!).setTextColor(color)
+        (_debug_text!!).setTextColor(accentColor)
+        (findViewById<View>(R.id.view) as View).setBackgroundColor(accentColor)
+
+        var cd: ColorDrawable = ColorDrawable(color)
+        var ab: ActionBar? = supportActionBar
+        (ab!!).setBackgroundDrawable(cd)
+    }
+
     /*   ACTIVITY MODIFIERS   */
     private fun launchColorSelectorActivity(){
         val intent = Intent(this, ColorSelectorActivity::class.java)
         intent.putExtra("currentSelectedFile", _strCurrentFileName)
         startActivity(intent)
-        (findViewById<View>(R.id.button_toolbar_refreshtext) as ImageButton).performClick()
     }
     private fun launchSettingsActivity(){
         val intent = Intent(this, SettingsActivity::class.java)

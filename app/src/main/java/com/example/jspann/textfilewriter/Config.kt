@@ -22,8 +22,6 @@ import java.io.File
 */
 class Config{
     private val utils = Utils()
-    private val configFile = File(utils.getDirectoryPathToString(),".config")
-    //private val configFile = File(getC,".config")
 
     var appColor: String = ""
     var autoLogCalls: Boolean = false
@@ -31,6 +29,7 @@ class Config{
     var fileColors: MutableMap<String,String> = hashMapOf("" to "")
 
     /* /  PREFERENCE CONTROLLERS  / */
+    /*  Get Preferences  */
     fun getPreferenceValue(p_context: Context, p_key: String): Any?{
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
         for((key, value) in prefs.all){
@@ -40,6 +39,7 @@ class Config{
         }
         return null
     }
+
     fun getPreference(p_context: Context, p_key: String): Map<String, Any?>?{
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
         for((key, value) in prefs.all){
@@ -49,19 +49,37 @@ class Config{
         }
         return null
     }
+
     fun getPreferences(p_context: Context): Map<String, Any?>{
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
         return prefs.all
     }
+
+
+    /*  Remove Preferences */
     fun removePreference(p_context: Context, p_key: String){
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
         prefs.edit().remove(p_key).commit()
     }
+
     fun removePreference(p_context: Context, p_keys: MutableSet<String>){
         for(key: String in p_keys){
             removePreference(p_context, key)
         }
     }
+
+
+    /*  Set Preferences  */
+    fun setDefaultPreferences(p_context: Context){
+        // Define Keys and their Values //
+        var map: MutableMap<String, Any> = mutableMapOf(
+                "dailydroid__blnAutoSave" to false,
+                "dailydroid__blnAutoLogCalls" to true,
+                "dailydroid__strAppColor" to "ffee2200"
+        )
+        setPreference(p_context, map)
+    }
+
     fun setPreference(p_context: Context, p_key: String, p_value: Any){
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
 
@@ -79,45 +97,15 @@ class Config{
             prefs.edit().putStringSet(p_key, p_value as Set<String>)
         }
     }
+
     fun setPreference(p_context: Context, p_map: MutableMap<String, Any>){
         for((key, value) in p_map){
             setPreference(p_context, key, value)
         }
     }
 
-    fun setDefaultPreferences(p_context: Context){
-        //println(_sharedPrefs.getString("pref_app_color",""))
-        val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
 
-        // Define Keys and their Values //
-        var map: MutableMap<String, Any> = mutableMapOf(
-                "blnAutoSave" to false,
-                "blnAutoLogCalls" to true,
-                "strAppColor" to "ffee2200"
-        )
-
-        // Remove Any Existing Values by Keys //
-        var keys: MutableSet<String> = map.keys
-        //removePreference(p_context, keys)
-
-        // Set Values //
-        map = mutableMapOf(
-                "dailydroid__blnAutoSave" to false,
-                "dailydroid__blnAutoLogCalls" to true,
-                "dailydroid__strAppColor" to "ffee2200"
-        )
-        setPreference(p_context, map)
-
-        // Get Pref Values //
-
-        var mapAllPrefs: MutableMap<String, Any?> = getPreferences(p_context) as MutableMap<String, Any?>
-        for((key, value) in mapAllPrefs){
-            if(key.contains("dailydroid__",true))
-                utils.popup(p_context.applicationContext, key+" : "+value.toString())
-        }
-
-    }
-
+    /*  Display Preferences  */
     fun showAllPreferences(p_context: Context){
         var mapAllPrefs: MutableMap<String, Any?> = getPreferences(p_context) as MutableMap<String, Any?>
         for((key, value) in mapAllPrefs){

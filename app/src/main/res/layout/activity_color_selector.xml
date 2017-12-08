@@ -137,4 +137,16 @@
         app:layout_constraintStart_toEndOf="@+id/btn_green_light"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
+    <Button
+        android:id="@+id/btn_default"
+        android:layout_width="92dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Default"
+        android:textColor="#fff"
+        app:layout_constraintStart_toEndOf="@+id/btn"
+        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+
 </android.support.constraint.ConstraintLayout>
