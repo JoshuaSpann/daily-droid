@@ -19,6 +19,7 @@
 
     <color name="colorText">#222</color>
     <color name="colorTextLight">#eee</color>
+    <color name="colorNone">#00eeeeee</color>
 
     <color name="color">#000</color>
 </resources>

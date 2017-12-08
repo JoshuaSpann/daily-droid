@@ -34,8 +34,7 @@ import android.widget.*
 import java.io.*
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-
-
+import android.graphics.Color
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     /* /  UTILTY AND VIEW DECLARATIONS  / */
     // Custom Classes //
     private val utils:Utils = Utils()
+    private val config = Config()
+    //config.setDefaultPreferences(this)
 
     // Base Type Properties //
     private var _blnPerformAutoSave: Boolean = false
@@ -61,60 +62,15 @@ class MainActivity : AppCompatActivity() {
     //private var _phoneStateListener: PhoneStateListener
     //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-    /*
-    fun setDefaultPreferences(){
-        // TODO - MOVE TO CONFIG!!!
-        //println(_sharedPrefs.getString("pref_app_color",""))
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        // Define Keys //
-        var strAutoSave_k = "blnAutoSave"
-        var strAutoLogCalls_k = "blnAutoLogCalls"
-        var strAppColor_k = "strAppColor"
-
-        // Remove Any Existing Values //
-        /**
-         * THE .commit() SUFFIX FN IS NEEDED IN ORDER FOR CHANGES TO PERSIST, ELSE NO VALUES SHOW!!!
-         */
-        prefs.edit().remove(strAutoSave_k).commit()
-        prefs.edit().remove(strAutoLogCalls_k).commit()
-        prefs.edit().remove(strAppColor_k).commit()
-
-        // Set Values if they do Not Exist //
-        if(!prefs.contains(strAutoSave_k)) {
-            prefs.edit().putBoolean(strAutoSave_k, true).commit()
-        }
-        if(!prefs.contains(strAutoLogCalls_k)) {
-            prefs.edit().putBoolean(strAutoLogCalls_k, false).commit()
-        }
-        if(!prefs.contains(strAppColor_k)){
-            prefs.edit().putString(strAppColor_k, "ffee1100").commit()
-        }
-
-        // Get Pref Values //
-        var blnAutoSaveVal = prefs.getBoolean(strAutoSave_k, false)
-        var blnAutoLogCalls_v = prefs.getBoolean(strAutoLogCalls_k, false)
-        var strAppColor_v = prefs.getString(strAppColor_k, "")
-
-        utils.popup(applicationContext, strAutoSave_k+":"+blnAutoSaveVal)
-        utils.popup(applicationContext, strAutoLogCalls_k+":"+blnAutoLogCalls_v)
-        utils.popup(applicationContext, strAppColor_k+":"+strAppColor_v)
-    }
-    */
-
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        var config = Config()
-        config.setDefaultPreferences(this)
-
         properties_Setup()
 
         try {
-            setTextFieldToLatestFile()
+            //setTextFieldToLatestFile()
             setCursorToEndOfTxtField()
         } catch (e: Exception) {
             //utils.popup(applicationContext, e)
@@ -259,10 +215,11 @@ class MainActivity : AppCompatActivity() {
     private fun fileSelection_Setup(){
         setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
                 setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+                setApplicationColor()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -307,6 +264,18 @@ class MainActivity : AppCompatActivity() {
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
+        setApplicationColor()
+    }
+    fun setApplicationColor(){
+        //var mapFileColorPrefs: MutableMap<String, Any> = mutableMapOf("dailydroid__"+_strCurrentFileName to "ff00aaee")
+        //config.setPreference(this,"dailydroid__"+_strCurrentFileName, "ff00aaee")
+        (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
+
+        var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
+        if(!str.isNullOrEmpty()) {
+            utils.popup(applicationContext, "FILE COLOR: " + str)
+            (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(Color.parseColor("#"+str))
+        }
     }
 
 
