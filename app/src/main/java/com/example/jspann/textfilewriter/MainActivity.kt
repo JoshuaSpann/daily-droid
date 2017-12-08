@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     //private var _phoneStateListener: PhoneStateListener
     //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
+    /*
     fun setDefaultPreferences(){
         // TODO - MOVE TO CONFIG!!!
         //println(_sharedPrefs.getString("pref_app_color",""))
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         utils.popup(applicationContext, strAutoLogCalls_k+":"+blnAutoLogCalls_v)
         utils.popup(applicationContext, strAppColor_k+":"+strAppColor_v)
     }
+    */
 
     /* /  LAUNCH CONTROLLER  / */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +108,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        setDefaultPreferences()
+        var config = Config()
+        config.setDefaultPreferences(this)
 
         properties_Setup()
 
