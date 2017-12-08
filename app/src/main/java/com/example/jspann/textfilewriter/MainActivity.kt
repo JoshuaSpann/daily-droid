@@ -218,7 +218,14 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
-                setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+                /*TODO - @@ FIX BUG CAUSED BY THIS!!! @@
+                 * Whenever items are reset for the spinner, the default is the new item.
+                 * Calling in an onSelected() will simply reset the items for the spinner,
+                 *  creating a loop.
+                 * How to balance the availability of newly created files in the listing with
+                 *  spinner file selection?
+                 setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+                */
                 setApplicationColor()
             }
 
