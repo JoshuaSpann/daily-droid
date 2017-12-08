@@ -49,6 +49,17 @@ class Config{
         utils.file_Write(configFile, strJsonProps)
     }
 
+    /*fun getPreference(p_context: Context, p_key: String): Map<String, Any>{
+        val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
+
+        var blnAutoLogCalls_v = prefs.getBoolean(strAutoLogCalls_k, false)
+        var strAppColor_v = prefs.getString(strAppColor_k, "")
+    }
+    */
+    fun getPreferences(p_context: Context): Map<String, Any?>{
+        val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
+        return prefs.all
+    }
     fun removePreference(p_context: Context, p_key: String){
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
         prefs.edit().remove(p_key).commit()
@@ -85,6 +96,27 @@ class Config{
         //println(_sharedPrefs.getString("pref_app_color",""))
         val prefs = PreferenceManager.getDefaultSharedPreferences(p_context)
 
+        var map: MutableMap<String, Any> = mutableMapOf(
+                "blnAutoSave" to false,
+                "blnAutoLogCalls" to true,
+                "strAppColor" to "ffee2200"
+        )
+        var keys: MutableSet<String> = map.keys
+        removePreference(p_context, keys)
+
+        map = mutableMapOf(
+                "dailydroid__blnAutoSave" to false,
+                "dailydroid__blnAutoLogCalls" to true,
+                "dailydroid__strAppColor" to "ffee2200"
+        )
+        setPreference(p_context, map)
+
+        var mapAllPrefs: MutableMap<String, Any?> = getPreferences(p_context) as MutableMap<String, Any?>
+        for((key, value) in mapAllPrefs){
+            if(key.contains("dailydroid__",true))
+                utils.popup(p_context.applicationContext, key+" : "+value.toString())
+        }
+        /*
         // Define Keys //
         var strAutoSave_k = "blnAutoSave"
         var strAutoLogCalls_k = "blnAutoLogCalls"
@@ -106,13 +138,15 @@ class Config{
             setPreference(p_context, strAppColor_k, "ffee1100")
         }
 
+
         // Get Pref Values //
-        var blnAutoSaveVal = prefs.getBoolean(strAutoSave_k, false)
+        var blnAutoSaveVal = prefs.getBoolean("blnAutoSave", false)
         var blnAutoLogCalls_v = prefs.getBoolean(strAutoLogCalls_k, false)
         var strAppColor_v = prefs.getString(strAppColor_k, "")
 
         utils.popup(p_context.applicationContext, strAutoSave_k+":"+blnAutoSaveVal)
         utils.popup(p_context.applicationContext, strAutoLogCalls_k+":"+blnAutoLogCalls_v)
         utils.popup(p_context.applicationContext, strAppColor_k+":"+strAppColor_v)
+        */
     }
 }
