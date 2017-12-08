@@ -38,6 +38,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.provider.ContactsContract
 import android.support.v7.app.ActionBar
+import android.view.WindowManager
+import android.os.Build
+
+
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
 
 
@@ -283,7 +287,7 @@ class MainActivity : AppCompatActivity() {
         if(_strCurrentFileName.isNullOrEmpty()) {
             return
         }
-    config.showAllPreferences(this)
+
         var color = resources.getColor(R.color.colorPrimary)
         var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and resources.getColor(R.color.colorAccent)))
         var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
@@ -291,7 +295,7 @@ class MainActivity : AppCompatActivity() {
         if(!str.isNullOrEmpty()) {
             color = Color.parseColor("#"+str)
             var hexColor = String.format("#%06X", 0xBBBBCC and color)
-            accentColor = Color.parseColor(hexColor)//color-11_11_11_11
+            accentColor = Color.parseColor(hexColor)
         }
 
         (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(color)
@@ -299,9 +303,15 @@ class MainActivity : AppCompatActivity() {
         (_debug_text!!).setTextColor(accentColor)
         (findViewById<View>(R.id.view) as View).setBackgroundColor(accentColor)
 
-        var cd: ColorDrawable = ColorDrawable(color)
+        var cd = ColorDrawable(color)
         var ab: ActionBar? = supportActionBar
         (ab!!).setBackgroundDrawable(cd)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = color
+        }
     }
 
     /*   ACTIVITY MODIFIERS   */
