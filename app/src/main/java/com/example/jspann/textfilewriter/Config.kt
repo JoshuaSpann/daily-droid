@@ -109,12 +109,21 @@ class Config{
         setPreference(p_context, map)
 
         // Get Pref Values //
-        /*
+
         var mapAllPrefs: MutableMap<String, Any?> = getPreferences(p_context) as MutableMap<String, Any?>
         for((key, value) in mapAllPrefs){
             if(key.contains("dailydroid__",true))
                 utils.popup(p_context.applicationContext, key+" : "+value.toString())
         }
-        */
+
+    }
+
+    fun showAllPreferences(p_context: Context){
+        var mapAllPrefs: MutableMap<String, Any?> = getPreferences(p_context) as MutableMap<String, Any?>
+        for((key, value) in mapAllPrefs){
+            if(key.contains("dailydroid__",true))
+                utils.popup(p_context.applicationContext, key+" : "+value.toString())
+        }
+
     }
 }

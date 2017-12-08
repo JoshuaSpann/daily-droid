@@ -45,10 +45,10 @@ class ColorSelectorActivity : AppCompatActivity() {
                 try {
                     //TODO - Set MainActivity landing page color bg to colorselector selected button, also store in config file?
                     //(findViewById<View>(R.id.button_colorLauncher) as? Button)?.setBackgroundColor(button.background as Int)
-                    val files = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
-                    config.fileColors.put(files[0].toString(), strButtonColor)
-                    config.fileColors.put(files[1].toString(), strButtonColor)
-                    //TODO - config.write()
+                    //val files = utils.getListOfAllFilenamesInDir(utils.getDirectoryPathToString())
+                    //config.fileColors.put(files[0].toString(), strButtonColor)
+                    //config.fileColors.put(files[1].toString(), strButtonColor)
+                    config.setPreference(this,"dailydroid__"+intent.getStringExtra("currentSelectedFile"), strButtonColor)
                 }catch(e: Exception){
                     utils.popup(applicationContext, e)
                 }

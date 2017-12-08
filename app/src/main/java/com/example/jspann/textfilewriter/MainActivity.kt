@@ -35,6 +35,7 @@ import java.io.*
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.provider.ContactsContract
 
 
 class MainActivity : AppCompatActivity() {
@@ -95,6 +96,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onRestart() {
+        super.onRestart()
+        setApplicationColor()
+    }
 
     /* /  APP BAR MENU CONTROLLERS  / */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean{
@@ -218,7 +224,6 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
-                setApplicationColor()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -266,15 +271,20 @@ class MainActivity : AppCompatActivity() {
         setApplicationColor()
     }
     fun setApplicationColor(){
+        if(_strCurrentFileName.isNullOrEmpty()) return
         //var mapFileColorPrefs: MutableMap<String, Any> = mutableMapOf("dailydroid__"+_strCurrentFileName to "ff00aaee")
         //config.setPreference(this,"dailydroid__"+_strCurrentFileName, "ff00aaee")
-        (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
+        //(findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
 
         var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
         if(!str.isNullOrEmpty()) {
-            utils.popup(applicationContext, "FILE COLOR: " + str)
+            //utils.popup(applicationContext, _strCurrentFileName+" FILE COLOR: " + str)
             (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(Color.parseColor("#"+str))
+        }else{
+            //utils.popup(applicationContext, _strCurrentFileName+" HAS NO FILE COLOR ASSIGNED ")
+            (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(resources.getColor(R.color.colorPrimary))
         }
+        //config.showAllPreferences(this)
     }
 
 
@@ -282,7 +292,9 @@ class MainActivity : AppCompatActivity() {
     /*   ACTIVITY MODIFIERS   */
     private fun launchColorSelectorActivity(){
         val intent = Intent(this, ColorSelectorActivity::class.java)
+        intent.putExtra("currentSelectedFile", _strCurrentFileName)
         startActivity(intent)
+        (findViewById<View>(R.id.button_toolbar_refreshtext) as ImageButton).performClick()
     }
     private fun launchSettingsActivity(){
         val intent = Intent(this, SettingsActivity::class.java)
@@ -327,6 +339,7 @@ class MainActivity : AppCompatActivity() {
         _strCurrentFileName = file.name
         _intEditTextStartLength = file.length().toInt()
         (_editText!!).setText(utils.readFileContentsToString(file))
+        setApplicationColor()
     }
 
     @Throws(Exception::class)
@@ -335,7 +348,6 @@ class MainActivity : AppCompatActivity() {
         val latestFile = files[0]
         this._strCurrentFileName = latestFile.name
         setEditTextToFileContents_and_setTextFieldToFileName(latestFile)
-        fileSelection_Setup()
     }
 
 }
