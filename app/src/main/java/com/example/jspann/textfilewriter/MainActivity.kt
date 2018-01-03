@@ -40,6 +40,9 @@ import android.provider.ContactsContract
 import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
+import android.text.method.ScrollingMovementMethod
+
+
 
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
@@ -163,6 +166,10 @@ class MainActivity : AppCompatActivity() {
         this.resetEditTextToGivenValue()
     }
 
+    fun button_toolbar_mdDream__click(view: View){
+        this.insertDreamMarkdownToEditText()
+    }
+
 
     /* /  FILE MANAGEMENT CONTROLLERS  / */
     private fun autosave_Setup(){
@@ -278,6 +285,7 @@ class MainActivity : AppCompatActivity() {
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
+        (_editText!!).setMovementMethod(ScrollingMovementMethod())
     }
 
 
@@ -326,6 +334,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*   EDIT TEXT FUNCTIONS   */
+    private fun insertDreamMarkdownToEditText(){
+        val txtMain = findViewById<EditText>(R.id.editText)
+        val strDreamMd: String = "\n\n```\n\n```\n"
+        val txtMain_cursorPosition = txtMain.selectionStart
+        txtMain.text.insert(txtMain_cursorPosition, strDreamMd)
+        txtMain.setSelection(txtMain_cursorPosition + 6)
+    }
+
     private fun insertTimestampToEditText(){
         val txtMain = findViewById<EditText>(R.id.editText)
         val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
