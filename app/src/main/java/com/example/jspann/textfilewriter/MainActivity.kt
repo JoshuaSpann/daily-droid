@@ -34,6 +34,7 @@ import android.widget.*
 import java.io.*
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.provider.ContactsContract
@@ -110,9 +111,31 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Activates When App is Restarted and Has Focus Returned to It
+     */
     override fun onRestart() {
         super.onRestart()
         setApplicationColor()
+        resetEditTextToGivenValue()
+    }
+
+    /**
+     * Activates When Leaving or Suspending App
+     */
+    override fun onPause() {
+        super.onPause()
+        setApplicationColor()
+        resetEditTextToGivenValue()
+    }
+
+    /**
+     * Activates When Paused App Has Focus Returned to It
+     */
+    override fun onResume() {
+        super.onResume()
+        setApplicationColor()
+        resetEditTextToGivenValue()
     }
 
     /* /  APP BAR MENU CONTROLLERS  / */

@@ -67,7 +67,6 @@
         app:layout_constraintEnd_toStartOf="@id/toolbar3"
         app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
-        android:maxLines = "10"
         android:scrollbars = "vertical"
         />
         <!--android:textCursorDrawable="@null"/>-->
