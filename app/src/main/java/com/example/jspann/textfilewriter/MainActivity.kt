@@ -21,10 +21,8 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,23 +30,12 @@ import android.view.*
 import android.widget.*
 
 import java.io.*
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.provider.ContactsContract
 import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
-import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
-import android.text.style.ForegroundColorSpan
-import com.example.jspann.textfilewriter.R.id.textView
-import android.text.Spannable
-import android.text.style.BackgroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.URLSpan
 import android.util.Log
 
 
@@ -400,11 +387,8 @@ class MainActivity : AppCompatActivity() {
         _strCurrentFileName = file.name
         property_ResetEditTextLength()
         val strOriginalText = utils.readFileContentsToString(file)
-        // TODO (_editText!!).span(new ForegroundColorSpan(COLOR.Red), 0, 5, 0)
-        var newTxt: List<String> = strOriginalText.split("##n")
-        (_editText!!).setText(newTxt[0])
-        //(_editText!!).setText(strOriginalText, BufferType.SPANNABLE)
-        //(_editText!!).setText(strOriginalText)
+        val formattedText = markdown.formatFromString(strOriginalText)
+        (_editText!!).setText(formattedText)
         setChosenFilename(file.name)
     }
 
@@ -412,78 +396,11 @@ class MainActivity : AppCompatActivity() {
         var file = File(_strDirPath, p_strFileName)
         _strCurrentFileName = file.name
         _intEditTextStartLength = file.length().toInt()
-        //(_editText!!).setText(utils.readFileContentsToString(file))
-        /*
-        var text = utils.readFileContentsToString(file)
-        val h2SplitIdentifier = "##"
-        val h2LocationInText = text.indexOf(h2SplitIdentifier)
-        var txtToColorSpan = SpannableString(text)
-        txtToColorSpan.setSpan(ForegroundColorSpan(Color.RED), h2LocationInText, h2SplitIdentifier.length, 0)
-        */
 
-        /* GOOD CODE
-        val spannableString = SpannableString("Hello World!")
-        val backgroundSpan = BackgroundColorSpan(Color.YELLOW)
-        val s: String = "________________SPANNABLE STRING:"+spannableString.length.toString()+"________________"
-        Log.d("JSDEV",s)
-        spannableString.setSpan(backgroundSpan, 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        */
+        val rawFileText = utils.readFileContentsToString(file)
+        val highlightedMarkdownText = markdown.formatFromString(rawFileText)
 
-        /*
-        // Set Markdown ## to have a specific style span in the editText //
-        val h2Identifier = "##"
-        val originalText = utils.readFileContentsToString(file)
-        val spannableString = SpannableString(originalText)
-        val backgroundSpan = BackgroundColorSpan(Color.YELLOW)
-
-        val startLocation = spannableString.indexOf(h2Identifier)
-        //val stopLocation = startLocation + spannableString.indexOf(h2Identifier, startLocation)//h2Identifier.length // TODO: Replace with character at end of line!
-        val stopLocation = spannableString.indexOf(h2Identifier, startLocation+h2Identifier.length) + h2Identifier.length
-        Log.d("JSDEV", "sL: "+startLocation+" eL: "+stopLocation)
-        spannableString.setSpan(backgroundSpan, startLocation, stopLocation, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        */
-
-        /*
-        val h2Identifier = "##"
-        val originalText = utils.readFileContentsToString(file)
-        var spannableString = SpannableString(originalText)
-        val sizeIncrease= 1.5
-        val h2SizeSpan = RelativeSizeSpan(sizeIncrease.toFloat())
-
-        val h2CountInText = originalText.length - originalText.replace("##", "").length
-
-        var startLocation = spannableString.indexOf(h2Identifier)
-        var stopLocation = startLocation
-
-        // Default EditText Color ro Darker Gray //
-        spannableString.setSpan(ForegroundColorSpan(Color.DKGRAY), 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        for (i in 1..(h2CountInText/2)) {
-            try {
-                // These have to stay in the loop or else they will be overwritten! //
-                val h2ColorSpan = ForegroundColorSpan(Color.BLACK)
-                val backgroundSpan = BackgroundColorSpan(Color.YELLOW)
-
-                // Find next instance of "tags" and apply style until those "tags" end //
-                stopLocation = spannableString.indexOf(h2Identifier, startLocation + h2Identifier.length)// + h2Identifier.length
-
-                // Set Styles //
-                spannableString.setSpan(backgroundSpan, startLocation, stopLocation+h2Identifier.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                spannableString.setSpan(h2ColorSpan, startLocation, stopLocation+h2Identifier.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // Reset the start location to the new stop location after setting the span //
-                startLocation = spannableString.indexOf(h2Identifier,stopLocation + h2Identifier.length)
-            }
-            catch (e: Exception) {
-                continue
-            }
-        }
-        */
-
-        val spannableString = markdown.setHeadingSpans(utils.readFileContentsToString(file))
-
-        (_editText!!).setText(spannableString)
-
+        (_editText!!).setText(highlightedMarkdownText)
 
         setApplicationColor()
     }
