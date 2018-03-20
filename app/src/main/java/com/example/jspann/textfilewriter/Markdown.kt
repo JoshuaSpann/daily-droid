@@ -6,14 +6,7 @@ import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
-import android.util.Log
 import java.util.regex.Pattern
-import android.R.attr.start
-import android.app.Application
-import android.content.Context
-import android.graphics.Color.rgb
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 
 
 /**
@@ -62,9 +55,7 @@ class Markdown {
         for (i in 1..(h2CountInText/2)) {
             try {
                 // These have to stay in the loop or else they will be overwritten! //
-                // val testColor = Color.HSVToColor(1, floatArrayOf((0).toFloat(),(0).toFloat(),(0).toFloat()))
                 val h2ColorSpan = ForegroundColorSpan(Colors.APP.PRIMARY)
-                val backgroundSpan = BackgroundColorSpan(Color.YELLOW)
                 val h2SizeSpan = RelativeSizeSpan((1.2).toFloat())
 
                 // Find next instance of "tags" and apply style until those "tags" end //
@@ -85,58 +76,29 @@ class Markdown {
         return  spannableString
     }
 
+    /**
+     * Applies Highlighted Formatting for "Timestamps" matching " - 0000:  " where '0' is 0-9
+     */
     private fun setTimestampSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
 
-        val timestampStartSymbol = " - "
-        val timestampEndSymbol = ":  "
-
-        val timestampCount = spannableString.toString().length - spannableString.toString().replace(" - ", "").replace(":  ","").length
-        var startLocation = spannableString.indexOf(timestampStartSymbol)
-        var stopLocation = startLocation//spannableString.indexOf(timestampEndSymbol)
-
+        // Search for "\n - 0000:  " timestamps and format accordingly with REGEX //
         val p = Pattern.compile("\n - \\d\\d\\d\\d:")
-        val m = p.matcher(spannableString)   // get a matcher object
-        var count = 0
+        val m = p.matcher(spannableString)
 
+        // Holds the text coordinates to set ranges for spans //
         var timestampHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        // Search through the regex matcher and assign the coordinates to the list //
         while (m.find()) {
-            count++
-            println("Match number " + count)
-            System.out.println("start(): " + m.start())
-            System.out.println("end(): " + m.end())
             timestampHighlightLocs.add(intArrayOf(m.start(), m.end()))
         }
 
+        // Set the Timestamp formatting spans to the text //
         for (i in 0 until timestampHighlightLocs.size) {
-            //try {
-                val colorSpan = ForegroundColorSpan(Color.RED)
-                Log.d("JSDEV - ARR: ", i.toString())
-                spannableString.setSpan(colorSpan, timestampHighlightLocs[i][0], timestampHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-           // }
-           // catch (e: Exception) {
-           //     continue
-           // }
+            val colorSpan = ForegroundColorSpan(Color.RED)
+            spannableString.setSpan(colorSpan, timestampHighlightLocs[i][0], timestampHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-
-
-        /*
-        for (i in 1..timestampCount) {
-            try {
-                Log.d("JSDEV", "["+i+"] strL: "+startLocation+" stpL: "+stopLocation)
-                // Formatting //
-                val colorSpan = ForegroundColorSpan(Color.RED)
-                stopLocation = spannableString.indexOf(timestampEndSymbol)
-                spannableString.setSpan(colorSpan, startLocation, stopLocation + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                startLocation = spannableString.indexOf(timestampStartSymbol, stopLocation)
-
-            }
-            catch (e: Exception) {
-                continue
-            }
-        }
-        */
 
         return spannableString
     }
