@@ -242,11 +242,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         try {
+            File(_strDirPath).mkdir()
             utils.file_Append(newFile, ("# " + utils.getCurrentFormattedDateAsString() + utils.getCurrentTimeStampAsString() + "\n\n---\n\n"))
 
             this.setTextFieldToLatestFile()
             this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         } catch (e: Exception) {
+            Log.d("JSDEV: ", e.toString()+"\n\t_strDirPath= "+_strDirPath)
             utils.popup(applicationContext, e)
         }
         setCursorToEndOfTxtField()
@@ -408,6 +410,7 @@ class MainActivity : AppCompatActivity() {
     @Throws(Exception::class)
     private fun setTextFieldToLatestFile() {
         val files = utils.getListOfAllFilesInDir(_strDirPath)
+        if (files === null) return
         val latestFile = files[0]
         this._strCurrentFileName = latestFile.name
         setEditTextToFileContents_and_setTextFieldToFileName(latestFile)

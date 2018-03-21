@@ -117,9 +117,11 @@ class Utils{
     }
 
     fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
-        val filesInDir = getListOfAllFilesInDir(pathString)
+        var filesInDir = getListOfAllFilesInDir(pathString)
 
         var intFileCounter = 0
+        if (filesInDir === null) return arrayOf("No Files")
+
         val filenamesInDir = arrayOfNulls<String>(filesInDir.size)
 
         for (currFile in filesInDir) {
@@ -129,10 +131,12 @@ class Utils{
 
         return filenamesInDir
     }
-    fun getListOfAllFilesInDir(pathString: String): Array<File> {
+    fun getListOfAllFilesInDir(pathString: String): Array<File>? {
         val dir = File(pathString)
 
         val filesInDir = dir.listFiles()
+        if (filesInDir === null) return null
+
         Arrays.sort(filesInDir!!, Collections.reverseOrder<Any>())
         return filesInDir
     }

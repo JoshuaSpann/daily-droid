@@ -55,7 +55,7 @@ class Markdown {
         for (i in 1..(h2CountInText/2)) {
             try {
                 // These have to stay in the loop or else they will be overwritten! //
-                val h2ColorSpan = ForegroundColorSpan(Colors.APP.PRIMARY)
+                val h2ColorSpan = ForegroundColorSpan(Colors.Markdown.h2)
                 val h2SizeSpan = RelativeSizeSpan((1.2).toFloat())
 
                 // Find next instance of "tags" and apply style until those "tags" end //
