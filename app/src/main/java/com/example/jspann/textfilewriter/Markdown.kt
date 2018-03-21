@@ -23,7 +23,7 @@ class Markdown {
         var spannableString = SpannableString(text)
 
         // Default EditText Color ro Darker Gray //
-        spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.text), 0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         spannableString = setHeadingSpans(spannableString)
         spannableString = setTimestampSpans(spannableString)
@@ -55,7 +55,7 @@ class Markdown {
         for (i in 1..(h2CountInText/2)) {
             try {
                 // These have to stay in the loop or else they will be overwritten! //
-                val h2ColorSpan = ForegroundColorSpan(Colors.Markdown.h2)
+                val h2ColorSpan = ForegroundColorSpan(Colors.Markdown.H2)
                 val h2SizeSpan = RelativeSizeSpan((1.2).toFloat())
 
                 // Find next instance of "tags" and apply style until those "tags" end //
@@ -96,7 +96,7 @@ class Markdown {
 
         // Set the Timestamp formatting spans to the text //
         for (i in 0 until timestampHighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Color.RED)
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.TIMESTAMP)
             spannableString.setSpan(colorSpan, timestampHighlightLocs[i][0], timestampHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
