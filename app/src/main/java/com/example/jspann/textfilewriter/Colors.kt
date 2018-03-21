@@ -8,28 +8,45 @@ import android.graphics.drawable.ColorDrawable
  * Created by jspann on 3/20/2018.
  */
 object Colors {
+    val BLACK = 0xFF000000.toInt()
+
+    val GRAY = 0xFF777777.toInt()
+    val GRAY_BRIGHT = GRAY + 0xFF555555.toInt()
+    val GRAY_DARK = GRAY - 0x00444444
+    val GRAY_LIGHT = GRAY + 0xFF444444.toInt()
+
     val GREEN = 0xFF669900.toInt()
+    val GREEN_BRIGHT = 0xFF88ff88.toInt()
     val GREEN_LIGHT = 0xFF99cc00.toInt()
+
     val ORANGE = 0xFFff8800.toInt()
     val ORANGE_DARK = 0xFFdd6611.toInt()
     val ORANGE_LIGHT = 0xFFffbb33.toInt()
+
+    val PURPLE_LIGHT = 0xFFaa66cc.toInt()
+
+    val RED = 0xFFcc0000.toInt()
+    val RED_LIGHT = 0xFFff4444.toInt()
+
     val SKYBLUE = 0xFF33b5e5.toInt()
     val SKYBLUE_BRIGHT = 0xFF00ddff.toInt()
     val SKYBLUE_DARK = 0xFF0099cc.toInt()
 
+    val WHITE = 0xFFeeeeee.toInt()
+    val YELLOW = 0xFFffbb33.toInt()
+
     object App {
-        val PRIMARY = rgb(63, 81, 181)
-        val SECONDARY = rgb(48, 63, 159)
-        val ACCENT = rgb(255,64,129)
+        val PRIMARY = 0xFF3F51B5.toInt()
+        val SECONDARY = 0xFF303F9F.toInt()
+        val ACCENT = 0xFFFF4081.toInt()
     }
     object Markdown {
-        private val header = 25
         val H1 = 0xFF111111.toInt()
-        val H2 = 0xFF222222.toInt()
-        val H3 = rgb(header*3,header*3,header*3)
-        val H4 = rgb(header*4,header*4,header*4)
-        val H5 = rgb(header*5,header*5,header*5)
-        val TEXT_BODY = 0xFFff0000.toInt()
+        val H2 = GRAY_DARK
+        val H3 = GRAY
+        val H4 = GRAY_LIGHT
+        val H5 = GRAY_LIGHT
+        val TEXT_BODY = 0xFF444444.toInt()
         val TIMESTAMP = ORANGE_DARK
     }
 }
