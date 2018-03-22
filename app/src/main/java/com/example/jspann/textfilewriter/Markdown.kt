@@ -1,11 +1,14 @@
 package com.example.jspann.textfilewriter
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.util.Log
 import java.util.regex.Pattern
 
 
@@ -25,8 +28,76 @@ class Markdown {
         // Default EditText Color ro Darker Gray //
         spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
+        spannableString = setItalicSpans(spannableString)
+        spannableString = setBoldSpans(spannableString)
+
+        spannableString = setCodeSpans(spannableString)
+
         spannableString = setHeadingSpans(spannableString)
         spannableString = setTimestampSpans(spannableString)
+
+        return spannableString
+    }
+
+    /**
+     * Returns given spannableString formatted to have styles applied to __...__ or **....**
+     */
+    // TODO - TEST
+    private fun setBoldSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        // Matches all words like " **............** " or " __.....__ "
+        val p = Pattern.compile("\\s(\\*\\*)|(__).(\\*\\*)|(__)\\s")
+        val m =p.matcher(spannableString)
+
+        //val p2 = Pattern.compile("\\s__.__\\s")
+        //val m2 =p2.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        /*
+        while (m2.find()) {
+            iHighlightLocs.add(intArrayOf(m2.start(), m2.end()))
+        }
+        */
+
+        // Set the formatting spans to the text //
+        for (i in 0 until iHighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.ITALICS)
+            val styleSpan = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    // TODO - FINISH `.*`
+    private fun setCodeSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        // Matches all words like " ```.``` " or " `.` "
+        // https://www.tutorialspoint.com/compile_java_online.php //
+        val p = Pattern.compile("\n```\n[\\s\\S]*\n```\n")
+        val m =p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        // Set the formatting spans to the text //
+        for (i in 0 until iHighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.CODE)
+            val bgSpan = BackgroundColorSpan(Colors.GRAY_BRIGHT)
+            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bgSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
 
         return spannableString
     }
@@ -36,7 +107,38 @@ class Markdown {
      */
     private fun setHeadingSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
+        spannableString = setH3Spans(spannableString)
         spannableString = setH2Spans(spannableString)
+        spannableString = setH1Spans(spannableString)
+
+        return spannableString
+    }
+
+    /**
+     * Returns provided spannable string formatted to have H1 styles (#...#) applied
+     */
+    // TODO - TEST
+    private fun setH1Spans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        //val h1Identifier = "#"
+        // Matches all lines like "# ............"
+        val p = Pattern.compile("(?m)^# /w $")
+        val m =p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var h1HighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            h1HighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        // Set the formatting spans to the text //
+        for (i in 0 until h1HighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.H1)
+            val relativeSizeSpan = RelativeSizeSpan(1.3.toFloat())
+            spannableString.setSpan(colorSpan, h1HighlightLocs[i][0], h1HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(relativeSizeSpan, h1HighlightLocs[i][0], h1HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
 
         return spannableString
     }
@@ -74,6 +176,70 @@ class Markdown {
         }
 
         return  spannableString
+    }
+
+    /**
+     * Returns given spannableString formatted to have H3 ###.....### styles
+     */
+    // TODO - TEST
+    private fun setH3Spans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        //val h1Identifier = "#"
+        // Matches all lines like "# ............"
+        val p = Pattern.compile("(?m)^### /w $")
+        val m =p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var h3HighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            h3HighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        // Set the formatting spans to the text //
+        for (i in 0 until h3HighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.H3)
+            val textSizeSpan = RelativeSizeSpan(1.1.toFloat())
+            spannableString.setSpan(colorSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(textSizeSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Returns given spannableString formatted to have styles applied to _..._ or *....*
+     */
+    // TODO - TEST
+    private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        // Matches all words like " *............* " or " _....._ "
+        val p = Pattern.compile("\\s\\*.\\*\\s")
+        val m =p.matcher(spannableString)
+
+        val p2 = Pattern.compile("\\s_._\\s")
+        val m2 =p2.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        while (m2.find()) {
+            iHighlightLocs.add(intArrayOf(m2.start(), m2.end()))
+        }
+
+        // Set the formatting spans to the text //
+        for (i in 0 until iHighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.ITALICS)
+            val styleSpan = StyleSpan(Typeface.ITALIC)
+            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
     }
 
     /**

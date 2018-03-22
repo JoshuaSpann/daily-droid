@@ -11,8 +11,9 @@ object Colors {
     val BLACK = 0xFF000000.toInt()
 
     val GRAY = 0xFF777777.toInt()
-    val GRAY_BRIGHT = GRAY + 0xFF555555.toInt()
+    val GRAY_BRIGHT = GRAY + 0xFF777777.toInt()
     val GRAY_DARK = GRAY - 0x00444444
+    val GRAY_HIGHLIGHT = GRAY + 0xFF555555.toInt()
     val GRAY_LIGHT = GRAY + 0xFF444444.toInt()
 
     val GREEN = 0xFF669900.toInt()
@@ -41,11 +42,13 @@ object Colors {
         val ACCENT = 0xFFFF4081.toInt()
     }
     object Markdown {
-        val H1 = 0xFF111111.toInt()
+        val CODE = GRAY_LIGHT
+        val H1 = App.PRIMARY//0xFF111111.toInt()
         val H2 = GRAY_DARK
         val H3 = GRAY
         val H4 = GRAY_LIGHT
         val H5 = GRAY_LIGHT
+        val ITALICS = GRAY
         val TEXT_BODY = 0xFF444444.toInt()
         val TIMESTAMP = ORANGE_DARK
     }

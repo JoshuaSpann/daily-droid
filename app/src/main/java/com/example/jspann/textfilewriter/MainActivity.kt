@@ -375,7 +375,12 @@ class MainActivity : AppCompatActivity() {
     /*   SPINNER FUNCTIONS   */
     private fun setSpinnerItems(p_strItems: Array<String?>){
         var spinner = findViewById<View>(R.id.spinner) as Spinner
-        spinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
+        //spinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
+        // TODO - TEST
+        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
+        adapter.setDropDownViewResource(R.layout.spinner_item)
+        spinner.adapter = adapter
+
     }
 
     /*   TEXT FIELD FUNCTIONS  */
