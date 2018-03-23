@@ -132,16 +132,7 @@ class Markdown {
     private fun setH1Spans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all lines like "# ............"
-        val r = "(^|\n)#{1}[\\s\\S&&[^\n#]]*\n"
-        val p = Pattern.compile(r)//(?m)
-        val m =p.matcher(spannableString)
-
-        // Search through the regex matcher and assign the coordinates to a list //
-        var h1HighlightLocs: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            h1HighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
+        val h1HighlightLocs = getCoordinatesOfHeadingsLevel(1, spannableString)
 
         // Set the formatting spans to the text //
         for (i in 0 until h1HighlightLocs.size) {
@@ -157,7 +148,7 @@ class Markdown {
     /**
      * Formats a SpannableString to have Spans for All H2 Markdown Headings (##) between the opening and closing tags (##.....##)
      */
-    private fun setH2Spans(spannableString: SpannableString) : SpannableString{
+    /*private fun setH2Spans(spannableString: SpannableString) : SpannableString{
         val h2Identifier = "##"
 
         val h2CountInText = spannableString.toString().length - spannableString.toString().replace("##", "").length
@@ -188,6 +179,21 @@ class Markdown {
 
         return  spannableString
     }
+    */
+    private fun setH2Spans(spannableString: SpannableString) : SpannableString{
+        var spannableString = spannableString
+
+        val h2HighlightLocs = getCoordinatesOfHeadingsLevel(2, spannableString)
+
+        for (i in 0 until h2HighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.H2)
+            val textSizeSpan = RelativeSizeSpan(1.2.toFloat())
+            spannableString.setSpan(colorSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(textSizeSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
 
     /**
      * Returns given spannableString formatted to have H3 ###.....### styles
@@ -196,16 +202,7 @@ class Markdown {
         var spannableString = spannableString
         //val h1Identifier = "#"
         // Matches all lines like "# ............"
-        val r = "(^|\n)#{3}[\\s\\S&&[^\n#]]*\n"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spannableString)
-
-        // Search through the regex matcher and assign the coordinates to a list //
-        var h3HighlightLocs: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            h3HighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
+        val h3HighlightLocs = getCoordinatesOfHeadingsLevel(3, spannableString)
 
         // Set the formatting spans to the text //
         for (i in 0 until h3HighlightLocs.size) {
@@ -216,6 +213,22 @@ class Markdown {
         }
 
         return spannableString
+    }
+
+    private fun getCoordinatesOfHeadingsLevel(headingLevel: Int, spannableString: SpannableString) : MutableList<IntArray>{
+        //val r = "((^|\n)#{"+headingLevel+"}[\\s\\S&&[^\n#]]*\n)"
+        val r = "(?m)((^|\n)#{"+headingLevel+"} .*$\n)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var hHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            hHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        return hHighlightLocs
     }
 
     /**
