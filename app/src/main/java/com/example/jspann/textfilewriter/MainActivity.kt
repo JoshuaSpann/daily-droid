@@ -364,6 +364,7 @@ class MainActivity : AppCompatActivity() {
     private fun insertTimestampToEditText(){
         val txtMain = findViewById<EditText>(R.id.editText)
         val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
+        if (txtMain.selectionStart < 0) return
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 

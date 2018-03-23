@@ -129,12 +129,11 @@ class Markdown {
     /**
      * Returns provided spannable string formatted to have H1 styles (#...#) applied
      */
-    // TODO - TEST
     private fun setH1Spans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        //val h1Identifier = "#"
         // Matches all lines like "# ............"
-        val p = Pattern.compile("(?m)^# /w $")
+        val r = "(^|\n)#[\\s\\S&&[^\n#]]*\n"
+        val p = Pattern.compile(r)//(?m)
         val m =p.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //

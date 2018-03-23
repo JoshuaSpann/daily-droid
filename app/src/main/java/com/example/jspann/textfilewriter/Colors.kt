@@ -44,12 +44,12 @@ object Colors {
     object Markdown {
         val CODE = GRAY_LIGHT
         val H1 = App.PRIMARY//0xFF111111.toInt()
-        val H2 = GRAY_DARK
-        val H3 = GRAY
-        val H4 = GRAY_LIGHT
+        val H2 = App.SECONDARY
+        val H3 = GRAY_DARK
+        val H4 = GRAY
         val H5 = GRAY_LIGHT
-        val ITALICS = GRAY
+        val ITALICS = GRAY_DARK
         val TEXT_BODY = 0xFF444444.toInt()
-        val TIMESTAMP = ORANGE_DARK
+        val TIMESTAMP = App.ACCENT
     }
 }
