@@ -132,7 +132,7 @@ class Markdown {
     private fun setH1Spans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all lines like "# ............"
-        val r = "(^|\n)#[\\s\\S&&[^\n#]]*\n"
+        val r = "(^|\n)#{1}[\\s\\S&&[^\n#]]*\n"
         val p = Pattern.compile(r)//(?m)
         val m =p.matcher(spannableString)
 
@@ -192,13 +192,13 @@ class Markdown {
     /**
      * Returns given spannableString formatted to have H3 ###.....### styles
      */
-    // TODO - TEST
     private fun setH3Spans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         //val h1Identifier = "#"
         // Matches all lines like "# ............"
-        val p = Pattern.compile("(?m)^### /w $")
-        val m =p.matcher(spannableString)
+        val r = "(^|\n)#{3}[\\s\\S&&[^\n#]]*\n"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //
         var h3HighlightLocs: MutableList<IntArray> = mutableListOf()
