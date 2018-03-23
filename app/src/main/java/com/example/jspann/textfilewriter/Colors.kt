@@ -42,6 +42,7 @@ object Colors {
         val ACCENT = 0xFFFF4081.toInt()
     }
     object Markdown {
+        val BOLD = BLACK
         val CODE = GRAY_LIGHT
         val H1 = App.PRIMARY//0xFF111111.toInt()
         val H2 = App.SECONDARY

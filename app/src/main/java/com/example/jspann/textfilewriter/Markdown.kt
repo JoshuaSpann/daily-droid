@@ -28,29 +28,51 @@ class Markdown {
         // Default EditText Color ro Darker Gray //
         spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
+        // Bolds and Italics //
         spannableString = setItalicSpans(spannableString)
         spannableString = setBoldSpans(spannableString)
 
+        // Code //
         spannableString = setCodeSpans(spannableString)
 
+        // Headings //
         spannableString = setHeadingSpans(spannableString)
+
+        // Timestamps and Lists //
         spannableString = setTimestampSpans(spannableString)
 
         return spannableString
     }
 
     /**
+     * Returns [begin, end] Coordinates List for Given Heading Level in a String
+     */
+    private fun getCoordinatesOfHeadingsLevel(headingLevel: Int, spannableString: SpannableString) : MutableList<IntArray>{
+        //val r = "((^|\n)#{"+headingLevel+"}[\\s\\S&&[^\n#]]*\n)"
+        val r = "(?m)((^|\n)#{"+headingLevel+"} .*$\n)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var hHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            hHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        return hHighlightLocs
+    }
+
+    /**
      * Returns given spannableString formatted to have styles applied to __...__ or **....**
      */
-    // TODO - TEST
     private fun setBoldSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all words like " **............** " or " __.....__ "
-        val p = Pattern.compile("\\s(\\*\\*)|(__).(\\*\\*)|(__)\\s")
+        //val r = " (\\*{2}|_{2}) [\\s\\S&&[^\n]]* (\\*{2}|_{2})"
+        val r = "\\s(\\*|_){2}[\\s\\S&&[^\n]]*(\\*|_){2}"
+        val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
-
-        //val p2 = Pattern.compile("\\s__.__\\s")
-        //val m2 =p2.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //
         var iHighlightLocs: MutableList<IntArray> = mutableListOf()
@@ -59,15 +81,9 @@ class Markdown {
             iHighlightLocs.add(intArrayOf(m.start(), m.end()))
         }
 
-        /*
-        while (m2.find()) {
-            iHighlightLocs.add(intArrayOf(m2.start(), m2.end()))
-        }
-        */
-
         // Set the formatting spans to the text //
         for (i in 0 until iHighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.ITALICS)
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
             val styleSpan = StyleSpan(Typeface.BOLD)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -213,22 +229,6 @@ class Markdown {
         }
 
         return spannableString
-    }
-
-    private fun getCoordinatesOfHeadingsLevel(headingLevel: Int, spannableString: SpannableString) : MutableList<IntArray>{
-        //val r = "((^|\n)#{"+headingLevel+"}[\\s\\S&&[^\n#]]*\n)"
-        val r = "(?m)((^|\n)#{"+headingLevel+"} .*$\n)"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spannableString)
-
-        // Search through the regex matcher and assign the coordinates to a list //
-        var hHighlightLocs: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            hHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        return hHighlightLocs
     }
 
     /**
