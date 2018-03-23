@@ -81,18 +81,24 @@ class Markdown {
         var spannableString = spannableString
         // Matches all words like " ```.``` " or " `.` "
         // https://www.tutorialspoint.com/compile_java_online.php //
-        val p = Pattern.compile("\n```\n[\\s\\S]*\n```\n")
+        //val p = Pattern.compile("\n```\n[\\w\\S\\d\n ]+\n```")
+        //val p = Pattern.compile("\n```\n\\W*\\s*\n* *\n```\n")
+        val p = Pattern.compile("\n```\n[\\s\\S&&[^`]]+\n```")
         val m =p.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //
         var iHighlightLocs: MutableList<IntArray> = mutableListOf()
 
         while (m.find()) {
+            Log.d("JSDEV", "\n\n"+m.start()+" "+m.end())
             iHighlightLocs.add(intArrayOf(m.start(), m.end()))
         }
 
         // Set the formatting spans to the text //
         for (i in 0 until iHighlightLocs.size) {
+            /*if (i-1 >= 0) {
+                if (iHighlightLocs[i-1][1] === iHighlightLocs[i][0]) continue
+            }*/
             val colorSpan = ForegroundColorSpan(Colors.Markdown.CODE)
             val bgSpan = BackgroundColorSpan(Colors.GRAY_BRIGHT)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
