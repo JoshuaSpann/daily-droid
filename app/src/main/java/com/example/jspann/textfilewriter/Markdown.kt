@@ -76,29 +76,35 @@ class Markdown {
         return spannableString
     }
 
-    // TODO - FINISH `.*`
+    /**
+     * Applies Code Formatting to Areas of String where is `.` and ```.```
+     */
     private fun setCodeSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        // Matches all words like " ```.``` " or " `.` "
-        // https://www.tutorialspoint.com/compile_java_online.php //
-        //val p = Pattern.compile("\n```\n[\\w\\S\\d\n ]+\n```")
-        //val p = Pattern.compile("\n```\n\\W*\\s*\n* *\n```\n")
-        val p = Pattern.compile("\n```\n[\\s\\S&&[^`]]+\n```")
-        val m =p.matcher(spannableString)
+
+        // Matches all words like `.`
+        val p1 = Pattern.compile("`.+`")
+        val m1 =p1.matcher(spannableString)
+
+        // Matches all words like ```.```
+        val p3 = Pattern.compile("\n```\n[\\s\\S&&[^`]]+\n```")
+        val m3 =p3.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //
         var iHighlightLocs: MutableList<IntArray> = mutableListOf()
 
-        while (m.find()) {
-            Log.d("JSDEV", "\n\n"+m.start()+" "+m.end())
-            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        // `.`
+        while (m1.find()) {
+            iHighlightLocs.add(intArrayOf(m1.start(), m1.end()))
+        }
+
+        // ```.```
+        while (m3.find()) {
+            iHighlightLocs.add(intArrayOf(m3.start(), m3.end()))
         }
 
         // Set the formatting spans to the text //
         for (i in 0 until iHighlightLocs.size) {
-            /*if (i-1 >= 0) {
-                if (iHighlightLocs[i-1][1] === iHighlightLocs[i][0]) continue
-            }*/
             val colorSpan = ForegroundColorSpan(Colors.Markdown.CODE)
             val bgSpan = BackgroundColorSpan(Colors.GRAY_BRIGHT)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
