@@ -64,11 +64,11 @@
         android:layout_toEndOf="@id/toolbar3"
         android:ems="10"
         android:inputType="textMultiLine"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toStartOf="@id/toolbar3"
         app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
-        android:scrollbars = "vertical"
-        />
+        android:textIsSelectable="true"/>
         <!--android:textCursorDrawable="@null"/>-->
 
     <android.support.v7.widget.Toolbar
@@ -91,7 +91,7 @@
             android:elevation="4dp"
             android:orientation="horizontal">
 
-            <ImageButton
+            <!--ImageButton
                 android:id="@+id/button_toolbar_new"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="0dp"
@@ -105,9 +105,9 @@
                 android:tint="@android:color/primary_text_dark"
                 app:layout_constraintStart_toEndOf="@+id/button_new"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="parent" /-->
 
-            <ImageButton
+            <!--ImageButton
                 android:id="@+id/button_toolbar_mdDream"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_height="wrap_content"
@@ -117,6 +117,21 @@
                 android:onClick="button_toolbar_mdDream__click"
                 android:src="@drawable/ic_brightness_3_black_24dp"
                 android:text="Refresh Text"
+                android:tint="@android:color/primary_text_dark"
+                app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" /-->
+
+            <ImageButton
+                android:id="@+id/button_toolbar_startoftext"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@color/colorNone"
+                android:onClick="button_toolbar_startoftext__click"
+                android:src="@drawable/ic_first_page_black_24dp"
+                android:text="SOF"
                 android:tint="@android:color/primary_text_dark"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"

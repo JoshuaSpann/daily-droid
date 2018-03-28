@@ -4,11 +4,11 @@
     <item
     android:id="@+id/menuitem_open"
     android:title="Open" />
-    <!--item
+    <item
         android:id="@+id/menuitem_add"
         android:icon="@drawable/ic_add_black_24dp"
         android:title="New" />
-    <item
+    <!--item
         android:id="@+id/menuitem_save"
         android:icon="@drawable/ic_save_black_24dp"
         android:title="Save" />

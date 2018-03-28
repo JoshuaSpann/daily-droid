@@ -38,6 +38,7 @@ import android.os.Build
 import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private var _strDirPath:String = utils.getDirectoryPathToString()
     private var _strCurrentFileName:String = ""
     private var _isMarkdownEnabled = true
+    private var _editTextPosition = 0
 
     // View-Widget Properties //
     private var _textView_Title: TextView ?= null
@@ -146,6 +148,9 @@ class MainActivity : AppCompatActivity() {
             R.id.menuitem_open -> {
                 (_spinner!!).performClick()
             }
+            R.id.menuitem_add -> {
+                createNewTextFile()
+            }
             R.id.menuitem_changecolor -> {
                 this.launchColorSelectorActivity()
             }
@@ -158,7 +163,7 @@ class MainActivity : AppCompatActivity() {
     fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
-        setCursorToEndOfTxtField()
+        setCursorToCurrentPositionOfTxtField()
     }
 
 
@@ -167,9 +172,15 @@ class MainActivity : AppCompatActivity() {
         this.createNewTextFile()
     }
 
+    fun button_toolbar_startoftext__click(view: View) {
+        this.setCursorToEndOfTxtField()
+        setCursorToStartOfTxtField()
+    }
+
     @Throws(Exception::class)
     fun button_toolbar_save__click(view: View) {
         this.saveToFile()
+        setEditTextToFileContents(_strCurrentFileName)
     }
 
     fun button_toolbar_timestamp__click(view: View) {
@@ -306,7 +317,13 @@ class MainActivity : AppCompatActivity() {
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
+
+        /*
+        // This prevents edit/copy/paste
         (_editText!!).setMovementMethod(ScrollingMovementMethod())
+        (_editText!!).setTextIsSelectable(true)
+        (_editText!!).isFocusableInTouchMode = true
+        */
     }
 
 
@@ -370,9 +387,17 @@ class MainActivity : AppCompatActivity() {
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
+    private fun setCursorToCurrentPositionOfTxtField() {
+        val txtMain: EditText = (_editText!!)
+        txtMain.setSelection(_editTextPosition)
+    }
     private fun setCursorToEndOfTxtField(){
         val txtMain: EditText = (_editText!!)
         txtMain.setSelection(txtMain.text.length)
+    }
+    private fun setCursorToStartOfTxtField(){
+        val txtMain: EditText = (_editText!!)
+        txtMain.setSelection(0)
     }
 
     /*   SPINNER FUNCTIONS   */
@@ -405,6 +430,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         (_editText!!).setText(formattedText)
+        (editText!!).setSelection(formattedText.length)
         setChosenFilename(file.name)
     }
 
@@ -420,7 +446,9 @@ class MainActivity : AppCompatActivity() {
             highlightedMarkdownText = markdown.formatFromString(rawFileText)
         }
 
+        _editTextPosition = (_editText!!).selectionStart
         (_editText!!).setText(highlightedMarkdownText)
+        (_editText!!).setSelection(_editTextPosition)
 
         setApplicationColor()
     }
