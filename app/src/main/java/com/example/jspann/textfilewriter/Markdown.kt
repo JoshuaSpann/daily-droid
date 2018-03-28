@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
+import android.text.style.*
 import android.util.Log
 import java.util.regex.Pattern
 
@@ -31,6 +28,7 @@ class Markdown {
         // Bolds and Italics //
         spannableString = setItalicSpans(spannableString)
         spannableString = setBoldSpans(spannableString)
+        spannableString = setBoldItalicSpans(spannableString)
 
         // Code //
         spannableString = setCodeSpans(spannableString)
@@ -38,9 +36,10 @@ class Markdown {
         // Headings //
         spannableString = setHeadingSpans(spannableString)
 
-        // Timestamps and Lists //
+        // Timestamps, Strikethroughs, and Lists //
         spannableString = setListSpans(spannableString)
         spannableString = setTimestampSpans(spannableString)
+        spannableString = setStrikethroughSpans(spannableString)
 
         return spannableString
     }
@@ -86,6 +85,35 @@ class Markdown {
         for (i in 0 until iHighlightLocs.size) {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
             val styleSpan = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString as BoldItalic-styled Markdown
+     */
+    private fun setBoldItalicSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        // Matches all words like " **............** " or " __.....__ "
+        //val r = " (\\*{2}|_{2}) [\\s\\S&&[^\n]]* (\\*{2}|_{2})"
+        val r = "\\s(\\*|_){3}[\\s\\S&&[^\n]]*(\\*|_){3}"
+        val p = Pattern.compile(r)
+        val m =p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to a list //
+        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
+        }
+
+        // Set the formatting spans to the text //
+        for (i in 0 until iHighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
+            val styleSpan = StyleSpan(Typeface.BOLD_ITALIC)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -266,7 +294,7 @@ class Markdown {
     private fun setListSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
 
-        val r = "\n {2}(-|\\d+\\.) [\\s\\S&&[^\n]]+"
+        val r = "\n {2}(-|\\d+\\.|\\*|\\+) [\\s\\S&&[^\n]]+"
         val p = Pattern.compile(r)
         val m = p.matcher(spannableString)
         var listItemCoordinates: MutableList<IntArray> = mutableListOf()
@@ -278,6 +306,29 @@ class Markdown {
         for (i in 0 until listItemCoordinates.size) {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.LIST_ITEM)
             spannableString.setSpan(colorSpan, listItemCoordinates[i][0], listItemCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString with Strikethrough-styled Markdown
+     */
+    private fun setStrikethroughSpans(spannableStr: SpannableString) : SpannableString {
+        val spannableString = spannableStr
+
+        val r = "~{2}[\\s\\S&&[^~]]+~{2}"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+        val strikeThruCoordinates: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            strikeThruCoordinates.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until strikeThruCoordinates.size) {
+            val strikethroughSpan = StrikethroughSpan()
+            spannableString.setSpan(strikethroughSpan, strikeThruCoordinates[i][0], strikeThruCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
