@@ -30,8 +30,9 @@ class Markdown {
         spannableString = setBoldSpans(spannableString)
         spannableString = setBoldItalicSpans(spannableString)
 
-        // Code //
+        // Code, Blockquotes //
         spannableString = setCodeSpans(spannableString)
+        spannableString = setBlockquoteSpans(spannableString)
 
         // Headings, Hyperlinks, Images //
         spannableString = setHeadingSpans(spannableString)
@@ -65,6 +66,31 @@ class Markdown {
         return hHighlightLocs
     }
 
+    /**
+     * Formats SpannableString with Blockquote-style Markdown
+     */
+    private fun setBlockquoteSpans(spannableString: SpannableString) : SpannableString {
+        var spnblStr = spannableString
+        val r = "\n> [\\s\\S&&[^\n]]+"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spnblStr)
+        var bqCoords: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            bqCoords.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until bqCoords.size) {
+            val bqStartBgSpan = BackgroundColorSpan(Colors.Markdown.BLOCK_QUOTE_START_BACKGROUND)
+            val bqColorSpan = ForegroundColorSpan(Colors.Markdown.BLOCK_QUOTE)
+            val bqBgSpan = BackgroundColorSpan(Colors.Markdown.BLOCK_QUOTE_BACKGROUND)
+            spannableString.setSpan(bqColorSpan, bqCoords[i][0], bqCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bqBgSpan, bqCoords[i][0], bqCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bqStartBgSpan, bqCoords[i][0], bqCoords[i][0]+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spnblStr
+    }
     /**
      * Returns given spannableString formatted to have styles applied to __...__ or **....**
      */
@@ -153,7 +179,7 @@ class Markdown {
         // Set the formatting spans to the text //
         for (i in 0 until iHighlightLocs.size) {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.CODE)
-            val bgSpan = BackgroundColorSpan(Colors.GRAY_BRIGHT)
+            val bgSpan = BackgroundColorSpan(Colors.Markdown.CODE_BACKGROUND)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(bgSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -268,8 +294,7 @@ class Markdown {
     private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
         var spannableString =  spannblStr
 
-        // TODO - Prevent all []() from underlinind such as for img ![]() not underlining?
-        val r = "\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
+        val r = "[^!]\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
         val p = Pattern.compile(r)
         val m = p.matcher(spannableString)
         var hyperlinkCoordinates: MutableList<IntArray> = mutableListOf()
@@ -281,6 +306,7 @@ class Markdown {
         for (i in 0 until hyperlinkCoordinates.size) {
             val hyperlinkColorSpan =  ForegroundColorSpan(Colors.Markdown.HYPERLINK)
             val hyperlinkStyleSpan = UnderlineSpan()
+            // TODO - Have hyperlinks clickable with dialog to confirm opening link in web browser
             spannableString.setSpan(hyperlinkColorSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(hyperlinkStyleSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
