@@ -33,9 +33,10 @@ class Markdown {
         // Code //
         spannableString = setCodeSpans(spannableString)
 
-        // Headings //
+        // Headings, Hyperlinks, Images //
         spannableString = setHeadingSpans(spannableString)
         spannableString = setHyperlinkSpans(spannableString)
+        spannableString = setImageSpans(spannableString)
 
         // Timestamps, Strikethroughs, and Lists //
         spannableString = setListSpans(spannableString)
@@ -267,8 +268,7 @@ class Markdown {
     private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
         var spannableString =  spannblStr
 
-        //val r = "\\s\\[[\\s\\S&&[^\n)]]+\\)"
-        //val r = "\\[[\\s\\S&&[^\n\\[\\]()]]+\\]\\([\\s\\S&&[^\n\\[\\]()]]+\\)"
+        // TODO - Prevent all []() from underlinind such as for img ![]() not underlining?
         val r = "\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
         val p = Pattern.compile(r)
         val m = p.matcher(spannableString)
@@ -289,12 +289,34 @@ class Markdown {
     }
 
     /**
+     * Formats a SpannableString with Image-styled Markdown
+     */
+    private fun setImageSpans(spannableString: SpannableString) : SpannableString {
+        var spnblStr = spannableString
+        val r = "!\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spnblStr)
+        var imageCoords: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            imageCoords.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until imageCoords.size) {
+            val imgColorSpan = ForegroundColorSpan(Colors.Markdown.IMAGE)
+            spannableString.setSpan(imgColorSpan, imageCoords[i][0], imageCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spnblStr
+    }
+
+    /**
      * Returns given spannableString formatted to have styles applied to _..._ or *....*
      */
     private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all words like " *............* " or " _....._ "
-        val r = "\\s(\\*|_)[\\s\\S&&[^*_]]+(\\*|_)" //"\\s\\*.*\\*\\s"
+        val r = "\\s(\\*|_)[\\s\\S&&[^*_]]+(\\*|_)"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 
