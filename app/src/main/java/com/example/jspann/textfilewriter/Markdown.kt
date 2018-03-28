@@ -35,6 +35,7 @@ class Markdown {
 
         // Headings //
         spannableString = setHeadingSpans(spannableString)
+        spannableString = setHyperlinkSpans(spannableString)
 
         // Timestamps, Strikethroughs, and Lists //
         spannableString = setListSpans(spannableString)
@@ -255,6 +256,33 @@ class Markdown {
             val textSizeSpan = RelativeSizeSpan(1.1.toFloat())
             spannableString.setSpan(colorSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(textSizeSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString with Hyperlink-styled Markdown
+     */
+    private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
+        var spannableString =  spannblStr
+
+        //val r = "\\s\\[[\\s\\S&&[^\n)]]+\\)"
+        //val r = "\\[[\\s\\S&&[^\n\\[\\]()]]+\\]\\([\\s\\S&&[^\n\\[\\]()]]+\\)"
+        val r = "\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+        var hyperlinkCoordinates: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            hyperlinkCoordinates.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until hyperlinkCoordinates.size) {
+            val hyperlinkColorSpan =  ForegroundColorSpan(Colors.Markdown.HYPERLINK)
+            val hyperlinkStyleSpan = UnderlineSpan()
+            spannableString.setSpan(hyperlinkColorSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(hyperlinkStyleSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
