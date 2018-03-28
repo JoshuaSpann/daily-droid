@@ -234,25 +234,18 @@ class Markdown {
     /**
      * Returns given spannableString formatted to have styles applied to _..._ or *....*
      */
-    // TODO - TEST
     private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all words like " *............* " or " _....._ "
-        val p = Pattern.compile("\\s\\*.\\*\\s")
+        val r = "\\s(\\*|_)[\\s\\S&&[^*_]]+(\\*|_)" //"\\s\\*.*\\*\\s"
+        val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
-
-        val p2 = Pattern.compile("\\s_._\\s")
-        val m2 =p2.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to a list //
         var iHighlightLocs: MutableList<IntArray> = mutableListOf()
 
         while (m.find()) {
             iHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        while (m2.find()) {
-            iHighlightLocs.add(intArrayOf(m2.start(), m2.end()))
         }
 
         // Set the formatting spans to the text //
