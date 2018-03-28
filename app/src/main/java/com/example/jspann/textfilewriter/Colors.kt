@@ -53,6 +53,7 @@ object Colors {
         val H3 = GRAY_DARK
         val H4 = GRAY
         val H5 = GRAY_LIGHT
+        val HORIZONTAL_RULE = App.ACCENT
         val HYPERLINK = SKYBLUE
         val IMAGE = ORANGE
         val ITALICS = GRAY_DARK

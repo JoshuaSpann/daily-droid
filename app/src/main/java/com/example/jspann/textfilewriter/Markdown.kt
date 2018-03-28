@@ -39,10 +39,11 @@ class Markdown {
         spannableString = setHyperlinkSpans(spannableString)
         spannableString = setImageSpans(spannableString)
 
-        // Timestamps, Strikethroughs, and Lists //
+        // Timestamps, Strikethroughs, Lists, Horizontal Rules //
         spannableString = setListSpans(spannableString)
         spannableString = setTimestampSpans(spannableString)
         spannableString = setStrikethroughSpans(spannableString)
+        spannableString = setHorizontalRuleSpans(spannableString)
 
         return spannableString
     }
@@ -289,6 +290,30 @@ class Markdown {
     }
 
     /**
+     * Formats SpannableString with Horizontal-Rule-styled Markdown
+     */
+    private fun setHorizontalRuleSpans(spannableString: SpannableString) : SpannableString {
+        var spnStr = spannableString
+        val r= "\n(-|\\*|_){3}\n"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spnStr)
+        val hrCoords: MutableList<IntArray> = mutableListOf()
+
+        while (m.find()) {
+            hrCoords.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until hrCoords.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.HORIZONTAL_RULE)
+            val stSpan = StrikethroughSpan()
+            spnStr.setSpan(colorSpan, hrCoords[i][0], hrCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spnStr.setSpan(stSpan, hrCoords[i][0], hrCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spnStr
+    }
+
+    /**
      * Formats SpannableString with Hyperlink-styled Markdown
      */
     private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
@@ -342,7 +367,7 @@ class Markdown {
     private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
         // Matches all words like " *............* " or " _....._ "
-        val r = "\\s(\\*|_)[\\s\\S&&[^*_]]+(\\*|_)"
+        val r = "\\s(\\*|_)[\\s\\S&&[^*_\n]]+(\\*|_)"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 
