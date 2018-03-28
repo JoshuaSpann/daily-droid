@@ -50,6 +50,7 @@ object Colors {
         val H4 = GRAY
         val H5 = GRAY_LIGHT
         val ITALICS = GRAY_DARK
+        val LIST_ITEM = GRAY
         val TEXT_BODY = 0xFF444444.toInt()
         val TIMESTAMP = App.ACCENT
     }

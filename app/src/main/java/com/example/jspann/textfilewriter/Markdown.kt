@@ -39,6 +39,7 @@ class Markdown {
         spannableString = setHeadingSpans(spannableString)
 
         // Timestamps and Lists //
+        spannableString = setListSpans(spannableString)
         spannableString = setTimestampSpans(spannableString)
 
         return spannableString
@@ -254,6 +255,29 @@ class Markdown {
             val styleSpan = StyleSpan(Typeface.ITALIC)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableStrings to the Style Markdown for (Un)ordered Lists
+     */
+    private fun setListSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+
+        val r = "\n {2}(-|\\d+\\.) [\\s\\S&&[^\n]]+"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+        var listItemCoordinates: MutableList<IntArray> = mutableListOf()
+
+        while(m.find()) {
+            listItemCoordinates.add(intArrayOf(m.start(), m.end()))
+        }
+
+        for (i in 0 until listItemCoordinates.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.LIST_ITEM)
+            spannableString.setSpan(colorSpan, listItemCoordinates[i][0], listItemCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
