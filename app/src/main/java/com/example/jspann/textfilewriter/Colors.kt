@@ -8,6 +8,33 @@ import android.graphics.drawable.ColorDrawable
  * Created by jspann on 3/20/2018.
  */
 object Colors {
+    object App {
+        val PRIMARY = 0xFF3F51B5.toInt()
+        val SECONDARY = 0xFF303F9F.toInt()
+        val ACCENT = 0xFFFF4081.toInt()
+    }
+
+    object Markdown {
+        val BLOCK_QUOTE = GRAY
+        val BLOCK_QUOTE_BACKGROUND = GRAY_HIGHLIGHT
+        val BLOCK_QUOTE_START_BACKGROUND = GRAY_LIGHT
+        val BOLD = BLACK
+        val CODE = GRAY_LIGHT
+        val CODE_BACKGROUND = GRAY_BRIGHT
+        val H1 = App.PRIMARY//0xFF111111.toInt()
+        val H2 = App.SECONDARY
+        val H3 = GRAY_DARK
+        val H4 = GRAY
+        val H5 = GRAY_LIGHT
+        val HORIZONTAL_RULE = App.ACCENT
+        val HYPERLINK = SKYBLUE
+        val IMAGE = ORANGE
+        val ITALICS = GRAY_DARK
+        val LIST_ITEM = GRAY
+        val TEXT_BODY = 0xFF444444.toInt()
+        val TIMESTAMP = App.ACCENT
+    }
+
     val BLACK = 0xFF000000.toInt()
 
     val GRAY = 0xFF777777.toInt()
@@ -35,30 +62,4 @@ object Colors {
 
     val WHITE = 0xFFeeeeee.toInt()
     val YELLOW = 0xFFffbb33.toInt()
-
-    object App {
-        val PRIMARY = 0xFF3F51B5.toInt()
-        val SECONDARY = 0xFF303F9F.toInt()
-        val ACCENT = 0xFFFF4081.toInt()
-    }
-    object Markdown {
-        val BLOCK_QUOTE = GRAY
-        val BLOCK_QUOTE_BACKGROUND = GRAY_HIGHLIGHT
-        val BLOCK_QUOTE_START_BACKGROUND = GRAY_LIGHT
-        val BOLD = BLACK
-        val CODE = GRAY_LIGHT
-        val CODE_BACKGROUND = GRAY_BRIGHT
-        val H1 = App.PRIMARY//0xFF111111.toInt()
-        val H2 = App.SECONDARY
-        val H3 = GRAY_DARK
-        val H4 = GRAY
-        val H5 = GRAY_LIGHT
-        val HORIZONTAL_RULE = App.ACCENT
-        val HYPERLINK = SKYBLUE
-        val IMAGE = ORANGE
-        val ITALICS = GRAY_DARK
-        val LIST_ITEM = GRAY
-        val TEXT_BODY = 0xFF444444.toInt()
-        val TIMESTAMP = App.ACCENT
-    }
 }

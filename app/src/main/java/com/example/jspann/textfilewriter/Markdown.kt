@@ -1,11 +1,9 @@
 package com.example.jspann.textfilewriter
 
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.*
-import android.util.Log
 import java.util.regex.Pattern
 
 
@@ -14,8 +12,6 @@ import java.util.regex.Pattern
  */
 
 class Markdown {
-    private val utils = Utils()
-
     /**
      * Formats a String as a SpannableString based off of its Markdown Content
      */
@@ -52,7 +48,6 @@ class Markdown {
      * Returns [begin, end] Coordinates List for Given Heading Level in a String
      */
     private fun getCoordinatesOfHeadingsLevel(headingLevel: Int, spannableString: SpannableString) : MutableList<IntArray>{
-        //val r = "((^|\n)#{"+headingLevel+"}[\\s\\S&&[^\n#]]*\n)"
         val r = "(?m)((^|\n)#{"+headingLevel+"} .*$\n)"
         val p = Pattern.compile(r)
         val m = p.matcher(spannableString)
@@ -75,47 +70,32 @@ class Markdown {
         val r = "\n> [\\s\\S&&[^\n]]+"
         val p = Pattern.compile(r)
         val m = p.matcher(spnblStr)
-        var bqCoords: MutableList<IntArray> = mutableListOf()
 
         while (m.find()) {
-            bqCoords.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until bqCoords.size) {
             val bqStartBgSpan = BackgroundColorSpan(Colors.Markdown.BLOCK_QUOTE_START_BACKGROUND)
             val bqColorSpan = ForegroundColorSpan(Colors.Markdown.BLOCK_QUOTE)
             val bqBgSpan = BackgroundColorSpan(Colors.Markdown.BLOCK_QUOTE_BACKGROUND)
-            spannableString.setSpan(bqColorSpan, bqCoords[i][0], bqCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(bqBgSpan, bqCoords[i][0], bqCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(bqStartBgSpan, bqCoords[i][0], bqCoords[i][0]+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bqColorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bqBgSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(bqStartBgSpan, m.start(), m.start()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spnblStr
     }
     /**
-     * Returns given spannableString formatted to have styles applied to __...__ or **....**
+     * Formats SpannableString with Bold Markdown styles applied to __...__ or **....**
      */
     private fun setBoldSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        // Matches all words like " **............** " or " __.....__ "
-        //val r = " (\\*{2}|_{2}) [\\s\\S&&[^\n]]* (\\*{2}|_{2})"
         val r = "\\s(\\*|_){2}[\\s\\S&&[^\n]]*(\\*|_){2}"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 
-        // Search through the regex matcher and assign the coordinates to a list //
-        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
-
         while (m.find()) {
-            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        // Set the formatting spans to the text //
-        for (i in 0 until iHighlightLocs.size) {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
             val styleSpan = StyleSpan(Typeface.BOLD)
-            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
@@ -126,32 +106,22 @@ class Markdown {
      */
     private fun setBoldItalicSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        // Matches all words like " **............** " or " __.....__ "
-        //val r = " (\\*{2}|_{2}) [\\s\\S&&[^\n]]* (\\*{2}|_{2})"
         val r = "\\s(\\*|_){3}[\\s\\S&&[^\n]]*(\\*|_){3}"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 
-        // Search through the regex matcher and assign the coordinates to a list //
-        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
-
         while (m.find()) {
-            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        // Set the formatting spans to the text //
-        for (i in 0 until iHighlightLocs.size) {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
             val styleSpan = StyleSpan(Typeface.BOLD_ITALIC)
-            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
     }
 
     /**
-     * Applies Code Formatting to Areas of String where is `.` and ```.```
+     * Formats SpannableString with Code Markdown `.` and ```.```
      */
     private fun setCodeSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
@@ -201,11 +171,10 @@ class Markdown {
     }
 
     /**
-     * Returns provided spannable string formatted to have H1 styles (#...#) applied
+     * Formats SpannableString with H1 styles (#...#) applied
      */
     private fun setH1Spans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        // Matches all lines like "# ............"
         val h1HighlightLocs = getCoordinatesOfHeadingsLevel(1, spannableString)
 
         // Set the formatting spans to the text //
@@ -220,8 +189,172 @@ class Markdown {
     }
 
     /**
-     * Formats a SpannableString to have Spans for All H2 Markdown Headings (##) between the opening and closing tags (##.....##)
+     * Formats SpannableString with H2 ##...## styles
      */
+    private fun setH2Spans(spannableString: SpannableString) : SpannableString{
+        var spannableString = spannableString
+
+        val h2HighlightLocs = getCoordinatesOfHeadingsLevel(2, spannableString)
+
+        for (i in 0 until h2HighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.H2)
+            val textSizeSpan = RelativeSizeSpan(1.2.toFloat())
+            spannableString.setSpan(colorSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(textSizeSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString with H3 ###.....### styles
+     */
+    private fun setH3Spans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        val h3HighlightLocs = getCoordinatesOfHeadingsLevel(3, spannableString)
+
+        // Set the formatting spans to the text //
+        for (i in 0 until h3HighlightLocs.size) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.H3)
+            val textSizeSpan = RelativeSizeSpan(1.1.toFloat())
+            spannableString.setSpan(colorSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(textSizeSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString with Horizontal-Rule-styled Markdown
+     */
+    private fun setHorizontalRuleSpans(spannableString: SpannableString) : SpannableString {
+        var spnStr = spannableString
+        val r= "\n(-|\\*|_){3}\n"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spnStr)
+
+        while (m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.HORIZONTAL_RULE)
+            val stSpan = StrikethroughSpan()
+            spnStr.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spnStr.setSpan(stSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spnStr
+    }
+
+    /**
+     * Formats SpannableString with Hyperlink-styled Markdown
+     */
+    private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
+        var spannableString =  spannblStr
+
+        val r = "[^!]\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+
+        while (m.find()) {
+            val hyperlinkColorSpan =  ForegroundColorSpan(Colors.Markdown.HYPERLINK)
+            val hyperlinkStyleSpan = UnderlineSpan()
+            // TODO - Have hyperlinks clickable with dialog to confirm opening link in web browser
+            spannableString.setSpan(hyperlinkColorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(hyperlinkStyleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats a SpannableString with Image-styled Markdown
+     */
+    private fun setImageSpans(spannableString: SpannableString) : SpannableString {
+        var spnblStr = spannableString
+        val r = "!\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spnblStr)
+
+        while (m.find()) {
+            val imgColorSpan = ForegroundColorSpan(Colors.Markdown.IMAGE)
+            spannableString.setSpan(imgColorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spnblStr
+    }
+
+    /**
+     * Formats SpannableString with Italic Markdown styles applied to _..._ or *....*
+     */
+    private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        val r = "\\s(\\*|_)[\\s\\S&&[^*_\n]]+(\\*|_)"
+        val p = Pattern.compile(r)
+        val m =p.matcher(spannableString)
+
+        while (m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.ITALICS)
+            val styleSpan = StyleSpan(Typeface.ITALIC)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString to the Style Markdown for (Un)ordered Lists
+     */
+    private fun setListSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+
+        val r = "\n {2}(-|\\d+\\.|\\*|\\+) [\\s\\S&&[^\n]]+"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+
+        while(m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.LIST_ITEM)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString with Strikethrough-styled Markdown
+     */
+    private fun setStrikethroughSpans(spannableStr: SpannableString) : SpannableString {
+        val spannableString = spannableStr
+
+        val r = "~{2}[\\s\\S&&[^~]]+~{2}"
+        val p = Pattern.compile(r)
+        val m = p.matcher(spannableString)
+
+        while (m.find()) {
+            val strikethroughSpan = StrikethroughSpan()
+            spannableString.setSpan(strikethroughSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Applies Highlighted Formatting for "Timestamps" matching " - 0000:  " where '0' is 0-9
+     */
+    private fun setTimestampSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+
+        // Search for "\n - 0000:  " timestamps and format accordingly with REGEX //
+        val p = Pattern.compile("\n - \\d\\d\\d\\d:")
+        val m = p.matcher(spannableString)
+
+        // Search through the regex matcher and assign the coordinates to the list //
+        while (m.find()) {
+        // Set the Timestamp formatting spans to the text //
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.TIMESTAMP)
+            spannableString.setSpan(colorSpan,m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
     /*private fun setH2Spans(spannableString: SpannableString) : SpannableString{
         val h2Identifier = "##"
 
@@ -254,211 +387,4 @@ class Markdown {
         return  spannableString
     }
     */
-    private fun setH2Spans(spannableString: SpannableString) : SpannableString{
-        var spannableString = spannableString
-
-        val h2HighlightLocs = getCoordinatesOfHeadingsLevel(2, spannableString)
-
-        for (i in 0 until h2HighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.H2)
-            val textSizeSpan = RelativeSizeSpan(1.2.toFloat())
-            spannableString.setSpan(colorSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(textSizeSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Returns given spannableString formatted to have H3 ###.....### styles
-     */
-    private fun setH3Spans(spannableString: SpannableString) : SpannableString {
-        var spannableString = spannableString
-        //val h1Identifier = "#"
-        // Matches all lines like "# ............"
-        val h3HighlightLocs = getCoordinatesOfHeadingsLevel(3, spannableString)
-
-        // Set the formatting spans to the text //
-        for (i in 0 until h3HighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.H3)
-            val textSizeSpan = RelativeSizeSpan(1.1.toFloat())
-            spannableString.setSpan(colorSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(textSizeSpan, h3HighlightLocs[i][0], h3HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Formats SpannableString with Horizontal-Rule-styled Markdown
-     */
-    private fun setHorizontalRuleSpans(spannableString: SpannableString) : SpannableString {
-        var spnStr = spannableString
-        val r= "\n(-|\\*|_){3}\n"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spnStr)
-        val hrCoords: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            hrCoords.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until hrCoords.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.HORIZONTAL_RULE)
-            val stSpan = StrikethroughSpan()
-            spnStr.setSpan(colorSpan, hrCoords[i][0], hrCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spnStr.setSpan(stSpan, hrCoords[i][0], hrCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spnStr
-    }
-
-    /**
-     * Formats SpannableString with Hyperlink-styled Markdown
-     */
-    private fun setHyperlinkSpans(spannblStr: SpannableString) : SpannableString {
-        var spannableString =  spannblStr
-
-        val r = "[^!]\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spannableString)
-        var hyperlinkCoordinates: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            hyperlinkCoordinates.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until hyperlinkCoordinates.size) {
-            val hyperlinkColorSpan =  ForegroundColorSpan(Colors.Markdown.HYPERLINK)
-            val hyperlinkStyleSpan = UnderlineSpan()
-            // TODO - Have hyperlinks clickable with dialog to confirm opening link in web browser
-            spannableString.setSpan(hyperlinkColorSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(hyperlinkStyleSpan, hyperlinkCoordinates[i][0], hyperlinkCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Formats a SpannableString with Image-styled Markdown
-     */
-    private fun setImageSpans(spannableString: SpannableString) : SpannableString {
-        var spnblStr = spannableString
-        val r = "!\\[[\\s\\S&&[^\n\\[\\]]]+\\]\\([\\s\\S&&[^\n()]]+\\)"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spnblStr)
-        var imageCoords: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            imageCoords.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until imageCoords.size) {
-            val imgColorSpan = ForegroundColorSpan(Colors.Markdown.IMAGE)
-            spannableString.setSpan(imgColorSpan, imageCoords[i][0], imageCoords[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spnblStr
-    }
-
-    /**
-     * Returns given spannableString formatted to have styles applied to _..._ or *....*
-     */
-    private fun setItalicSpans(spannableString: SpannableString) : SpannableString {
-        var spannableString = spannableString
-        // Matches all words like " *............* " or " _....._ "
-        val r = "\\s(\\*|_)[\\s\\S&&[^*_\n]]+(\\*|_)"
-        val p = Pattern.compile(r)
-        val m =p.matcher(spannableString)
-
-        // Search through the regex matcher and assign the coordinates to a list //
-        var iHighlightLocs: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            iHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        // Set the formatting spans to the text //
-        for (i in 0 until iHighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.ITALICS)
-            val styleSpan = StyleSpan(Typeface.ITALIC)
-            spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(styleSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Formats SpannableStrings to the Style Markdown for (Un)ordered Lists
-     */
-    private fun setListSpans(spannableString: SpannableString) : SpannableString {
-        var spannableString = spannableString
-
-        val r = "\n {2}(-|\\d+\\.|\\*|\\+) [\\s\\S&&[^\n]]+"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spannableString)
-        var listItemCoordinates: MutableList<IntArray> = mutableListOf()
-
-        while(m.find()) {
-            listItemCoordinates.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until listItemCoordinates.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.LIST_ITEM)
-            spannableString.setSpan(colorSpan, listItemCoordinates[i][0], listItemCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Formats SpannableString with Strikethrough-styled Markdown
-     */
-    private fun setStrikethroughSpans(spannableStr: SpannableString) : SpannableString {
-        val spannableString = spannableStr
-
-        val r = "~{2}[\\s\\S&&[^~]]+~{2}"
-        val p = Pattern.compile(r)
-        val m = p.matcher(spannableString)
-        val strikeThruCoordinates: MutableList<IntArray> = mutableListOf()
-
-        while (m.find()) {
-            strikeThruCoordinates.add(intArrayOf(m.start(), m.end()))
-        }
-
-        for (i in 0 until strikeThruCoordinates.size) {
-            val strikethroughSpan = StrikethroughSpan()
-            spannableString.setSpan(strikethroughSpan, strikeThruCoordinates[i][0], strikeThruCoordinates[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
-
-    /**
-     * Applies Highlighted Formatting for "Timestamps" matching " - 0000:  " where '0' is 0-9
-     */
-    private fun setTimestampSpans(spannableString: SpannableString) : SpannableString {
-        var spannableString = spannableString
-
-        // Search for "\n - 0000:  " timestamps and format accordingly with REGEX //
-        val p = Pattern.compile("\n - \\d\\d\\d\\d:")
-        val m = p.matcher(spannableString)
-
-        // Holds the text coordinates to set ranges for spans //
-        var timestampHighlightLocs: MutableList<IntArray> = mutableListOf()
-
-        // Search through the regex matcher and assign the coordinates to the list //
-        while (m.find()) {
-            timestampHighlightLocs.add(intArrayOf(m.start(), m.end()))
-        }
-
-        // Set the Timestamp formatting spans to the text //
-        for (i in 0 until timestampHighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.TIMESTAMP)
-            spannableString.setSpan(colorSpan, timestampHighlightLocs[i][0], timestampHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        return spannableString
-    }
 }

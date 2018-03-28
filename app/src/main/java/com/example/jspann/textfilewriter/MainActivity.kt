@@ -35,6 +35,7 @@ import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
+import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var _intEditTextStartLength: Int = 0
     private var _strDirPath:String = utils.getDirectoryPathToString()
     private var _strCurrentFileName:String = ""
+    private var _isMarkdownEnabled = true
 
     // View-Widget Properties //
     private var _textView_Title: TextView ?= null
@@ -394,8 +396,14 @@ class MainActivity : AppCompatActivity() {
     private fun setEditTextToFileContents_and_setTextFieldToFileName(file: File) {
         _strCurrentFileName = file.name
         property_ResetEditTextLength()
+
         val strOriginalText = utils.readFileContentsToString(file)
-        val formattedText = markdown.formatFromString(strOriginalText)
+        var formattedText = SpannableString(strOriginalText)
+
+        if (_isMarkdownEnabled) {
+            formattedText = markdown.formatFromString(strOriginalText)
+        }
+
         (_editText!!).setText(formattedText)
         setChosenFilename(file.name)
     }
@@ -406,7 +414,11 @@ class MainActivity : AppCompatActivity() {
         _intEditTextStartLength = file.length().toInt()
 
         val rawFileText = utils.readFileContentsToString(file)
-        val highlightedMarkdownText = markdown.formatFromString(rawFileText)
+        var highlightedMarkdownText = SpannableString(rawFileText)
+
+        if (_isMarkdownEnabled) {
+            highlightedMarkdownText = markdown.formatFromString(rawFileText)
+        }
 
         (_editText!!).setText(highlightedMarkdownText)
 
