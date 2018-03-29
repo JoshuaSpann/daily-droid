@@ -5,33 +5,33 @@
         android:key="pref_key_autosave_settings">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="pref_autosave"
+            android:key="daily_droid__pref_autosave"
             android:summary="@string/pref_description_autosave"
             android:title="Autosave" />
         <EditTextPreference
             android:defaultValue="0"
             android:inputType="number"
-            android:key="pref_autosave_number"
+            android:key="daily_droid__pref_autosave_number"
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Autosave after"
-            android:summary="Autosaves after this may characters are typed (assuming no reductions have been made to the file)"/>
+            android:summary="Save after adding this many characters"/>
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Logging"
-        android:key="pref_key_logging_settings">
+        android:key="daily_droid__pref_logging_settings">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="pref_autolog_calls"
+            android:key="daily_droid__pref_autolog_calls"
             android:summary="Auto-logs incoming and outgoing calls"
             android:title="Auto-Log Calls" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Files"
-        android:key="pref_key_files_settings">
+        android:key="daily_droid__pref_files_settings">
         <!--ListPreference
             android:defaultValue="-1"
             android:entries="@array/pref_example_list_titles"
@@ -44,10 +44,15 @@
             android:defaultValue="-1"
             android:entries="@array/pref_example_color_titles"
             android:entryValues="@array/list_preference_color_values"
-            android:key="pref_app_color"
+            android:key="daily_droid__pref_app_color"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="App Color" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="daily_droid__pref_enable_markdown"
+            android:summary="Use styles to render markdown in text"
+            android:title="Markdown Styles" />
     </PreferenceCategory>
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
 

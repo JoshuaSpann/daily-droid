@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
     fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
-        setCursorToCurrentPositionOfTxtField()
+        //setCursorToCurrentPositionOfTxtField()
     }
 
 
@@ -310,7 +310,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun properties_Setup(){
         // TODO - Set up & Override by CONFIG Props Too!
-        _blnPerformAutoSave = true
+        //_blnPerformAutoSave = true
+        _blnPerformAutoSave = config.getPreferenceValue(this, "daily_droid__pref_autosave") as Boolean
+        _isMarkdownEnabled = config.getPreferenceValue(this,"daily_droid__pref_enable_markdown") as Boolean
+
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)
         _intEditTextStartLength = (_editText!!).length()
@@ -452,13 +455,21 @@ class MainActivity : AppCompatActivity() {
         val rawFileText = utils.readFileContentsToString(file)
         var highlightedMarkdownText = SpannableString(rawFileText)
 
+        // Perform Markdown Styling //
         if (_isMarkdownEnabled) {
             highlightedMarkdownText = markdown.formatFromString(rawFileText)
         }
 
         _editTextPosition = (_editText!!).selectionStart
         (_editText!!).setText(highlightedMarkdownText)
-        (_editText!!).setSelection(_editTextPosition)
+
+        // Ensure that cursor is in most current position or the beginning of file //
+        try {
+            (_editText!!).setSelection(_editTextPosition)
+        }
+        catch (e: Exception) {
+            (_editText!!).setSelection(0)
+        }
 
         setApplicationColor()
     }
