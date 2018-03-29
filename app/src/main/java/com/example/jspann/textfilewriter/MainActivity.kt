@@ -40,6 +40,14 @@ import android.text.SpannableString
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.inputmethod.InputMethodManager
+import android.view.MotionEvent
+import android.view.GestureDetector
+import android.widget.Scroller
+import android.widget.TextView
+
+
+
+
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
 
@@ -103,22 +111,14 @@ class MainActivity : AppCompatActivity() {
         setApplicationColor()
 
         // AUTO-SAVE FUNCTIONALITY //
-        if(_blnPerformAutoSave) {
+        if (_blnPerformAutoSave) {
             autosave_Setup()
         }
 
-        // Force the softkeyboard to become visible whenever editText is clicked //
-        (_editText!!).setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                if (editText.requestFocus()) {
-                    val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    //mgr.hideSoftInputFromWindow((_editText!!).windowToken, 0)
-                    mgr.showSoftInput((_editText!!), InputMethodManager.SHOW_IMPLICIT)
-                }
-            }
-        })
-    }
+        showKeyboardOnEditTextClick((_editText!!))
+        addFlingScrollingToEditText((_editText!!))
 
+    }
 
     /**
      * Activates When App is Restarted and Has Focus Returned to It
@@ -179,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         }
         return blnRetItem
     }
+
     fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
@@ -417,7 +418,33 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
+
     /*   EDIT TEXT FUNCTIONS   */
+    /**
+     * Adds scrolling capabilities to a supplied EditText
+     */
+    private fun addFlingScrollingToEditText(editText: EditText) {
+        val scroller = Scroller(this)
+        editText.setScroller(scroller)
+        editText.setOnTouchListener(object : View.OnTouchListener {
+
+            // Could make this a field member on your activity
+            internal var gesture = GestureDetector(this@MainActivity, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                    scroller.fling(0, editText.scrollY, 0, (-velocityY*2).toInt(), 0, 0, 0, editText.lineCount * editText.lineHeight)
+                    return super.onFling(e1, e2, velocityX, velocityY)
+                }
+
+            })
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                return gesture.onTouchEvent(event)
+                return false
+            }
+        })
+    }
+
     private fun insertDreamMarkdownToEditText(){
         val txtMain = findViewById<EditText>(R.id.editText)
         val strDreamMd: String = "\n\n```\n\n```\n"
@@ -524,6 +551,21 @@ class MainActivity : AppCompatActivity() {
         val latestFile = files[0]
         this._strCurrentFileName = latestFile.name
         setEditTextToFileContents_and_setTextFieldToFileName(latestFile)
+    }
+
+    /**
+     * Force the softkeyboard to become visible whenever the supplied editText is clicked
+     */
+    private fun showKeyboardOnEditTextClick(element: EditText) {
+        element.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                if (editText.requestFocus()) {
+                    val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    //mgr.hideSoftInputFromWindow((_editText!!).windowToken, 0)
+                    mgr.showSoftInput((_editText!!), InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
+        })
     }
 
 }
