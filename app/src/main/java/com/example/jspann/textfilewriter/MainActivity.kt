@@ -353,7 +353,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun properties_Setup(){
-        // TODO - Set up & Override by CONFIG Props Too!
 
         loadPreferences()
 
@@ -414,6 +413,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun launchSettingsActivity(){
         val intent = Intent(this, SettingsActivity::class.java)
+        // TODO - TRY loading fragment for SettingsActivity: val intent = Intent(this, SettingsActivity::GeneralPreferenceFragment.javaClass)
         startActivity(intent)
     }
 
