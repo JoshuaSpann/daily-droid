@@ -2,7 +2,6 @@ package com.example.jspann.textfilewriter
 
 import android.content.Context
 import android.preference.PreferenceManager
-import java.io.File
 
 /**
  * Created by lxd on 12/2/17.

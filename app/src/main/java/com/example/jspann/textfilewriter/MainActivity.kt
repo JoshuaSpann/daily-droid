@@ -21,6 +21,7 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -36,10 +37,9 @@ import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
 import android.text.SpannableString
-import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
-
+import android.view.inputmethod.InputMethodManager
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
 
@@ -106,6 +106,17 @@ class MainActivity : AppCompatActivity() {
         if(_blnPerformAutoSave) {
             autosave_Setup()
         }
+
+        // Force the softkeyboard to become visible whenever editText is clicked //
+        (_editText!!).setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                if (editText.requestFocus()) {
+                    val mgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    //mgr.hideSoftInputFromWindow((_editText!!).windowToken, 0)
+                    mgr.showSoftInput((_editText!!), InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
+        })
     }
 
 
@@ -114,8 +125,12 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onRestart() {
         super.onRestart()
+        loadPreferences()
         setApplicationColor()
         resetEditTextToGivenValue()
+
+        // Pull back up the soft keyboard automatically //
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     /**
@@ -132,8 +147,12 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onResume() {
         super.onResume()
+        loadPreferences()
         setApplicationColor()
         resetEditTextToGivenValue()
+
+        // Pull back up the soft keyboard automatically //
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     /* /  APP BAR MENU CONTROLLERS  / */
@@ -321,7 +340,7 @@ class MainActivity : AppCompatActivity() {
             _blnPerformAutoSave = daily_droid__pref_autosave_enabled as Boolean
 
             if (daily_droid__pref_autosave_number !== null) {
-                _intAutoSaveTrigger = daily_droid__pref_autosave_number as Int
+                _intAutoSaveTrigger = daily_droid__pref_autosave_number.toString().toInt()
             }
         }
 
