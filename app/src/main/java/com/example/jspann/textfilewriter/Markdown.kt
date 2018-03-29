@@ -87,7 +87,7 @@ class Markdown {
      */
     private fun setBoldSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        val r = "\\s(\\*|_){2}[\\s\\S&&[^\n]]*(\\*|_){2}"
+        val r = "\\s(\\*|_){2}[\\s\\S&&[^\n_*]]*(\\*|_){2}"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 
@@ -106,7 +106,7 @@ class Markdown {
      */
     private fun setBoldItalicSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        val r = "\\s(\\*|_){3}[\\s\\S&&[^\n]]*(\\*|_){3}"
+        val r = "\\s(\\*|_){3}[\\s\\S&&[^\n*_]]*(\\*|_){3}"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 

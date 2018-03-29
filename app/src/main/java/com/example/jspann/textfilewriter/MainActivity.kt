@@ -402,12 +402,22 @@ class MainActivity : AppCompatActivity() {
 
     /*   SPINNER FUNCTIONS   */
     private fun setSpinnerItems(p_strItems: Array<String?>){
+
+        // Use items as a list cleared of non *.* files //
+        var items: MutableList<String> = mutableListOf()
+
+        for (i in 0 until p_strItems.size) {
+            if ((p_strItems[i]!!).contains(".")) items.add(p_strItems[i].toString())
+        }
+
+        // Assign items to spinner //
         var spinner = findViewById<View>(R.id.spinner) as Spinner
-        //spinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
-        // TODO - TEST
-        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, p_strItems)
+        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items)
+
+        // Assign visual styling to spinner //
         adapter.setDropDownViewResource(R.layout.spinner_item)
         spinner.adapter = adapter
+        spinner.prompt = "Open File"
 
     }
 
