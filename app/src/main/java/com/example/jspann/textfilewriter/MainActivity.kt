@@ -308,11 +308,35 @@ class MainActivity : AppCompatActivity() {
         _intEditTextStartLength = (_editText!!).length()
     }
 
+    /**
+     * Check for preferences and enable them if they're set (Will be set once user opens Menu.Settings.General for the 1st time)
+     */
+    private fun loadPreferences() {
+        var daily_droid__pref_autosave_enabled = config.getPreferenceValue(this, "daily_droid__pref_autosave_enabled")
+        var daily_droid__pref_autosave_number = config.getPreferenceValue(this, "daily_droid__pref_autosave_number")
+        var daily_droid__pref_markdown_enabled = config.getPreferenceValue(this, "daily_droid__pref_markdown_enabled")
+
+        // Check for Autosave preferences //
+        if (daily_droid__pref_autosave_enabled !== null) {
+            _blnPerformAutoSave = daily_droid__pref_autosave_enabled as Boolean
+
+            if (daily_droid__pref_autosave_number !== null) {
+                _intAutoSaveTrigger = daily_droid__pref_autosave_number as Int
+            }
+        }
+
+        // Check for Markdown preferences //
+        if (daily_droid__pref_markdown_enabled !== null) {
+            _isMarkdownEnabled = daily_droid__pref_markdown_enabled as Boolean
+        }
+
+        // Call preferences are stored in the CallReciever Class //
+    }
+
     private fun properties_Setup(){
         // TODO - Set up & Override by CONFIG Props Too!
-        //_blnPerformAutoSave = true
-        _blnPerformAutoSave = config.getPreferenceValue(this, "daily_droid__pref_autosave") as Boolean
-        _isMarkdownEnabled = config.getPreferenceValue(this,"daily_droid__pref_enable_markdown") as Boolean
+
+        loadPreferences()
 
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)

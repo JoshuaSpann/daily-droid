@@ -17,8 +17,19 @@ class CallReceiver : BroadcastReceiver() {
     var intRingingWriteCount: Int = 0
     private var lastState: Int = TelephonyManager.CALL_STATE_IDLE;
     private var lastMsg: String = ""
+    private val config = Config()
+    var _isCallLoggingEnabled = false
 
     override fun onReceive(context: Context, intent: Intent) {
+        // See if autologging calls is enabled or perform safe exit //
+        var daily_droid__pref_autolog_calls_enabled = config.getPreferenceValue(context, "daily_droid__pref_autolog_calls_enabled")
+
+        if (daily_droid__pref_autolog_calls_enabled !== null) {
+            _isCallLoggingEnabled = config.getPreferenceValue(context, "daily_droid__pref_autolog_calls_enabled") as Boolean
+        }
+
+        if (!_isCallLoggingEnabled) return
+
         var savedNumber = ""
 
         // Outgoing Calls //
@@ -71,9 +82,14 @@ class CallReceiver : BroadcastReceiver() {
     }
 
     fun onCallStateChanged(context: Context, state: Int, number: String) {
-        if (lastState === state) {
-            return
+        // See if autologging calls is enabled or perform safe exit //
+        var daily_droid__pref_autolog_calls_enabled = config.getPreferenceValue(context, "daily_droid__pref_autolog_calls_enabled")
+
+        if (daily_droid__pref_autolog_calls_enabled !== null) {
+            _isCallLoggingEnabled = config.getPreferenceValue(context, "daily_droid__pref_autolog_calls_enabled") as Boolean
         }
+
+        if (!_isCallLoggingEnabled) return
 
         val utils = Utils()
 
