@@ -107,17 +107,15 @@ class MainActivity : AppCompatActivity() {
            |__[] Auto-JournalEntryLatest.txt -- Put here by user choice
          */
 
-        // COLORIZING FUNCTIONALITY //
-        setApplicationColor()
-
-        // AUTO-SAVE FUNCTIONALITY //
+        // Autosave functionality //
         if (_blnPerformAutoSave) {
             autosave_Setup()
         }
 
-        showKeyboardOnEditTextClick((_editText!!))
-        addFlingScrollingToEditText((_editText!!))
+        // COLORIZING FUNCTIONALITY //
+        setApplicationColor()
 
+        showKeyboardOnEditTextClick((_editText!!))
     }
 
     /**
@@ -335,6 +333,7 @@ class MainActivity : AppCompatActivity() {
         var daily_droid__pref_autosave_enabled = config.getPreferenceValue(this, "daily_droid__pref_autosave_enabled")
         var daily_droid__pref_autosave_number = config.getPreferenceValue(this, "daily_droid__pref_autosave_number")
         var daily_droid__pref_markdown_enabled = config.getPreferenceValue(this, "daily_droid__pref_markdown_enabled")
+        var daily_droid__pref_fancy_scroll_enabled = config.getPreferenceValue(this, "daily_droid__pref_fancy_scroll_enabled")
 
         // Check for Autosave preferences //
         if (daily_droid__pref_autosave_enabled !== null) {
@@ -348,6 +347,11 @@ class MainActivity : AppCompatActivity() {
         // Check for Markdown preferences //
         if (daily_droid__pref_markdown_enabled !== null) {
             _isMarkdownEnabled = daily_droid__pref_markdown_enabled as Boolean
+        }
+
+        // Fancy scrolling //
+        if (daily_droid__pref_fancy_scroll_enabled !== null) {
+            if (daily_droid__pref_fancy_scroll_enabled as Boolean === true) addFlingScrollingToEditText((_editText!!))
         }
 
         // Call preferences are stored in the CallReciever Class //
@@ -366,7 +370,7 @@ class MainActivity : AppCompatActivity() {
 
         /*
         // This prevents edit/copy/paste
-        (_editText!!).setMovementMethod(ScrollingMovementMethod())
+        //(_editText!!).setMovementMethod(ScrollingMovementMethod())
         (_editText!!).setTextIsSelectable(true)
         (_editText!!).isFocusableInTouchMode = true
         */

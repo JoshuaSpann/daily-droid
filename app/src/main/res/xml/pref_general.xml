@@ -53,7 +53,13 @@
             android:key="daily_droid__pref_markdown_enabled"
             android:summary="Use styles to render markdown in text"
             android:title="Markdown Styles" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="daily_droid__pref_fancy_scroll_enabled"
+            android:summary="Use a faster, animated scroll"
+            android:title="Fancy Scroll" />
     </PreferenceCategory>
+
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
 
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
