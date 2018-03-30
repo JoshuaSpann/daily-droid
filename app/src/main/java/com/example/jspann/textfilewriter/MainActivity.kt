@@ -21,8 +21,13 @@
 /* /  IMPORTS  / */
 package com.example.jspann.textfilewriter
 
+import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -36,6 +41,8 @@ import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,6 +70,11 @@ class MainActivity : AppCompatActivity() {
     private val markdown = Markdown()
     //config.setDefaultPreferences(this)
 
+    // Permissions //
+    val _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE = 1
+    val _REQUEST_PERMISSION_READ_CONTACTS = 1
+    val _REQUEST_PERMISSION_READ_PHONE_STATE = 1
+
     // Base Type Properties //
     private var _blnPerformAutoSave: Boolean = false
     private var _intAutoSaveTrigger: Int = 0
@@ -87,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        checkPermissions()
         properties_Setup()
 
         try {
@@ -177,6 +190,42 @@ class MainActivity : AppCompatActivity() {
         }
         return blnRetItem
     }
+
+    /**
+     * Checks that the Base, Needed Permissions to Run the App are Granted, if not then Request them
+     */
+    private fun checkPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //showExplanation("Permission Needed", "Rationale", Manifest.permission.READ_PHONE_STATE, _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
+                //showExplanation("Permission Needed", "We use storage to allow you to save text files!", Manifest.permission.READ_PHONE_STATE, _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
+                /*
+                var dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+                dialogBuilder.setMessage("We use storage to allow you to save text files!").setTitle("Permission Needed")
+                dialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener(){})
+"C"
+                var dialog = dialogBuilder.create()
+                dialog.show()
+                */
+
+                utils.createDialog(this, "Permission Needed", "Daily Droid uses storage to allow you to save text files!", fun(isOkClicked: Boolean){
+                    if (isOkClicked) {
+                        Log.d("JSDEV", "Clicked OK")
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
+                        //utils.popup(this, "Can Read and Save Files!")
+                        finish()
+                        startActivity(intent)
+                        return
+                    }
+
+                    utils.popup(this, "Can't Read or Save files")
+                })
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
 
     fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent

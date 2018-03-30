@@ -1,6 +1,8 @@
 package com.example.jspann.textfilewriter
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
@@ -49,6 +51,20 @@ class Utils{
         strOutput+="]"
         println("\n\n"+p_map.size+"\n\n"+strOutput)
         return strOutput
+    }
+
+    /**
+     * Creates an OK/Cancel Dialog Window with the supplied title and message, performing the callback after.
+     * The callback takes TRUE if OK was clicked or FALSE if Cancel was clicked
+     */
+    fun createDialog(context: Context, title: String, body: String, callback: (Boolean)->Unit) {
+        var dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+        dialogBuilder.setMessage(body).setTitle(title)
+        dialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog: DialogInterface, id: Int -> callback(true) /* USE run{...} INSTEAD OF cb() FOR BLOCK STATEMENTS */})
+        dialogBuilder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog: DialogInterface, id: Int -> callback(false)})
+
+        var dialog = dialogBuilder.create()
+        dialog.show()
     }
 
     fun file_Append(file:File, data:Any){
