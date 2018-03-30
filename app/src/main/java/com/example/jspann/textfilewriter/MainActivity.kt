@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity() {
 
         // Fancy scrolling //
         if (daily_droid__pref_fancy_scroll_enabled !== null) {
-            if (daily_droid__pref_fancy_scroll_enabled as Boolean === true) addFlingScrollingToEditText((_editText!!))
+            if (daily_droid__pref_fancy_scroll_enabled as Boolean === true && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
         }
 
         // Call preferences are stored in the CallReciever Class //
@@ -436,7 +436,7 @@ class MainActivity : AppCompatActivity() {
             // Could make this a field member on your activity
             internal var gesture = GestureDetector(this@MainActivity, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-                    scroller.fling(0, editText.scrollY, 0, (-velocityY*2).toInt(), 0, 0, 0, editText.lineCount * editText.lineHeight)
+                    scroller.fling(0, editText.scrollY, 0, (-velocityY).toInt(), 0, 0, 0, editText.lineCount * editText.lineHeight)
                     return super.onFling(e1, e2, velocityX, velocityY)
                 }
 
