@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity() {
 
     // Permissions //
     val _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE = 1
-    val _REQUEST_PERMISSION_READ_CONTACTS = 1
-    val _REQUEST_PERMISSION_READ_PHONE_STATE = 1
+    val _REQUEST_PERMISSION_READ_CONTACTS = 2
+    val _REQUEST_PERMISSION_READ_PHONE_STATE = 3
 
     // Base Type Properties //
     private var _blnPerformAutoSave: Boolean = false
@@ -195,30 +195,19 @@ class MainActivity : AppCompatActivity() {
      * Checks that the Base, Needed Permissions to Run the App are Granted, if not then Request them
      */
     private fun checkPermissions(){
+        // GET MANDATORY STORAGE PERMISSION //
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //showExplanation("Permission Needed", "Rationale", Manifest.permission.READ_PHONE_STATE, _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
-                //showExplanation("Permission Needed", "We use storage to allow you to save text files!", Manifest.permission.READ_PHONE_STATE, _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
-                /*
-                var dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
-                dialogBuilder.setMessage("We use storage to allow you to save text files!").setTitle("Permission Needed")
-                dialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener(){})
-"C"
-                var dialog = dialogBuilder.create()
-                dialog.show()
-                */
-
-                utils.createDialog(this, "Permission Needed", "Daily Droid uses storage to allow you to save text files!", fun(isOkClicked: Boolean){
+                utils.createDialog(this, "Permission Needed", "Daily Droid needs Storage to allow you to save text files!", fun(isOkClicked: Boolean){
                     if (isOkClicked) {
-                        Log.d("JSDEV", "Clicked OK")
                         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)
-                        //utils.popup(this, "Can Read and Save Files!")
                         finish()
                         startActivity(intent)
                         return
                     }
-
                     utils.popup(this, "Can't Read or Save files")
+                    finish()
+                    return
                 })
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), _REQUEST_PERMISSION_RW_EXTERNAL_STORAGE)

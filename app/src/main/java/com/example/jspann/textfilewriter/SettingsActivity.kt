@@ -1,5 +1,6 @@
 package com.example.jspann.textfilewriter
 
+import android.Manifest
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
@@ -17,7 +18,9 @@ import android.preference.RingtonePreference
 import android.text.TextUtils
 import android.view.MenuItem
 import android.content.SharedPreferences
-
+import android.content.pm.PackageManager
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 
 
 /**
@@ -31,10 +34,48 @@ import android.content.SharedPreferences
  * for more information on developing a Settings UI.
  */
 class SettingsActivity : AppCompatPreferenceActivity() {
+    val utils = Utils()
+    val _REQUEST_PERMISSION_READ_CONTACTS = 2
+    val _REQUEST_PERMISSION_READ_PHONE_STATE = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkPermissions()
         //setupActionBar()
+    }
+
+    /**
+     * Checks that the Optional Permissions to Run the App are Granted, if not then Request them
+     */
+    private fun checkPermissions(){
+
+        // GET PHONE PERMISSION //
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+                utils.createDialog(this, "Permission Needed", "Daily Droid uses the Phone to log calls to your current journal! Toggle in Daily Droid's Settings!", fun(isOkClicked: Boolean){
+                    if (isOkClicked) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_STATE), _REQUEST_PERMISSION_READ_PHONE_STATE)
+                        return
+                    }
+                    utils.popup(this, "Can't log calls")
+                })
+            }
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_STATE), _REQUEST_PERMISSION_READ_PHONE_STATE)
+        }
+
+        // CONTACTS //
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                utils.createDialog(this, "Permission Needed", "Daily Droid uses Contacts to name logged calls in your journal! Toggle in Daily Droid's Settings!", fun(isOkClicked: Boolean){
+                    if (isOkClicked) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), _REQUEST_PERMISSION_READ_CONTACTS)
+                        return
+                    }
+                    utils.popup(this, "Can't log contact names to calls")
+                })
+            }
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), _REQUEST_PERMISSION_READ_CONTACTS)
+        }
     }
 
     /*override fun onResume() {
