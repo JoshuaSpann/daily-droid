@@ -127,7 +127,7 @@ class Markdown {
         var spannableString = spannableString
 
         // Matches all words like `.`
-        val p1 = Pattern.compile("`.+`")
+        val p1 = Pattern.compile("`[\\s\\S&&[^`]]+`")
         val m1 =p1.matcher(spannableString)
 
         // Matches all words like ```.```
@@ -343,7 +343,7 @@ class Markdown {
         var spannableString = spannableString
 
         // Search for "\n - 0000:  " timestamps and format accordingly with REGEX //
-        val p = Pattern.compile("\n - \\d\\d\\d\\d:")
+        val p = Pattern.compile("\n - (\\d{4}|[\\d\\d\\d\\d, ]*|\\d{4} - \\d{4}):")
         val m = p.matcher(spannableString)
 
         // Search through the regex matcher and assign the coordinates to the list //
