@@ -41,8 +41,10 @@ import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.ActionBar
 import android.view.WindowManager
 import android.os.Build
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.text.Selection
 import android.text.SpannableString
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -89,6 +91,10 @@ class MainActivity : AppCompatActivity() {
     private var _debug_text: TextView ?= null
     private var _editText: EditText ?= null
     private var _spinner: Spinner ?= null
+
+    // Properties Specific to Navigation and Editing //
+    private var _buttonStartClickCount :Int = 0
+    private var _buttonEndClickCount :Int = 0
 
     // System Properties //
     //private var _phoneStateListener: PhoneStateListener
@@ -229,8 +235,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun button_toolbar_startoftext__click(view: View) {
-        this.setCursorToEndOfTxtField()
-        setCursorToStartOfTxtField()
+        _buttonEndClickCount = 0
+        _buttonStartClickCount++
+        //this.setCursorToEndOfTxtField()
+        if (_buttonStartClickCount == 1) {
+            this.setCursorToStartOfLine()
+        }
+        if (_buttonStartClickCount >= 2) {
+            this.setCursorToStartOfTxtField()
+            _buttonStartClickCount = 0
+        }
+
+        this.resetButtonNavigationProperties()
     }
 
     @Throws(Exception::class)
@@ -244,7 +260,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun button_toolbar_endoftext__click(view: View){
-        this.setCursorToEndOfTxtField()
+        _buttonStartClickCount = 0
+        _buttonEndClickCount++
+        if (_buttonEndClickCount == 1) {
+            this.setCursorToEndOfLine()
+        }
+        if (_buttonEndClickCount >= 2) {
+            this.setCursorToEndOfTxtField()
+            _buttonEndClickCount = 0
+        }
+
+        this.resetButtonNavigationProperties()
     }
 
     fun button_toolbar_refreshtext__click(view: View){
@@ -502,13 +528,45 @@ class MainActivity : AppCompatActivity() {
         txtMain.text.insert(txtMain.selectionStart, strTimestamp)
     }
 
+    fun resetButtonNavigationProperties() {
+        /*val run = Runnable {
+            _buttonStartClickCount = 0
+            _buttonEndClickCount = 0
+        }*/
+        Handler().postDelayed({
+            _buttonStartClickCount = 0
+            _buttonEndClickCount = 0
+        },1000)
+    }
+
     private fun setCursorToCurrentPositionOfTxtField() {
         val txtMain: EditText = (_editText!!)
         txtMain.setSelection(_editTextPosition)
     }
+    private fun setCursorToEndOfLine() {
+        val txtMain: EditText = (_editText!!)
+        val cursorLine = this.getCursorLineFromEditText(txtMain)
+        val endOfLineIndex = txtMain.layout.getLineVisibleEnd(cursorLine)
+        txtMain.setSelection(endOfLineIndex)
+    }
     private fun setCursorToEndOfTxtField(){
         val txtMain: EditText = (_editText!!)
         txtMain.setSelection(txtMain.text.length)
+    }
+    private fun setCursorToStartOfLine(){
+        val txtMain: EditText = (_editText!!)
+        val cursorLine = this.getCursorLineFromEditText(txtMain)
+        val startOfLineIndex = txtMain.layout.getLineStart(cursorLine)
+        txtMain.setSelection(startOfLineIndex)
+    }
+    private fun getCursorLineFromEditText(editText: EditText) :Int{
+        val selectionStartLocation = Selection.getSelectionStart(editText.text)
+        val txtMainLayout = editText.layout
+
+        if (selectionStartLocation != -1) {
+            return txtMainLayout.getLineForOffset(selectionStartLocation)
+        }
+        return -1
     }
     private fun setCursorToStartOfTxtField(){
         val txtMain: EditText = (_editText!!)
