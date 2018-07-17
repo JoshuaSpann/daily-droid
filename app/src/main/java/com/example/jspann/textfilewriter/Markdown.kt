@@ -26,8 +26,9 @@ class Markdown {
         spannableString = setBoldSpans(spannableString)
         spannableString = setBoldItalicSpans(spannableString)
 
-        // Code, Blockquotes //
+        // Code, Checkboxes, Blockquotes //
         spannableString = setCodeSpans(spannableString)
+        spannableString = setCheckboxSpans(spannableString)
         spannableString = setBlockquoteSpans(spannableString)
 
         // Headings, Hyperlinks, Images //
@@ -114,6 +115,40 @@ class Markdown {
             val colorSpan = ForegroundColorSpan(Colors.Markdown.BOLD)
             val styleSpan = StyleSpan(Typeface.BOLD_ITALIC)
             spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString as Github-Checkbox-styled Markdown
+     */
+    private fun setCheckboxSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        var r = "\\s\\[\\s\\]\\s"
+        var p = Pattern.compile(r)
+        var m =p.matcher(spannableString)
+
+        while (m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.CODE)
+            val backgroundSpan = BackgroundColorSpan(Colors.Markdown.BLOCK_QUOTE_BACKGROUND)
+            val styleSpan = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(backgroundSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        r = "\\s\\[(x|X)\\]\\s"
+        p = Pattern.compile(r)
+        m =p.matcher(spannableString)
+
+        while (m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.App.ACCENT)
+            val backgroundSpan = BackgroundColorSpan(Colors.Markdown.CODE_BACKGROUND)
+            val styleSpan = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(backgroundSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
