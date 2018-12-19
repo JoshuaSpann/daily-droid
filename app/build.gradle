@@ -4,11 +4,11 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.jspann.textfilewriter"
+        applicationId "com.example.jspann.dailydroid"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 2
-        versionName "2.7.2"
+        versionName "2.8.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

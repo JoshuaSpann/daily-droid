@@ -19,19 +19,14 @@
  **/
 
 /* /  IMPORTS  / */
-package com.example.jspann.textfilewriter
+package com.example.jspann.dailydroid
 
 import android.Manifest
-import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 
@@ -44,8 +39,8 @@ import android.os.Build
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.text.Selection
-import android.text.SpannableString
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.inputmethod.InputMethodManager
@@ -53,9 +48,6 @@ import android.view.MotionEvent
 import android.view.GestureDetector
 import android.widget.Scroller
 import android.widget.TextView
-
-
-
 
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
@@ -430,7 +422,10 @@ class MainActivity : AppCompatActivity() {
         _intEditTextStartLength = (_editText!!).length()
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
-        (_textView_Title!!).setOnClickListener { (_spinner!!).performClick() }
+        (_textView_Title!!).setOnClickListener {
+            setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
+            (_spinner!!).performClick()
+        }
 
         /*
         // This prevents edit/copy/paste
@@ -458,6 +453,8 @@ class MainActivity : AppCompatActivity() {
             accentColor = Color.parseColor(hexColor)
         }
 
+        Colors.App.CURRENT_PRIMARY = color
+        Colors.App.CURRENT_ACCENT = accentColor
         (findViewById<View>(R.id.toolbar3) as android.support.v7.widget.Toolbar).setBackgroundColor(color)
         (_textView_Title!!).setTextColor(color)
         (_debug_text!!).setTextColor(accentColor)
@@ -577,15 +574,53 @@ class MainActivity : AppCompatActivity() {
     private fun setSpinnerItems(p_strItems: Array<String?>){
 
         // Use items as a list cleared of non *.* files //
-        var items: MutableList<String> = mutableListOf()
+        //var items: MutableList<String> = mutableListOf()
+        var items: MutableList<SpannableString> = mutableListOf()
 
         for (i in 0 until p_strItems.size) {
-            if ((p_strItems[i]!!).contains(".")) items.add(p_strItems[i].toString())
+            if ((p_strItems[i]!!).contains(".")) {
+                // TODO - Set spinner item coloring here! Put loop in utils function!
+                val strFileName = p_strItems[i].toString()
+
+                // Parse filename date to get day's letter: [N,M,T,W,R,F,S] //
+                var strFileDisplayName = strFileName
+                /*
+                val strFileNameDate = strFileDisplayName.split('.')[0]
+                var dateFromFileName = utils.getDateFromIntString(strFileNameDate).date
+                // Date(strFileNameDate).day.toString()
+
+                val strWeekdaysArray :Array<String> = arrayOf("M","T","W","R","F","S","N")
+                var fileNameDayLetter = strWeekdaysArray[dateFromFileName]
+
+                //val fileNameDayLetter = SimpleDateFormat("E").format(dateFromFileName)
+                //if (dateFromFileName == 0) dateFromFileName = "M"
+                //if (dateFromFileName == "Thursday") dateFromFileName = "R"
+
+                //val fileNameDayLetter = dateFromFileName[0].toString()
+
+                strFileDisplayName = fileNameDayLetter + " - " +strFileDisplayName
+                */
+
+                // Set SpannableString color to the existing file color assigned in config //
+                var fileNameSpannableStr = SpannableString(strFileDisplayName)
+                var colorSpan = ForegroundColorSpan(Colors.GRAY)
+
+                val currentFileColorPref = config.getPreferenceValue(this, "dailydroid__"+strFileName)
+                if (currentFileColorPref !== null) {
+                    val fileColor = currentFileColorPref.toString()
+                    colorSpan = ForegroundColorSpan(Color.parseColor("#"+fileColor))
+                }
+                fileNameSpannableStr.setSpan(colorSpan, 0, strFileDisplayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                //items.add(p_strItems[i].toString())
+                items.add(fileNameSpannableStr)
+            }
         }
 
         // Assign items to spinner //
         var spinner = findViewById<View>(R.id.spinner) as Spinner
-        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items)
+        //var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items)
+        var adapter = ArrayAdapter<SpannableString>(this, android.R.layout.simple_spinner_item, items)
 
         // Assign visual styling to spinner //
         adapter.setDropDownViewResource(R.layout.spinner_item)

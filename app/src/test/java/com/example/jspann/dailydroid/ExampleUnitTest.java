@@ -1,4 +1,4 @@
-package com.example.jspann.textfilewriter;
+package com.example.jspann.dailydroid;
 
 import org.junit.Test;
 

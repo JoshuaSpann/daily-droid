@@ -5,7 +5,7 @@
     android:id="@+id/container_color_buttons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jspann.textfilewriter.ColorSelectorActivity">
+    tools:context="com.example.jspann.dailydroid.ColorSelectorActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -22,9 +22,19 @@
         android:id="@+id/btn_blue_dark"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorBlueDark"
+        app:layout_constraintStart_toEndOf="@+id/btn_blue"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btn_blue"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#0044ff"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -118,13 +128,43 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_grey_dark"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#444"
+        app:layout_constraintStart_toEndOf="@+id/btn_black"
+        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+
+    <Button
+        android:id="@+id/btn_black"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="#222"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+
+    <Button
+        android:id="@+id/btn_white"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#ddd"
+        app:layout_constraintStart_toEndOf="@+id/btn_grey_light"
+        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+
+    <Button
+        android:id="@+id/btn_grey_light"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#888"
+        app:layout_constraintStart_toEndOf="@+id/btn_grey_dark"
         app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
 
     <Button

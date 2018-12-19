@@ -1,4 +1,4 @@
-package com.example.jspann.textfilewriter
+package com.example.jspann.dailydroid
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -17,7 +17,6 @@ import android.preference.PreferenceManager
 import android.preference.RingtonePreference
 import android.text.TextUtils
 import android.view.MenuItem
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat

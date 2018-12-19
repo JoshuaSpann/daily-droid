@@ -1,4 +1,4 @@
-package com.example.jspann.textfilewriter
+package com.example.jspann.dailydroid
 
 import android.graphics.Typeface
 import android.text.Spannable

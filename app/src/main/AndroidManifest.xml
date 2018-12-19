@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.jspann.textfilewriter">
+    package="com.example.jspann.dailydroid">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.jspann.dailydroid.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +26,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ColorSelectorActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name="com.example.jspann.dailydroid.ColorSelectorActivity"
+            android:parentActivityName="com.example.jspann.dailydroid.MainActivity" />
 
-        <receiver android:name=".CallReceiver">
+        <receiver android:name="com.example.jspann.dailydroid.CallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -39,7 +39,7 @@
         </receiver>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.example.jspann.dailydroid.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
     </application>
 

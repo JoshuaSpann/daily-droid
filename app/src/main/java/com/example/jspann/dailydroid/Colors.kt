@@ -1,8 +1,4 @@
-package com.example.jspann.textfilewriter
-
-import android.graphics.Color
-import android.graphics.Color.rgb
-import android.graphics.drawable.ColorDrawable
+package com.example.jspann.dailydroid
 
 /**
  * Created by jspann on 3/20/2018.
@@ -12,6 +8,8 @@ object Colors {
         val PRIMARY = 0xFF3F51B5.toInt()
         val SECONDARY = 0xFF303F9F.toInt()
         val ACCENT = 0xFFFF4081.toInt()
+        var CURRENT_PRIMARY = PRIMARY
+        var CURRENT_ACCENT = SECONDARY
     }
 
     object Markdown {

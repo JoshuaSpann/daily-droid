@@ -15,9 +15,8 @@
  **/
 
 /* /  INPORTS  / */
-package com.example.jspann.textfilewriter
+package com.example.jspann.dailydroid
 
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout

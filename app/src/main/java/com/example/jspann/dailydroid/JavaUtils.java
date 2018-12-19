@@ -1,4 +1,4 @@
-package com.example.jspann.textfilewriter;
+package com.example.jspann.dailydroid;
 
 import android.text.Editable;
 import android.text.TextWatcher;

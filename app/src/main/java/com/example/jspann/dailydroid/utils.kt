@@ -1,4 +1,4 @@
-package com.example.jspann.textfilewriter
+package com.example.jspann.dailydroid
 
 import android.app.AlertDialog
 import android.content.Context
@@ -118,6 +118,14 @@ class Utils{
     }
     fun getCurrentTimeStampAsString(): String {
         return SimpleDateFormat("HHmm").format(Date()).toString()
+    }
+
+    fun getDateFromIntString(dateString: String): Date {
+        val intDateYear = dateString.substring(0,3).toInt()
+        val intDateMonth = dateString.substring(4,5).toInt()
+        val intDateDay = dateString.substring(6,7).toInt()
+
+        return Date(intDateYear,intDateMonth,intDateDay)
     }
 
     fun getDirectoryPathToString(): String {
