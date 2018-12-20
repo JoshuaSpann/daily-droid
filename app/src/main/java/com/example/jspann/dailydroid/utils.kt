@@ -199,6 +199,10 @@ class Utils{
         return filesInDir
     }
 
+    fun getSpacesFromPositionInTextFile(intCursorPosition: Int, strText: String) {
+        //
+    }
+
     fun popup(applicationContext: Context, data: Any) {
         android.widget.Toast.makeText(applicationContext, data.toString(), Toast.LENGTH_SHORT).show()
     }

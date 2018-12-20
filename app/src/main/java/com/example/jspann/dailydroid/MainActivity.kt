@@ -47,6 +47,7 @@ import android.view.MotionEvent
 import android.view.GestureDetector
 import android.widget.Scroller
 import android.widget.TextView
+import java.util.regex.Pattern
 
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
@@ -249,11 +250,15 @@ class MainActivity : AppCompatActivity() {
     fun button_toolbar_startoftext__click(view: View) {
         _buttonEndClickCount = 0
         _buttonStartClickCount++
+
         //this.setCursorToEndOfTxtField()
         if (_buttonStartClickCount == 1) {
+            this.moveCursorBackOneWord()
+        }
+        if (_buttonStartClickCount == 2) {
             this.setCursorToStartOfLine()
         }
-        if (_buttonStartClickCount >= 2) {
+        if (_buttonStartClickCount >= 3) {
             this.setCursorToStartOfTxtField()
             _buttonStartClickCount = 0
         }
@@ -283,10 +288,14 @@ class MainActivity : AppCompatActivity() {
     fun button_toolbar_endoftext__click(view: View){
         _buttonStartClickCount = 0
         _buttonEndClickCount++
+
         if (_buttonEndClickCount == 1) {
+            this.moveCursorForwardOneWord()
+        }
+        if (_buttonEndClickCount == 2) {
             this.setCursorToEndOfLine()
         }
-        if (_buttonEndClickCount >= 2) {
+        if (_buttonEndClickCount >= 3) {
             this.setCursorToEndOfTxtField()
             _buttonEndClickCount = 0
         }
@@ -606,6 +615,8 @@ class MainActivity : AppCompatActivity() {
         val rawFileText = utils.readFileContentsToString(file)
         var highlightedMarkdownText = SpannableString(rawFileText)
 
+        setApplicationColor()
+
         // Perform Markdown Styling //
         if (_isMarkdownEnabled) {
             var color = utils.getFileColorIntFromPreferences(this, this.config, file.name)
@@ -626,8 +637,6 @@ class MainActivity : AppCompatActivity() {
         catch (e: Exception) {
             (_editText!!).setSelection(0)
         }
-
-        setApplicationColor()
     }
 
     /**
@@ -653,7 +662,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Resets the nav button counters after 1 second (allows nav by word/line/document)
+     * Resets the nav button counters around 1 second (allows nav by word/line/document)
      */
     fun resetButtonNavigationProperties() {
         /*val run = Runnable {
@@ -663,7 +672,7 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             _buttonStartClickCount = 0
             _buttonEndClickCount = 0
-        },1000)
+        },370)
     }
 
     // TODO - DELETEME
@@ -700,6 +709,55 @@ class MainActivity : AppCompatActivity() {
         txtMain.setSelection(startOfLineIndex)
     }
 
+    private fun moveCursorBackOneWord() {
+        if (_editTextPosition <= 0) return
+        val txtMain: EditText = (_editText!!)
+        var intCursorLocation = txtMain.selectionStart
+
+        // Matches all spaces
+        val spaceCharRegex = Pattern.compile("\\s")
+        val spaceCharMatcher = spaceCharRegex.matcher(txtMain.text)
+
+        var spaceCharLocations: MutableList<IntArray> = mutableListOf()
+        while (spaceCharMatcher.find()) {
+            spaceCharLocations.add(intArrayOf(spaceCharMatcher.start(), spaceCharMatcher.end()))
+        }
+        var intLastSpacePositionBeforeCursor: Int = intCursorLocation
+        for (i in 0 until spaceCharLocations.size) {
+            var currCharLoc = spaceCharLocations[i][1]
+            if (currCharLoc < intCursorLocation) intLastSpacePositionBeforeCursor = currCharLoc
+        }
+
+        txtMain.setSelection(intLastSpacePositionBeforeCursor)
+        _editTextPosition = intLastSpacePositionBeforeCursor
+    }
+    private fun moveCursorForwardOneWord() {
+        //if (_editTextPosition >= (_editText!!).length()) return
+        val txtMain: EditText = (_editText!!)
+        var intCursorLocation = txtMain.selectionStart
+
+        // Matches all spaces
+        val spaceCharRegex = Pattern.compile("\\s")
+        val spaceCharMatcher = spaceCharRegex.matcher(txtMain.text)
+
+        var spaceCharLocations: MutableList<IntArray> = mutableListOf()
+        while (spaceCharMatcher.find()) {
+            spaceCharLocations.add(intArrayOf(spaceCharMatcher.start(), spaceCharMatcher.end()))
+        }
+        var intLastSpacePositionBeforeCursor: Int = intCursorLocation
+
+        for (i in 0 until spaceCharLocations.size) {
+            var currCharLoc = spaceCharLocations[i][0]
+            if (currCharLoc > intCursorLocation) {
+                intLastSpacePositionBeforeCursor = currCharLoc
+                break
+            }
+        }
+
+        txtMain.setSelection(intLastSpacePositionBeforeCursor)
+        _editTextPosition = intLastSpacePositionBeforeCursor
+    }
+
     /**
      * Returns the cursor's current line or an error code
      */
@@ -720,6 +778,8 @@ class MainActivity : AppCompatActivity() {
         val txtMain: EditText = (_editText!!)
         txtMain.setSelection(0)
     }
+
+
 
 //*//   SPINNER FUNCTIONS   //*//
     private var _spinnerAdapter: ArrayAdapter<SpannableString>? = null

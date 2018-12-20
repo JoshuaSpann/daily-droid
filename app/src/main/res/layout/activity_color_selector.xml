@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="#0044ff"
+        android:background="#0044aa"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -54,7 +54,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorBlueBright"
+        android:background="#30e3ff"
         app:layout_constraintStart_toEndOf="@+id/btn_blue_light"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -65,6 +65,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorGreenLight"
+        app:layout_constraintStart_toEndOf="@+id/btn_green"
+        app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
+
+    <Button
+        android:id="@+id/btn_green"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorGreenDark"
         app:layout_constraintStart_toEndOf="@+id/btn_green_dark"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
@@ -74,17 +84,17 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorGreenDark"
+        android:background="#208800"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
     <Button
-        android:id="@+id/btn_orange"
+        android:id="@+id/btn_orange_dark"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorOrangeDark"
+        android:background="#e45f00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
 
@@ -94,8 +104,28 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorOrangeLight"
+        android:background="#ffaa2b"
         app:layout_constraintStart_toEndOf="@+id/btn_orange"
+        app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
+
+    <Button
+        android:id="@+id/btn_orange"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorOrangeDark"
+        app:layout_constraintStart_toEndOf="@+id/btn_orange_dark"
+        app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
+
+    <Button
+        android:id="@+id/btn_orange_bright"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#fc0"
+        app:layout_constraintStart_toEndOf="@+id/btn_orange_light"
         app:layout_constraintTop_toBottomOf="@+id/btn_green_dark" />
 
     <Button
@@ -104,27 +134,76 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorRedDark"
+        android:background="#a71414"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_orange" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_orange_dark" />
+
+    <Button
+        android:id="@+id/btn_red"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#ed0000"
+        app:layout_constraintStart_toEndOf="@+id/btn_red_dark"
+        app:layout_constraintTop_toBottomOf="@+id/btn_orange_dark" />
 
     <Button
         android:id="@+id/btn_red_light"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:background="@color/colorRedLight"
-        app:layout_constraintStart_toEndOf="@+id/btn_red_dark"
+        android:background="#ff3c3c"
+        app:layout_constraintStart_toEndOf="@+id/btn_red"
         app:layout_constraintTop_toTopOf="@+id/btn_red_dark" />
 
     <Button
-        android:id="@+id/btn_putple_light"
+        android:id="@+id/btn_red_light2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="#faa"
+        app:layout_constraintStart_toEndOf="@+id/btn_red_light"
+        app:layout_constraintTop_toTopOf="@+id/btn_red_dark" />
+
+    <Button
+        android:id="@+id/btn_purple_dark"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPurpleLight"
+        android:background="#422064"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
+
+    <Button
+        android:id="@+id/btn_purple_bright"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#cc85ff"
+        app:layout_constraintStart_toEndOf="@+id/btn_purple_light2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
+
+    <Button
+        android:id="@+id/btn_purple_light2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPurpleLight"
+        app:layout_constraintStart_toEndOf="@+id/btn_purple"
+        app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
+
+    <Button
+        android:id="@+id/btn_purple"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#64377b"
+        app:layout_constraintStart_toEndOf="@+id/btn_purple_dark"
         app:layout_constraintTop_toBottomOf="@+id/btn_red_dark" />
 
     <Button
@@ -133,9 +212,9 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#444"
+        android:background="#555"
         app:layout_constraintStart_toEndOf="@+id/btn_black"
-        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_purple_dark" />
 
     <Button
         android:id="@+id/btn_black"
@@ -145,7 +224,7 @@
         android:layout_marginTop="8dp"
         android:background="#222"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_purple_dark" />
 
     <Button
         android:id="@+id/btn_white"
@@ -153,9 +232,9 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#ddd"
+        android:background="#aaa"
         app:layout_constraintStart_toEndOf="@+id/btn_grey_light"
-        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_purple_dark" />
 
     <Button
         android:id="@+id/btn_grey_light"
@@ -165,7 +244,7 @@
         android:layout_marginTop="8dp"
         android:background="#888"
         app:layout_constraintStart_toEndOf="@+id/btn_grey_dark"
-        app:layout_constraintTop_toBottomOf="@+id/btn_putple_light" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_purple_dark" />
 
     <Button
         android:id="@+id/btn_green_bright"
@@ -173,7 +252,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorGreenBright"
+        android:background="#6dff6d"
         app:layout_constraintStart_toEndOf="@+id/btn_green_light"
         app:layout_constraintTop_toBottomOf="@+id/btn_blue_dark" />
 
