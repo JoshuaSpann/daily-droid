@@ -40,7 +40,6 @@ import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.*
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.inputmethod.InputMethodManager
@@ -57,7 +56,7 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    /* /  UTILTY AND VIEW DECLARATIONS  / */
+/****  UTILTY AND VIEW DECLARATIONS  ****/
     // Custom Classes //
     private val utils:Utils = Utils()
     private val config = Config()
@@ -92,7 +91,13 @@ class MainActivity : AppCompatActivity() {
     //private var _phoneStateListener: PhoneStateListener
     //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-    /* /  LAUNCH CONTROLLER  / */
+
+
+/****  LAUNCH CONTROLLER  ****/
+
+    /**
+     * Main activity creation
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -164,16 +169,26 @@ class MainActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
-    /* /  APP BAR MENU CONTROLLERS  / */
+
+
+/****  APP BAR MENU CONTROLLERS  ****/
+
+    /**
+     * Populates options menu with items from resource XML
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean{
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
+    /**
+     * Runs on item selected from the Options Menu
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val blnRetItem = super.onOptionsItemSelected(item)
         when(item?.itemId){
             R.id.menuitem_open -> {
+                launchFileSelectionSpinner()
                 (_spinner!!).performClick()
             }
             R.id.menuitem_add -> {
@@ -213,7 +228,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
+     * Undoes any unsaved changes made within the main EditText
+     */
     fun resetEditTextToGivenValue(){
         //this.editTextField.text = this.originalEditTextContent
         setEditTextToFileContents(_strCurrentFileName)
@@ -226,6 +243,9 @@ class MainActivity : AppCompatActivity() {
         this.createNewTextFile()
     }
 
+    /**
+     * Runs on the taps/clicks of the |< button
+     */
     fun button_toolbar_startoftext__click(view: View) {
         _buttonEndClickCount = 0
         _buttonStartClickCount++
@@ -241,16 +261,25 @@ class MainActivity : AppCompatActivity() {
         this.resetButtonNavigationProperties()
     }
 
+    /**
+     * Runs on the floppy disk save button tap/click
+     */
     @Throws(Exception::class)
     fun button_toolbar_save__click(view: View) {
         this.saveToFile()
         setEditTextToFileContents(_strCurrentFileName)
     }
 
+    /**
+     * Runs on the timestamp button tap/click
+     */
     fun button_toolbar_timestamp__click(view: View) {
         this.insertTimestampToEditText()
     }
 
+    /**
+     * Runs on the taps/clicks of the >| button
+     */
     fun button_toolbar_endoftext__click(view: View){
         _buttonStartClickCount = 0
         _buttonEndClickCount++
@@ -265,17 +294,26 @@ class MainActivity : AppCompatActivity() {
         this.resetButtonNavigationProperties()
     }
 
+    /**
+     * Runs on the reset/refresh button tap/click
+     */
     fun button_toolbar_refreshtext__click(view: View){
         // Todo - Run check for no files in dir then return
         this.resetEditTextToGivenValue()
     }
 
+    // TODO - DELETEME
     fun button_toolbar_mdDream__click(view: View){
         this.insertDreamMarkdownToEditText()
     }
 
 
-    /* /  FILE MANAGEMENT CONTROLLERS  / */
+
+/****  FILE MANAGEMENT CONTROLLERS  ****/
+
+    /**
+     * Automatically saves after so many new characters have been entered
+     */
     private fun autosave_Setup(){
         /* Listener for characters time period after (x# characters?) entered.
            Listen every few seconds and see if new content then save?
@@ -321,6 +359,9 @@ class MainActivity : AppCompatActivity() {
         (_editText!!).customOnTextChanged { saveToFile() }*/
     }
 
+    /**
+     * Creates new files in the app directory
+     */
     private fun createNewTextFile(){
         val newFile = File(_strDirPath, utils.getCurrentFormattedDateAsString() + ".txt")
 
@@ -341,9 +382,13 @@ class MainActivity : AppCompatActivity() {
         setCursorToEndOfTxtField()
     }
 
+    /**
+     * Sets spinner item list, performs actions on a spinner item click/tap
+     */
     private fun fileSelection_Setup(){
         setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
-        (findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        //(findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        (_spinner!!).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
                 setChosenFilename((_spinner!!).selectedItem.toString())
@@ -355,6 +400,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Saves main EditText data to the current working file
+     */
     private fun saveToFile(){
         var strDataBody = (_editText!!).text.toString()
         try {
@@ -413,6 +461,9 @@ class MainActivity : AppCompatActivity() {
         // Call preferences are stored in the CallReciever Class //
     }
 
+    /**
+     * Loads preferences and sets all view widgets to be modified
+     */
     private fun properties_Setup(){
 
         loadPreferences()
@@ -423,8 +474,7 @@ class MainActivity : AppCompatActivity() {
         _spinner = findViewById<View>(R.id.spinner) as Spinner
         _textView_Title = (findViewById(R.id.textView_Title))
         (_textView_Title!!).setOnClickListener {
-            setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
-            (_spinner!!).performClick()
+            launchFileSelectionSpinner()
         }
 
         /*
@@ -436,8 +486,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /* /  VIEW CONTROLLERS  / */
-    /*   ALL/MANY VIEW ELEMENTS   */
+
+/****  VIEW CONTROLLERS  ****/
+
+//*//   ALL/MANY VIEW ELEMENTS   //*//
     fun setApplicationColor(){
         if(_strCurrentFileName.isNullOrEmpty()) {
             return
@@ -452,6 +504,12 @@ class MainActivity : AppCompatActivity() {
             var hexColor = String.format("#%06X", 0xBBBBCC and color)
             accentColor = Color.parseColor(hexColor)
         }
+
+        /*
+        var color = utils.getFileColorIntFromPreferences(this, this.config, this._strCurrentFileName)
+        var hexColor = String.format("#%06X", 0xBBBBCC and color)
+        var accentColor = Color.parseColor(hexColor)
+        */
 
         Colors.App.CURRENT_PRIMARY = color
         Colors.App.CURRENT_ACCENT = accentColor
@@ -471,12 +529,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*   ACTIVITY MODIFIERS   */
+//*//   ACTIVITY MODIFIERS   //*//
+    /**
+     * Opens the color selection activity view
+     */
     private fun launchColorSelectorActivity(){
         val intent = Intent(this, ColorSelectorActivity::class.java)
         intent.putExtra("currentSelectedFile", _strCurrentFileName)
         startActivity(intent)
     }
+
+    /**
+     * Opens the settings activity view
+     */
     private fun launchSettingsActivity(){
         val intent = Intent(this, SettingsActivity::class.java)
         // TODO - TRY loading fragment for SettingsActivity: val intent = Intent(this, SettingsActivity::GeneralPreferenceFragment.javaClass)
@@ -485,7 +550,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    /*   EDIT TEXT FUNCTIONS   */
+//*//   EDIT TEXT FUNCTIONS   //*//
     /**
      * Adds scrolling capabilities to a supplied EditText
      */
@@ -510,131 +575,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun insertDreamMarkdownToEditText(){
-        val txtMain = findViewById<EditText>(R.id.editText)
-        val strDreamMd: String = "\n\n```\n\n```\n"
-        val txtMain_cursorPosition = txtMain.selectionStart
-        txtMain.text.insert(txtMain_cursorPosition, strDreamMd)
-        txtMain.setSelection(txtMain_cursorPosition + 6)
-    }
-
-    private fun insertTimestampToEditText(){
-        val txtMain = findViewById<EditText>(R.id.editText)
-        val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
-        if (txtMain.selectionStart < 0) return
-        txtMain.text.insert(txtMain.selectionStart, strTimestamp)
-    }
-
-    fun resetButtonNavigationProperties() {
-        /*val run = Runnable {
-            _buttonStartClickCount = 0
-            _buttonEndClickCount = 0
-        }*/
-        Handler().postDelayed({
-            _buttonStartClickCount = 0
-            _buttonEndClickCount = 0
-        },1000)
-    }
-
-    private fun setCursorToCurrentPositionOfTxtField() {
-        val txtMain: EditText = (_editText!!)
-        txtMain.setSelection(_editTextPosition)
-    }
-    private fun setCursorToEndOfLine() {
-        val txtMain: EditText = (_editText!!)
-        val cursorLine = this.getCursorLineFromEditText(txtMain)
-        val endOfLineIndex = txtMain.layout.getLineVisibleEnd(cursorLine)
-        txtMain.setSelection(endOfLineIndex)
-    }
-    private fun setCursorToEndOfTxtField(){
-        val txtMain: EditText = (_editText!!)
-        txtMain.setSelection(txtMain.text.length)
-    }
-    private fun setCursorToStartOfLine(){
-        val txtMain: EditText = (_editText!!)
-        val cursorLine = this.getCursorLineFromEditText(txtMain)
-        val startOfLineIndex = txtMain.layout.getLineStart(cursorLine)
-        txtMain.setSelection(startOfLineIndex)
-    }
-    private fun getCursorLineFromEditText(editText: EditText) :Int{
-        val selectionStartLocation = Selection.getSelectionStart(editText.text)
-        val txtMainLayout = editText.layout
-
-        if (selectionStartLocation != -1) {
-            return txtMainLayout.getLineForOffset(selectionStartLocation)
-        }
-        return -1
-    }
-    private fun setCursorToStartOfTxtField(){
-        val txtMain: EditText = (_editText!!)
-        txtMain.setSelection(0)
-    }
-
-    /*   SPINNER FUNCTIONS   */
-    private fun setSpinnerItems(p_strItems: Array<String?>){
-
-        // Use items as a list cleared of non *.* files //
-        //var items: MutableList<String> = mutableListOf()
-        var items: MutableList<SpannableString> = mutableListOf()
-
-        for (i in 0 until p_strItems.size) {
-            if ((p_strItems[i]!!).contains(".")) {
-                // TODO - Set spinner item coloring here! Put loop in utils function!
-                val strFileName = p_strItems[i].toString()
-
-                // Parse filename date to get day's letter: [N,M,T,W,R,F,S] //
-                var strFileDisplayName = strFileName
-                /*
-                val strFileNameDate = strFileDisplayName.split('.')[0]
-                var dateFromFileName = utils.getDateFromIntString(strFileNameDate).date
-                // Date(strFileNameDate).day.toString()
-
-                val strWeekdaysArray :Array<String> = arrayOf("M","T","W","R","F","S","N")
-                var fileNameDayLetter = strWeekdaysArray[dateFromFileName]
-
-                //val fileNameDayLetter = SimpleDateFormat("E").format(dateFromFileName)
-                //if (dateFromFileName == 0) dateFromFileName = "M"
-                //if (dateFromFileName == "Thursday") dateFromFileName = "R"
-
-                //val fileNameDayLetter = dateFromFileName[0].toString()
-
-                strFileDisplayName = fileNameDayLetter + " - " +strFileDisplayName
-                */
-
-                // Set SpannableString color to the existing file color assigned in config //
-                var fileNameSpannableStr = SpannableString(strFileDisplayName)
-                var colorSpan = ForegroundColorSpan(Colors.GRAY)
-
-                val currentFileColorPref = config.getPreferenceValue(this, "dailydroid__"+strFileName)
-                if (currentFileColorPref !== null) {
-                    val fileColor = currentFileColorPref.toString()
-                    colorSpan = ForegroundColorSpan(Color.parseColor("#"+fileColor))
-                }
-                fileNameSpannableStr.setSpan(colorSpan, 0, strFileDisplayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                //items.add(p_strItems[i].toString())
-                items.add(fileNameSpannableStr)
-            }
-        }
-
-        // Assign items to spinner //
-        var spinner = findViewById<View>(R.id.spinner) as Spinner
-        //var adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items)
-        var adapter = ArrayAdapter<SpannableString>(this, android.R.layout.simple_spinner_item, items)
-
-        // Assign visual styling to spinner //
-        adapter.setDropDownViewResource(R.layout.spinner_item)
-        spinner.adapter = adapter
-        spinner.prompt = "Open File"
-
-    }
-
-    /*   TEXT FIELD FUNCTIONS  */
-    private fun setChosenFilename(p_strFileName: String){
-        (_debug_text!!).text = _strDirPath + p_strFileName
-        (_textView_Title!!).text = (p_strFileName).substring(0,(p_strFileName).length-4)
-    }
-
+    // TODO - Merge the redundancies between this and setEditTextToFileContents??
     @Throws(Exception::class)
     private fun setEditTextToFileContents_and_setTextFieldToFileName(file: File) {
         _strCurrentFileName = file.name
@@ -644,11 +585,16 @@ class MainActivity : AppCompatActivity() {
         var formattedText = SpannableString(strOriginalText)
 
         if (_isMarkdownEnabled) {
-            formattedText = markdown.formatFromString(strOriginalText)
+            var color = utils.getFileColorIntFromPreferences(this, this.config, file.name)
+            var hexColor = String.format("#%06X", 0xBBBBCC and color)
+            var accentColor = Color.parseColor(hexColor)
+
+            formattedText = markdown.formatFromString(strOriginalText, color, accentColor)
         }
 
         (_editText!!).setText(formattedText)
-        (editText!!).setSelection(formattedText.length)
+        //(editText!!).setSelection(formattedText.length)
+        (_editText!!).setSelection(formattedText.length)
         setChosenFilename(file.name)
     }
 
@@ -662,7 +608,12 @@ class MainActivity : AppCompatActivity() {
 
         // Perform Markdown Styling //
         if (_isMarkdownEnabled) {
-            highlightedMarkdownText = markdown.formatFromString(rawFileText)
+            var color = utils.getFileColorIntFromPreferences(this, this.config, file.name)
+            var hexColor = String.format("#%06X", 0xBBBBCC and color)
+            var accentColor = Color.parseColor(hexColor)
+
+            highlightedMarkdownText = markdown.formatFromString(rawFileText, color, accentColor)
+            //highlightedMarkdownText = markdown.formatFromString(rawFileText)
         }
 
         _editTextPosition = (_editText!!).selectionStart
@@ -679,6 +630,160 @@ class MainActivity : AppCompatActivity() {
         setApplicationColor()
     }
 
+    /**
+     * TODO - DELETEME
+     */
+    private fun insertDreamMarkdownToEditText(){
+        val txtMain = findViewById<EditText>(R.id.editText)
+        val strDreamMd: String = "\n\n```\n\n```\n"
+        val txtMain_cursorPosition = txtMain.selectionStart
+        txtMain.text.insert(txtMain_cursorPosition, strDreamMd)
+        txtMain.setSelection(txtMain_cursorPosition + 6)
+    }
+
+//*//   FOOTER ACTION BUTTON FUNCTIONS   //*//
+    /**
+     * Inserts a "- ####:  " timestamp at the line under the cursor
+     */
+    private fun insertTimestampToEditText(){
+        val txtMain = findViewById<EditText>(R.id.editText)
+        val strTimestamp: String = "\n - "+utils.getCurrentTimeStampAsString()+":  "
+        if (txtMain.selectionStart < 0) return
+        txtMain.text.insert(txtMain.selectionStart, strTimestamp)
+    }
+
+    /**
+     * Resets the nav button counters after 1 second (allows nav by word/line/document)
+     */
+    fun resetButtonNavigationProperties() {
+        /*val run = Runnable {
+            _buttonStartClickCount = 0
+            _buttonEndClickCount = 0
+        }*/
+        Handler().postDelayed({
+            _buttonStartClickCount = 0
+            _buttonEndClickCount = 0
+        },1000)
+    }
+
+    // TODO - DELETEME
+    private fun setCursorToCurrentPositionOfTxtField() {
+        val txtMain: EditText = (_editText!!)
+        txtMain.setSelection(_editTextPosition)
+    }
+
+    /**
+     * Works like the End key
+     */
+    private fun setCursorToEndOfLine() {
+        val txtMain: EditText = (_editText!!)
+        val cursorLine = this.getCursorLineFromEditText(txtMain)
+        val endOfLineIndex = txtMain.layout.getLineVisibleEnd(cursorLine)
+        txtMain.setSelection(endOfLineIndex)
+    }
+
+    /**
+     * Works like the Ctrl+End keypresses
+     */
+    private fun setCursorToEndOfTxtField(){
+        val txtMain: EditText = (_editText!!)
+        txtMain.setSelection(txtMain.text.length)
+    }
+
+    /**
+     * Works like the Home key
+     */
+    private fun setCursorToStartOfLine(){
+        val txtMain: EditText = (_editText!!)
+        val cursorLine = this.getCursorLineFromEditText(txtMain)
+        val startOfLineIndex = txtMain.layout.getLineStart(cursorLine)
+        txtMain.setSelection(startOfLineIndex)
+    }
+
+    /**
+     * Returns the cursor's current line or an error code
+     */
+    private fun getCursorLineFromEditText(editText: EditText) :Int{
+        val selectionStartLocation = Selection.getSelectionStart(editText.text)
+        val txtMainLayout = editText.layout
+
+        if (selectionStartLocation != -1) {
+            return txtMainLayout.getLineForOffset(selectionStartLocation)
+        }
+        return -1
+    }
+
+    /**
+     * Works like the Ctrl+Home key combo
+     */
+    private fun setCursorToStartOfTxtField(){
+        val txtMain: EditText = (_editText!!)
+        txtMain.setSelection(0)
+    }
+
+//*//   SPINNER FUNCTIONS   //*//
+    private var _spinnerAdapter: ArrayAdapter<SpannableString>? = null
+    /**
+     * Updates spinner formatting and opens the file selection spinner
+     */
+    private fun launchFileSelectionSpinner() {
+        this.updateSpinnerItems()
+        (_spinner!!).performClick()
+    }
+
+    /**
+     * Creates the spinner's file listing with appropriate file colors
+     */
+    private fun setSpinnerItems(p_strItems: Array<String?>){
+        // Use items as a list cleared of non *.* files //
+        var items: MutableList<SpannableString> = mutableListOf()
+
+        for (i in 0 until p_strItems.size) {
+            if ((p_strItems[i]!!).contains(".")) {
+                var fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, p_strItems[i].toString(), config)
+                items.add(fileNameSpannableStr)
+            }
+        }
+
+        // Assign items to spinner //
+        var adapter = ArrayAdapter<SpannableString>(this, android.R.layout.simple_spinner_item, items)
+        _spinnerAdapter = adapter
+
+        // Assign visual styling to spinner //
+        adapter.setDropDownViewResource(R.layout.spinner_item)
+        (_spinner!!).adapter = adapter
+        (_spinner!!).prompt = "Open File"
+    }
+
+    /**
+     * Updates the file selection spinner items with the latest color formatting
+     *     (prevents weird setspinneritems() opening the latest file by default)
+     */
+    private fun updateSpinnerItems(){
+        if (_spinnerAdapter == null) return
+        for (i in 0 until (_spinnerAdapter!!).count) {
+            val curSpinnerAdapterItem = (_spinnerAdapter!!).getItem(i)
+            if (curSpinnerAdapterItem.contains(".")) {
+                var fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, curSpinnerAdapterItem.toString(), config)
+                (_spinnerAdapter!!).remove(curSpinnerAdapterItem)
+                (_spinnerAdapter!!).insert(fileNameSpannableStr, i)
+                (_spinnerAdapter!!).notifyDataSetChanged()
+            }
+        }
+    }
+
+//*//   TEXT FIELD FUNCTIONS  //*//
+    /**
+     * Changes the filename TextView to the supplied/chosen filename
+     */
+    private fun setChosenFilename(p_strFileName: String){
+        (_debug_text!!).text = _strDirPath + p_strFileName
+        (_textView_Title!!).text = (p_strFileName).substring(0,(p_strFileName).length-4)
+    }
+
+    /**
+     * Finds the "newest" or "largest" filename and sets the title TextField to the filename without the extension
+     */
     @Throws(Exception::class)
     private fun setTextFieldToLatestFile() {
         val files = utils.getListOfAllFilesInDir(_strDirPath)

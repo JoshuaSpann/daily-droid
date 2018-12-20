@@ -12,11 +12,15 @@ import java.util.regex.Pattern
  */
 
 class Markdown {
+    data class AppColors(var primary: Int, var accent: Int)
+    var HeadingColors = AppColors(Colors.App.PRIMARY, Colors.App.ACCENT)
     /**
      * Formats a String as a SpannableString based off of its Markdown Content
      */
-    public fun formatFromString(text: String): SpannableString {
+    public fun formatFromString(text: String, color: Int = Colors.App.PRIMARY, accentColor: Int = Colors.App.ACCENT): SpannableString {
         var spannableString = SpannableString(text)
+        this.HeadingColors.primary = color
+        this.HeadingColors.accent = accentColor
 
         // Default EditText Color ro Darker Gray //
         spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -214,7 +218,8 @@ class Markdown {
 
         // Set the formatting spans to the text //
         for (i in 0 until h1HighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.H1)
+            //var colorSpan = ForegroundColorSpan(Colors.Markdown.H1)
+            var colorSpan = ForegroundColorSpan(this.HeadingColors.primary)
             val relativeSizeSpan = RelativeSizeSpan(1.3.toFloat())
             spannableString.setSpan(colorSpan, h1HighlightLocs[i][0], h1HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(relativeSizeSpan, h1HighlightLocs[i][0], h1HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -232,7 +237,8 @@ class Markdown {
         val h2HighlightLocs = getCoordinatesOfHeadingsLevel(2, spannableString)
 
         for (i in 0 until h2HighlightLocs.size) {
-            val colorSpan = ForegroundColorSpan(Colors.Markdown.H2)
+            //val colorSpan = ForegroundColorSpan(Colors.Markdown.H2)
+            val colorSpan = ForegroundColorSpan(this.HeadingColors.primary)
             val textSizeSpan = RelativeSizeSpan(1.2.toFloat())
             spannableString.setSpan(colorSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(textSizeSpan, h2HighlightLocs[i][0], h2HighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

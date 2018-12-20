@@ -3,6 +3,7 @@ package com.example.jspann.dailydroid
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
@@ -11,7 +12,9 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.provider.ContactsContract
-
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 
 
 /**
@@ -138,6 +141,37 @@ class Utils{
     fun getDirectoryPathToString(str_subdir: String): String {
         var strDefaultDir:String = getDirectoryPathToString()+str_subdir
         return strDefaultDir
+    }
+
+    fun getFileColorIntFromPreferences(context: Context, config: Config, strFileName: String): Int {
+        var color = Colors.App.CURRENT_PRIMARY
+        //var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and Colors.App.CURRENT_ACCENT))
+        var str: String? = config.getPreferenceValue(context, "dailydroid__"+strFileName) as String?
+
+        if(!str.isNullOrEmpty()) {
+            color = Color.parseColor("#"+str)
+            //var hexColor = String.format("#%06X", 0xBBBBCC and color)
+            //accentColor = Color.parseColor(hexColor)
+        }
+
+        return color
+    }
+
+    fun getFilenameStringFormattedWithPropertiesColor(context: Context, strFileName: String, config: Config): SpannableString {
+        // Parse filename date to get day's letter: [N,M,T,W,R,F,S] //
+        var strFileDisplayName = strFileName
+
+        // Set SpannableString color to the existing file color assigned in config //
+        var fileNameSpannableStr = SpannableString(strFileDisplayName)
+        var colorSpan = ForegroundColorSpan(Colors.GRAY)
+
+        val currentFileColorPref = config.getPreferenceValue(context, "dailydroid__"+strFileName)
+        if (currentFileColorPref !== null) {
+            val fileColor = currentFileColorPref.toString()
+            colorSpan = ForegroundColorSpan(Color.parseColor("#"+fileColor))
+        }
+        fileNameSpannableStr.setSpan(colorSpan, 0, strFileDisplayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return fileNameSpannableStr
     }
 
     fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
