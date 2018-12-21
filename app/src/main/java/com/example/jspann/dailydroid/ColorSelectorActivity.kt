@@ -35,11 +35,12 @@ class ColorSelectorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_selector)
 
-        var buttons: List<Button>
-        buttons = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).getTouchables() as List<Button>
+        var buttons: List<Button> = (findViewById<View>(R.id.container_color_buttons) as ConstraintLayout).touchables as List<Button>
         for(button: Button in buttons){
+
             button.setOnClickListener{
                 val MainActivity__strFileName: String = "dailydroid__"+intent.getStringExtra("currentSelectedFile")
+
                 if(button.id == R.id.btn_default){
                     config.removePreference(this,MainActivity__strFileName)
                     utils.popup(this,"Color Reset to Default")
@@ -56,6 +57,7 @@ class ColorSelectorActivity : AppCompatActivity() {
                     this.finish()
                 }
             }
+
         }
     }
 

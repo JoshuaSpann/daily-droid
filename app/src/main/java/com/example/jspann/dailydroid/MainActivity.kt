@@ -40,6 +40,7 @@ import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.*
+import android.text.style.BackgroundColorSpan
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.inputmethod.InputMethodManager
@@ -47,7 +48,6 @@ import android.view.MotionEvent
 import android.view.GestureDetector
 import android.widget.Scroller
 import android.widget.TextView
-import java.util.regex.Pattern
 
 
 //import sun.swing.plaf.synth.Paint9Painter.PaintType
@@ -88,10 +88,6 @@ class MainActivity : AppCompatActivity() {
     private var _buttonStartClickCount :Int = 0
     private var _buttonEndClickCount :Int = 0
 
-    // System Properties //
-    //private var _phoneStateListener: PhoneStateListener
-    //private val _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-
 
 
 /****  LAUNCH CONTROLLER  ****/
@@ -109,9 +105,7 @@ class MainActivity : AppCompatActivity() {
         try {
             setTextFieldToLatestFile()
             setCursorToEndOfTxtField()
-        } catch (e: Exception) {
-            //utils.popup(applicationContext, e)
-        }
+        } catch (e: Exception) {}
 
         // ADD FILE SELECTION DROPDOWN TO ALLOW DYNAMIC EDITING //
         fileSelection_Setup()
@@ -190,7 +184,6 @@ class MainActivity : AppCompatActivity() {
         when(item?.itemId){
             R.id.menuitem_open -> {
                 launchFileSelectionSpinner()
-                (_spinner!!).performClick()
             }
             R.id.menuitem_add -> {
                 createNewTextFile()
@@ -233,16 +226,12 @@ class MainActivity : AppCompatActivity() {
      * Undoes any unsaved changes made within the main EditText
      */
     fun resetEditTextToGivenValue(){
-        //this.editTextField.text = this.originalEditTextContent
-        setEditTextToFileContents(_strCurrentFileName)
-        //setCursorToCurrentPositionOfTxtField()
+        this.setEditTextToFileContents(_strCurrentFileName)
     }
 
 
-    /* /  BUTTON CLICK FUNCTIONS  / */
-    fun button_toolbar_new__click(view: View) {
-        this.createNewTextFile()
-    }
+
+/****  BUTTON CLICK FUNCTIONS  ****/
 
     /**
      * Runs on the taps/clicks of the |< button
@@ -251,7 +240,6 @@ class MainActivity : AppCompatActivity() {
         _buttonEndClickCount = 0
         _buttonStartClickCount++
 
-        //this.setCursorToEndOfTxtField()
         if (_buttonStartClickCount == 1) {
             this.moveCursorBackOneWord()
         }
@@ -272,7 +260,7 @@ class MainActivity : AppCompatActivity() {
     @Throws(Exception::class)
     fun button_toolbar_save__click(view: View) {
         this.saveToFile()
-        setEditTextToFileContents(_strCurrentFileName)
+        this.setEditTextToFileContents(_strCurrentFileName)
     }
 
     /**
@@ -311,10 +299,6 @@ class MainActivity : AppCompatActivity() {
         this.resetEditTextToGivenValue()
     }
 
-    // TODO - DELETEME
-    fun button_toolbar_mdDream__click(view: View){
-        this.insertDreamMarkdownToEditText()
-    }
 
 
 
@@ -334,10 +318,8 @@ class MainActivity : AppCompatActivity() {
         var strOldFileName = _strCurrentFileName
 
         (_editText!!).addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(strOldFileName != _strCurrentFileName){
@@ -396,7 +378,6 @@ class MainActivity : AppCompatActivity() {
      */
     private fun fileSelection_Setup(){
         setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
-        //(findViewById<View>(R.id.spinner) as Spinner).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
         (_spinner!!).onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 setEditTextToFileContents((_spinner!!).selectedItem.toString())
@@ -428,9 +409,7 @@ class MainActivity : AppCompatActivity() {
 
             property_ResetEditTextLength()
             (_debug_text!!).text = "Last Saved: "+utils.getCurrentTimeStampAsString()
-        } catch (e: Exception) {
-            //utils.popup(applicationContext, e)
-        }
+        } catch (e: Exception) {}
     }
 
 
@@ -467,7 +446,7 @@ class MainActivity : AppCompatActivity() {
             if (daily_droid__pref_fancy_scroll_enabled as Boolean === true && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
         }
 
-        // Call preferences are stored in the CallReciever Class //
+        // NOTE: Call preferences are stored in the CallReciever Class //
     }
 
     /**
@@ -475,7 +454,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun properties_Setup(){
 
-        loadPreferences()
+        this.loadPreferences()
 
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)
@@ -485,13 +464,6 @@ class MainActivity : AppCompatActivity() {
         (_textView_Title!!).setOnClickListener {
             launchFileSelectionSpinner()
         }
-
-        /*
-        // This prevents edit/copy/paste
-        //(_editText!!).setMovementMethod(ScrollingMovementMethod())
-        (_editText!!).setTextIsSelectable(true)
-        (_editText!!).isFocusableInTouchMode = true
-        */
     }
 
 
@@ -506,11 +478,11 @@ class MainActivity : AppCompatActivity() {
 
         var color = resources.getColor(R.color.colorPrimary)
         var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and resources.getColor(R.color.colorAccent)))
-        var str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
+        val str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
 
         if(!str.isNullOrEmpty()) {
             color = Color.parseColor("#"+str)
-            var hexColor = String.format("#%06X", 0xBBBBCC and color)
+            val hexColor = String.format("#%06X", 0xBBBBCC and color)
             accentColor = Color.parseColor(hexColor)
         }
 
@@ -527,7 +499,7 @@ class MainActivity : AppCompatActivity() {
         (_debug_text!!).setTextColor(accentColor)
         (findViewById<View>(R.id.view) as View).setBackgroundColor(accentColor)
 
-        var cd = ColorDrawable(color)
+        val cd = ColorDrawable(color)
         var ab: ActionBar? = supportActionBar
         (ab!!).setBackgroundDrawable(cd)
 
@@ -584,48 +556,43 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    // TODO - Merge the redundancies between this and setEditTextToFileContents??
+    /**
+     * "Loads" a new working file's info and contents into the editor
+     */
     @Throws(Exception::class)
     private fun setEditTextToFileContents_and_setTextFieldToFileName(file: File) {
-        _strCurrentFileName = file.name
-        property_ResetEditTextLength()
-
-        val strOriginalText = utils.readFileContentsToString(file)
-        var formattedText = SpannableString(strOriginalText)
-
-        if (_isMarkdownEnabled) {
-            var color = utils.getFileColorIntFromPreferences(this, this.config, file.name)
-            var hexColor = String.format("#%06X", 0xBBBBCC and color)
-            var accentColor = Color.parseColor(hexColor)
-
-            formattedText = markdown.formatFromString(strOriginalText, color, accentColor)
-        }
-
-        (_editText!!).setText(formattedText)
-        //(editText!!).setSelection(formattedText.length)
-        (_editText!!).setSelection(formattedText.length)
+        this.setEditTextToFileContents(file.name)
         setChosenFilename(file.name)
     }
 
+    /**
+     * Applies markdown formatting and colorization (if it exists) and returns the string span
+     */
+    private fun getMarkdownColoredTextFromFile(filename: String, text: String): SpannableString {
+        // Perform Markdown Styling //
+        if (_isMarkdownEnabled) {
+            val color = utils.getFileColorIntFromPreferences(this, this.config, filename)
+            val hexColor = String.format("#%06X", 0xFFBBBBCC.toInt() and color)
+            val accentColor = Color.parseColor(hexColor)
+
+            return markdown.formatFromString(text, color, accentColor)
+        }
+
+        return SpannableString(text)
+    }
+
+    /**
+     * Populates the edit text with the text from a given file
+     */
     private fun setEditTextToFileContents(p_strFileName: String){
         var file = File(_strDirPath, p_strFileName)
         _strCurrentFileName = file.name
         _intEditTextStartLength = file.length().toInt()
 
         val rawFileText = utils.readFileContentsToString(file)
-        var highlightedMarkdownText = SpannableString(rawFileText)
 
-        setApplicationColor()
-
-        // Perform Markdown Styling //
-        if (_isMarkdownEnabled) {
-            var color = utils.getFileColorIntFromPreferences(this, this.config, file.name)
-            var hexColor = String.format("#%06X", 0xBBBBCC and color)
-            var accentColor = Color.parseColor(hexColor)
-
-            highlightedMarkdownText = markdown.formatFromString(rawFileText, color, accentColor)
-            //highlightedMarkdownText = markdown.formatFromString(rawFileText)
-        }
+        this.setApplicationColor()
+        val highlightedMarkdownText = getMarkdownColoredTextFromFile(file.name, rawFileText)
 
         _editTextPosition = (_editText!!).selectionStart
         (_editText!!).setText(highlightedMarkdownText)
@@ -639,16 +606,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * TODO - DELETEME
-     */
-    private fun insertDreamMarkdownToEditText(){
-        val txtMain = findViewById<EditText>(R.id.editText)
-        val strDreamMd: String = "\n\n```\n\n```\n"
-        val txtMain_cursorPosition = txtMain.selectionStart
-        txtMain.text.insert(txtMain_cursorPosition, strDreamMd)
-        txtMain.setSelection(txtMain_cursorPosition + 6)
-    }
 
 //*//   FOOTER ACTION BUTTON FUNCTIONS   //*//
     /**
@@ -665,20 +622,10 @@ class MainActivity : AppCompatActivity() {
      * Resets the nav button counters around 1 second (allows nav by word/line/document)
      */
     fun resetButtonNavigationProperties() {
-        /*val run = Runnable {
-            _buttonStartClickCount = 0
-            _buttonEndClickCount = 0
-        }*/
         Handler().postDelayed({
             _buttonStartClickCount = 0
             _buttonEndClickCount = 0
         },370)
-    }
-
-    // TODO - DELETEME
-    private fun setCursorToCurrentPositionOfTxtField() {
-        val txtMain: EditText = (_editText!!)
-        txtMain.setSelection(_editTextPosition)
     }
 
     /**
@@ -709,53 +656,30 @@ class MainActivity : AppCompatActivity() {
         txtMain.setSelection(startOfLineIndex)
     }
 
+    /**
+     * Works like Ctrl+LeftArrow
+     */
     private fun moveCursorBackOneWord() {
-        if (_editTextPosition <= 0) return
-        val txtMain: EditText = (_editText!!)
-        var intCursorLocation = txtMain.selectionStart
-
-        // Matches all spaces
-        val spaceCharRegex = Pattern.compile("\\s")
-        val spaceCharMatcher = spaceCharRegex.matcher(txtMain.text)
-
-        var spaceCharLocations: MutableList<IntArray> = mutableListOf()
-        while (spaceCharMatcher.find()) {
-            spaceCharLocations.add(intArrayOf(spaceCharMatcher.start(), spaceCharMatcher.end()))
-        }
-        var intLastSpacePositionBeforeCursor: Int = intCursorLocation
-        for (i in 0 until spaceCharLocations.size) {
-            var currCharLoc = spaceCharLocations[i][1]
-            if (currCharLoc < intCursorLocation) intLastSpacePositionBeforeCursor = currCharLoc
-        }
-
-        txtMain.setSelection(intLastSpacePositionBeforeCursor)
-        _editTextPosition = intLastSpacePositionBeforeCursor
+        this.moveCursor(false)
     }
+
+    /**
+     * Works like Ctrl+RightArrow
+     */
     private fun moveCursorForwardOneWord() {
-        //if (_editTextPosition >= (_editText!!).length()) return
+        this.moveCursor(true)
+    }
+
+    /**
+     * Determines which direction to move the cursor in the main EditText
+     */
+    private fun moveCursor(blnForward: Boolean) {
         val txtMain: EditText = (_editText!!)
-        var intCursorLocation = txtMain.selectionStart
+        val intCursorLocation = txtMain.selectionStart
+        val intClosestWhiteSpaceLocation = utils.getClosestWhitespaceLocationFromCursor(txtMain, intCursorLocation, blnForward)
 
-        // Matches all spaces
-        val spaceCharRegex = Pattern.compile("\\s")
-        val spaceCharMatcher = spaceCharRegex.matcher(txtMain.text)
-
-        var spaceCharLocations: MutableList<IntArray> = mutableListOf()
-        while (spaceCharMatcher.find()) {
-            spaceCharLocations.add(intArrayOf(spaceCharMatcher.start(), spaceCharMatcher.end()))
-        }
-        var intLastSpacePositionBeforeCursor: Int = intCursorLocation
-
-        for (i in 0 until spaceCharLocations.size) {
-            var currCharLoc = spaceCharLocations[i][0]
-            if (currCharLoc > intCursorLocation) {
-                intLastSpacePositionBeforeCursor = currCharLoc
-                break
-            }
-        }
-
-        txtMain.setSelection(intLastSpacePositionBeforeCursor)
-        _editTextPosition = intLastSpacePositionBeforeCursor
+        txtMain.setSelection(intClosestWhiteSpaceLocation)
+        _editTextPosition = intClosestWhiteSpaceLocation
     }
 
     /**
@@ -787,50 +711,42 @@ class MainActivity : AppCompatActivity() {
      * Updates spinner formatting and opens the file selection spinner
      */
     private fun launchFileSelectionSpinner() {
-        this.updateSpinnerItems()
+        this.setSpinnerItems(utils.getListOfAllFilenamesInDir(_strDirPath))
         (_spinner!!).performClick()
     }
 
     /**
      * Creates the spinner's file listing with appropriate file colors
      */
-    private fun setSpinnerItems(p_strItems: Array<String?>){
+    private fun setSpinnerItems(p_strItems: Array<String?>) {
         // Use items as a list cleared of non *.* files //
         var items: MutableList<SpannableString> = mutableListOf()
 
         for (i in 0 until p_strItems.size) {
             if ((p_strItems[i]!!).contains(".")) {
                 var fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, p_strItems[i].toString(), config)
+                if (fileNameSpannableStr.toString() == _strCurrentFileName) {
+                    var activeFileSpan = android.text.style.StyleSpan(android.graphics.Typeface.BOLD_ITALIC)
+                    fileNameSpannableStr.setSpan(activeFileSpan, 0, fileNameSpannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
                 items.add(fileNameSpannableStr)
             }
         }
 
-        // Assign items to spinner //
-        var adapter = ArrayAdapter<SpannableString>(this, android.R.layout.simple_spinner_item, items)
-        _spinnerAdapter = adapter
+        if (_spinnerAdapter !== null) {
+            utils.setAdapterWithItems(_spinnerAdapter, items)
+            return
+        }
+
+        // Assign items to spinner. Reassigning the adapter will load the latest file each click //
+        _spinnerAdapter = ArrayAdapter<SpannableString>(this, android.R.layout.simple_spinner_item, items)
 
         // Assign visual styling to spinner //
-        adapter.setDropDownViewResource(R.layout.spinner_item)
-        (_spinner!!).adapter = adapter
+        (_spinnerAdapter!!).setDropDownViewResource(R.layout.spinner_item)
+        (_spinner!!).adapter = _spinnerAdapter
         (_spinner!!).prompt = "Open File"
     }
 
-    /**
-     * Updates the file selection spinner items with the latest color formatting
-     *     (prevents weird setspinneritems() opening the latest file by default)
-     */
-    private fun updateSpinnerItems(){
-        if (_spinnerAdapter == null) return
-        for (i in 0 until (_spinnerAdapter!!).count) {
-            val curSpinnerAdapterItem = (_spinnerAdapter!!).getItem(i)
-            if (curSpinnerAdapterItem.contains(".")) {
-                var fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, curSpinnerAdapterItem.toString(), config)
-                (_spinnerAdapter!!).remove(curSpinnerAdapterItem)
-                (_spinnerAdapter!!).insert(fileNameSpannableStr, i)
-                (_spinnerAdapter!!).notifyDataSetChanged()
-            }
-        }
-    }
 
 //*//   TEXT FIELD FUNCTIONS  //*//
     /**

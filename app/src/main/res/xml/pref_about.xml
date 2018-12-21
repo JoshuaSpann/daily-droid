@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/app_name"
+    android:icon="@drawable/ic_dailydroid_logo_fg">
+        <PreferenceCategory
+            android:title="Version"
+            android:key="pref_key_version_settings">
+            <EditTextPreference
+                android:inputType="none"
+                android:selectable="false"
+                android:editable="false"
+                android:title="@string/app_version"
+                android:summary="@string/app_version_build_date"/>
+        </PreferenceCategory>
+</PreferenceScreen>

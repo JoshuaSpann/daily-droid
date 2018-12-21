@@ -15,6 +15,9 @@ import android.provider.ContactsContract
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import java.util.regex.Pattern
 
 
 /**
@@ -22,6 +25,11 @@ import android.text.style.ForegroundColorSpan
  */
 
 class Utils{
+    val VERSION = "3.0"
+
+    /**
+     * Creates the main configuration JSON file if it does not exist
+     */
     fun configFile_Create(config: Config){
         val configFile = File(getDirectoryPathToString(),".config")
         if(configFile.exists()){
@@ -32,10 +40,18 @@ class Utils{
         var strJsonProps = "{colors:[main: \"#fff\",accent: \"#222\"]}"
         file_Write(configFile, strJsonProps)
     }
+
+    /**
+     * Reads config options from file and saves to a Config object
+     */
     fun configFile_Read(): Config{
         // TODO - Pull JSON of Config options and save it to array???
         return Config()
     }
+
+    /**
+     * Converts JSON to a KVP array or object
+     */
     //TODO - Create Data Model of config opts in array/propclass and modify using predefined set of functions
     fun convertMutMapToJSONString(p_map: MutableMap<String,String>): String{
         var strOutput = "["
@@ -66,23 +82,33 @@ class Utils{
         dialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog: DialogInterface, id: Int -> callback(true) /* USE run{...} INSTEAD OF cb() FOR BLOCK STATEMENTS */})
         dialogBuilder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog: DialogInterface, id: Int -> callback(false)})
 
-        var dialog = dialogBuilder.create()
+        val dialog = dialogBuilder.create()
         dialog.show()
     }
 
+    /**
+     * Add data to end of file without modifying original contents
+     */
     fun file_Append(file:File, data:Any){
         fileWriter(file,data,true)
     }
+
+    /**
+     * Overwrite file with data
+     */
     fun file_Write(file:File, data:Any){
         fileWriter(file,data,false)
     }
 
+    /**
+     * Unified function that overwrites or appedns to a file depending on params' call state
+     */
     private fun fileWriter(file:File, data:Any, isSafeWrite: Boolean){
         val fwriter = FileWriter(file)
-        if(isSafeWrite == false){
+        if(!isSafeWrite){
             fwriter.write(data.toString())
         }
-        else if(isSafeWrite == true){
+        else if(isSafeWrite){
             fwriter.append(data.toString())
         }
         else{
@@ -92,6 +118,9 @@ class Utils{
         fwriter.close()
     }
 
+    /**
+     * Returns the given contact name (if any) for the supplied phone number
+     */
     fun getContactName(phoneNumber: String, context: Context): String {
         val uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber))
 
@@ -114,15 +143,25 @@ class Utils{
         return contactName //+ " ("+phoneNumber+")"
     }
 
+    /**
+     * Returns Date.now() in a "yyyyMMdd" string value
+     */
     fun getCurrentFormattedDateAsString(): String {
         val dteCurrentDate = Date()
         val dteFormat = SimpleDateFormat("yyyyMMdd")
         return dteFormat.format(dteCurrentDate).toString()
     }
+
+    /**
+     * Returns the a 24-hour timestamp string of the current time
+     */
     fun getCurrentTimeStampAsString(): String {
         return SimpleDateFormat("HHmm").format(Date()).toString()
     }
 
+    /**
+     * Returns a given date for the supplied string
+     */
     fun getDateFromIntString(dateString: String): Date {
         val intDateYear = dateString.substring(0,3).toInt()
         val intDateMonth = dateString.substring(4,5).toInt()
@@ -131,6 +170,9 @@ class Utils{
         return Date(intDateYear,intDateMonth,intDateDay)
     }
 
+    /**
+     * Creates a string of the actual application path
+     */
     fun getDirectoryPathToString(): String {
         var strDefaultDir = Environment.getExternalStorageDirectory().toString()
         strDefaultDir+="/DailyDroid/"
@@ -138,15 +180,21 @@ class Utils{
         projectDir.mkdir()
         return strDefaultDir
     }
+
+    /**
+     * Prefixes a given directory with the app directory to give a full subdir path
+     */
     fun getDirectoryPathToString(str_subdir: String): String {
-        var strDefaultDir:String = getDirectoryPathToString()+str_subdir
+        val strDefaultDir:String = getDirectoryPathToString()+str_subdir
         return strDefaultDir
     }
 
+    /**
+     * Gives file coloring if set in preferences by user
+     */
     fun getFileColorIntFromPreferences(context: Context, config: Config, strFileName: String): Int {
         var color = Colors.App.CURRENT_PRIMARY
-        //var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and Colors.App.CURRENT_ACCENT))
-        var str: String? = config.getPreferenceValue(context, "dailydroid__"+strFileName) as String?
+        val str: String? = config.getPreferenceValue(context, "dailydroid__"+strFileName) as String?
 
         if(!str.isNullOrEmpty()) {
             color = Color.parseColor("#"+str)
@@ -157,12 +205,15 @@ class Utils{
         return color
     }
 
+    /**
+     * Applies file coloring to string if set in preferences
+     */
     fun getFilenameStringFormattedWithPropertiesColor(context: Context, strFileName: String, config: Config): SpannableString {
         // Parse filename date to get day's letter: [N,M,T,W,R,F,S] //
-        var strFileDisplayName = strFileName
+        val strFileDisplayName = strFileName
 
         // Set SpannableString color to the existing file color assigned in config //
-        var fileNameSpannableStr = SpannableString(strFileDisplayName)
+        val fileNameSpannableStr = SpannableString(strFileDisplayName)
         var colorSpan = ForegroundColorSpan(Colors.GRAY)
 
         val currentFileColorPref = config.getPreferenceValue(context, "dailydroid__"+strFileName)
@@ -174,8 +225,11 @@ class Utils{
         return fileNameSpannableStr
     }
 
+    /**
+     * Gets array of all filenames (no dirs) in the app directory
+     */
     fun getListOfAllFilenamesInDir(pathString: String): Array<String?> {
-        var filesInDir = getListOfAllFilesInDir(pathString)
+        val filesInDir = getListOfAllFilesInDir(pathString)
 
         var intFileCounter = 0
         if (filesInDir === null) return arrayOf("No Files")
@@ -189,24 +243,65 @@ class Utils{
 
         return filenamesInDir
     }
+
+    /**
+     * Gets array of all files in the app dir
+     */
     fun getListOfAllFilesInDir(pathString: String): Array<File>? {
         val dir = File(pathString)
 
         val filesInDir = dir.listFiles()
         if (filesInDir === null) return null
 
-        Arrays.sort(filesInDir!!, Collections.reverseOrder<Any>())
+        Arrays.sort(filesInDir, Collections.reverseOrder<Any>())
         return filesInDir
     }
 
-    fun getSpacesFromPositionInTextFile(intCursorPosition: Int, strText: String) {
-        //
+    /**
+     * Finds the coordinates of the nearest space to the cursor in a text field
+     * You could return all space locations by making a list and inserting into it
+     *   instead of reassigning the intClosestPosition
+     */
+    fun getClosestWhitespaceLocationFromCursor(editText: EditText, cursorPosition: Int = 0, blnLookForward: Boolean = true): Int {
+        // Matches all spaces
+        val spaceCharRegex = Pattern.compile("\\s")
+        val spaceCharMatcher = spaceCharRegex.matcher(editText.text)
+        var intClosestPosition = 0
+
+        if (blnLookForward) intClosestPosition = editText.text.length
+
+        while (spaceCharMatcher.find()) {
+            val startPos = spaceCharMatcher.start()
+            val endPos = spaceCharMatcher.end()
+
+            if (blnLookForward) {
+                if (endPos < cursorPosition)
+                    continue
+                if (endPos > cursorPosition && endPos < intClosestPosition)
+                    intClosestPosition = endPos
+            }
+
+            if (!blnLookForward) {
+                if (startPos > cursorPosition)
+                    continue
+                if (startPos < cursorPosition && startPos > intClosestPosition)
+                    intClosestPosition = startPos
+            }
+        }
+
+        return intClosestPosition
     }
 
+    /**
+     * Creates a simple and reusable toast message without being so verbose
+     */
     fun popup(applicationContext: Context, data: Any) {
         android.widget.Toast.makeText(applicationContext, data.toString(), Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Reads a given file and gets the text in it or an empty string
+     */
     @Throws(Exception::class)
     fun readFileContentsToString(file: File): String {
         try {
@@ -214,6 +309,20 @@ class Utils{
         }catch(e: Exception){
             return ""
         }
+    }
+
+    /**
+     * Resets a given spinnerAdapter with a new list of items
+     *   and optionally returns it
+     */
+    fun setAdapterWithItems(spinnerAdapter: ArrayAdapter<SpannableString>?, items: MutableList<SpannableString>): ArrayAdapter<SpannableString>? {
+        if (spinnerAdapter !== null) {
+            spinnerAdapter.clear()
+            spinnerAdapter.notifyDataSetChanged()
+            spinnerAdapter.addAll(items)
+            spinnerAdapter.notifyDataSetChanged()
+        }
+        return spinnerAdapter
     }
 
 }

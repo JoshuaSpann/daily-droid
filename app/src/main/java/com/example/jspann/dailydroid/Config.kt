@@ -90,7 +90,6 @@ class Config{
         }
         if(p_value::class == String::class){
             prefs.edit().putString(p_key, p_value as String).commit()
-            //addPref_Str(key, value as String)
         }
         if(p_value::class == Set::class) {
             prefs.edit().putStringSet(p_key, p_value as Set<String>)

@@ -12,8 +12,10 @@ import java.util.regex.Pattern
  */
 
 class Markdown {
+    //  Holds app colors supplied to make headers match file's chosen color
     data class AppColors(var primary: Int, var accent: Int)
     var HeadingColors = AppColors(Colors.App.PRIMARY, Colors.App.ACCENT)
+
     /**
      * Formats a String as a SpannableString based off of its Markdown Content
      */
@@ -396,36 +398,4 @@ class Markdown {
 
         return spannableString
     }
-    /*private fun setH2Spans(spannableString: SpannableString) : SpannableString{
-        val h2Identifier = "##"
-
-        val h2CountInText = spannableString.toString().length - spannableString.toString().replace("##", "").length
-
-        var startLocation = spannableString.indexOf(h2Identifier)
-        var stopLocation = startLocation
-
-        for (i in 1..(h2CountInText/2)) {
-            try {
-                // These have to stay in the loop or else they will be overwritten! //
-                val h2ColorSpan = ForegroundColorSpan(Colors.Markdown.H2)
-                val h2SizeSpan = RelativeSizeSpan((1.2).toFloat())
-
-                // Find next instance of "tags" and apply style until those "tags" end //
-                stopLocation = spannableString.indexOf(h2Identifier, startLocation + h2Identifier.length)// + h2Identifier.length
-
-                // Set Styles //
-                spannableString.setSpan(h2SizeSpan, startLocation, stopLocation+h2Identifier.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                spannableString.setSpan(h2ColorSpan, startLocation, stopLocation+h2Identifier.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // Reset the start location to the new stop location after setting the span //
-                startLocation = spannableString.indexOf(h2Identifier,stopLocation + h2Identifier.length)
-            }
-            catch (e: Exception) {
-                continue
-            }
-        }
-
-        return  spannableString
-    }
-    */
 }

@@ -11,20 +11,10 @@
     <!--item
         android:id="@+id/menuitem_save"
         android:icon="@drawable/ic_save_black_24dp"
-        android:title="Save" />
-    <item
-        android:id="@+id/menuitem_timestamp"
-        android:icon="@drawable/ic_timer_black_24dp"
-        android:title="Timestamp" /-->
+        android:title="Save" /-->
     <item
         android:id="@+id/menuitem_changecolor"
-        android:icon="@drawable/ic_color_lens_black_24dp"
         android:title="Color" />
-
-    <!--item
-        android:id="@+id/menuitem_resetText"
-        android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="Reset" /-->
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/menuitem_settings"
