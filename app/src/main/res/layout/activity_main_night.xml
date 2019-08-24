@@ -26,7 +26,7 @@
         android:text="No Text File Loaded"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title"
-        android:textColor="#A5A5A5"
+        android:textColor="@color/colorTextLight"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
         android:layout_below="@+id/textView_Title"
         android:layout_centerHorizontal="true"
         android:text="TextView"
-        android:textColor="#A5A5A5"
+        android:textColor="@color/colorTextLight"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
         android:layout_height="2dip"
         android:layout_below="@+id/debug_text"
         android:layout_centerHorizontal="true"
-        android:background="#A5A5A5" />
+        android:background="@color/colorTextLight" />
 
     <EditText
         android:id="@+id/editText"
@@ -66,8 +66,8 @@
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
         android:textAllCaps="false"
-        android:textColor="#A5A5A5"
-        android:textColorLink="#A5A5A5"
+        android:textColor="@color/colorTextLight"
+        android:textColorLink="@color/colorTextLight"
         android:textIsSelectable="true"
         app:layout_constraintEnd_toStartOf="@id/toolbar3"
         app:layout_constraintHorizontal_bias="0.533"

@@ -18,7 +18,9 @@
     <color name="colorWhite">#eee</color>
 
     <color name="colorText">#222</color>
-    <color name="colorTextLight">#eee</color>
+    <color name="colorTextMedium">#737373</color>
+    <color name="colorTextLight">#A5A5A5</color>
+    <color name="colorTextBright">#eee</color>
     <color name="colorNone">#00eeeeee</color>
 
     <color name="color">#000000</color>
