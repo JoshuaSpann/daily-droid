@@ -119,6 +119,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
     override fun isValidFragment(fragmentName: String): Boolean {
         return PreferenceFragment::class.java.name == fragmentName
                 || GeneralPreferenceFragment::class.java.name == fragmentName
+                || ThemesFragment::class.java.name == fragmentName
                 || InformationFragment::class.java.name == fragmentName
                // || NotificationPreferenceFragment::class.java.name == fragmentName
     }
@@ -156,6 +157,28 @@ class SettingsActivity : AppCompatPreferenceActivity() {
                 addPreferencesFromResource(R.xml.pref_about)
                 setHasOptionsMenu(true)
             }
+
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            val id = item.itemId
+            if (id == android.R.id.home) {
+                startActivity(Intent(activity, SettingsActivity::class.java))
+                return true
+            }
+            return super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * This fragment shows theme preferences only.
+     * Dark/night mode can be set from here as well as default colors.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    class ThemesFragment : PreferenceFragment() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            addPreferencesFromResource(R.xml.pref_themes)
+            setHasOptionsMenu(true)
+        }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
