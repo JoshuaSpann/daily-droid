@@ -2,22 +2,22 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
             android:title="Dark Mode"
-            android:key="pref_key_autosave_settings">
+            android:key="daily_droid__pref_key_darkmode_settings">
             <SwitchPreference
                 android:defaultValue="true"
-                android:key="daily_droid__pref_autosave_enabled"
-                android:summary="@string/pref_description_autosave"
-                android:title="Autosave" />
+                android:key="daily_droid__pref_darkmode_enabled"
+                android:summary="@string/pref_themes__darkmode_desc"
+                android:title="@string/pref_themes__darkmode" />
         </PreferenceCategory>
 
         <PreferenceCategory
             android:title="UI"
-            android:key="daily_droid__pref_logging_settings">
+            android:key="daily_droid__pref_ui_settings">
             <SwitchPreference
                 android:defaultValue="true"
-                android:key="daily_droid__pref_autolog_calls_enabled"
-                android:summary="Auto-logs incoming and outgoing calls"
-                android:title="Simple Mode" />
+                android:key="daily_droid__pref_ui_simple_enabled"
+                android:summary="@string/pref_themes__ui_mode_desc"
+                android:title="@string/pref_themes__ui_mode" />
         </PreferenceCategory>
-    
+
 </PreferenceScreen>

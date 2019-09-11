@@ -19,6 +19,12 @@
     <string name="pref_header_general">General</string>
     <string name="pref_description_autosave">Allows auto-saving whenever new characters are entered.</string>
 
+    <!-- Theme Settings -->
+    <string name="pref_themes__darkmode">Dark Mode</string>
+    <string name="pref_themes__darkmode_desc">Switches colors UI to a "night mode" with dark backgrounds and light text. Most colors are desaturated to greys.</string>
+    <string name="pref_themes__ui_mode">Advanced UI</string>
+    <string name="pref_themes__ui_mode_desc">Enables an advanced UI when toggled that has more buttons, menu items, and app statuses.</string>
+
     <string-array name="pref_example_color_titles">
         <item>Default</item>
         <item>Red</item>
