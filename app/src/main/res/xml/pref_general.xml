@@ -1,13 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Autosave"
+        android:title="@string/pref_general__autosave"
         android:key="pref_key_autosave_settings">
         <SwitchPreference
             android:defaultValue="true"
             android:key="daily_droid__pref_autosave_enabled"
-            android:summary="@string/pref_description_autosave"
-            android:title="Autosave" />
+            android:summary="@string/pref_general__autosave_desc"
+            android:title="@string/pref_general__autosave" />
         <EditTextPreference
             android:defaultValue="0"
             android:inputType="number"
@@ -15,22 +15,22 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Autosave after"
-            android:summary="Save after adding this many characters"/>
+            android:title="@string/pref_general__autosave_number"
+            android:summary="@string/pref_general__autosave_number_desc"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Logging"
+        android:title="@string/pref_general__logging"
         android:key="daily_droid__pref_logging_settings">
         <SwitchPreference
             android:defaultValue="true"
             android:key="daily_droid__pref_autolog_calls_enabled"
-            android:summary="Auto-logs incoming and outgoing calls"
-            android:title="Auto-Log Calls" />
+            android:summary="@string/pref_general__log_calls_desc"
+            android:title="@string/pref_general__log_calls" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Files"
+        android:title="@string/pref_general__files"
         android:key="daily_droid__pref_files_settings">
         <!--ListPreference
             android:defaultValue="-1"
@@ -47,17 +47,17 @@
             android:key="daily_droid__pref_app_color"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="App Color" />
+            android:title="@string/pref_general__app_color" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="daily_droid__pref_markdown_enabled"
-            android:summary="Use styles to render markdown in text"
-            android:title="Markdown Styles" />
+            android:summary="@string/pref_general__markdown_desc"
+            android:title="@string/pref_general__markdown" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="daily_droid__pref_fancy_scroll_enabled"
-            android:summary="Use a faster, animated scroll"
-            android:title="Fancy Scroll" />
+            android:summary="@string/pref_general__scroll_desc"
+            android:title="@string/pref_general__scroll" />
     </PreferenceCategory>
 
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
