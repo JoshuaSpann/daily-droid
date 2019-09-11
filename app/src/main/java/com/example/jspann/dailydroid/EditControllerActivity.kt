@@ -1,59 +1,32 @@
-/**
- * Daily Droid :: MainActivity
- *
- * PURPOSE:
- *   Landing-point controller for the MainActivity, which is in charge of text editing, time-logging,
- *   file creating/updating, and additional activity selection. Documenting input.
- *
- * MAIN CONTRIBUTORS:
- *   Joshua Spann (jspann) - Author
- *
- * STRUCTURE:
- *   imports
- *   utilty and view declarations
- *   launch controller
- *   app bar menu controllers
- *   button click functions
- *   file management controllers
- *   view controllers
- **/
-
-/* /  IMPORTS  / */
 package com.example.jspann.dailydroid
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.*
-import android.widget.*
-
-import java.io.*
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.ActionBar
-import android.view.WindowManager
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.text.*
-import android.text.style.BackgroundColorSpan
 import android.util.Log
-import kotlinx.android.synthetic.main.activity_main.*
+import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.view.MotionEvent
-import android.view.GestureDetector
-import android.widget.Scroller
-import android.widget.TextView
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
+/**
+ * Holds main functionality for activities that involve editing
+ */
+class EditControllerActivity : AppCompatActivity() {
 
-
-class MainActivity : AppCompatActivity() {
-
-/****  UTILTY AND VIEW DECLARATIONS  ****/
+    /****  UTILTY AND VIEW DECLARATIONS  ****/
     // Custom Classes //
     private val utils:Utils = Utils()
     private val config = Config()
@@ -75,10 +48,10 @@ class MainActivity : AppCompatActivity() {
     private var _editTextPosition = 0
 
     // View-Widget Properties //
-    private var _textView_Title: TextView ?= null
-    private var _debug_text: TextView ?= null
-    private var _editText: EditText ?= null
-    private var _spinner: Spinner ?= null
+    private var _textView_Title: TextView?= null
+    private var _debug_text: TextView?= null
+    private var _editText: EditText?= null
+    private var _spinner: Spinner?= null
 
     // Properties Specific to Navigation and Editing //
     private var _buttonStartClickCount :Int = 0
@@ -86,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/****  LAUNCH CONTROLLER  ****/
+    /****  LAUNCH CONTROLLER  ****/
 
     /**
      * Main activity creation
@@ -162,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/****  APP BAR MENU CONTROLLERS  ****/
+    /****  APP BAR MENU CONTROLLERS  ****/
 
     /**
      * Populates options menu with items from resource XML
@@ -227,7 +200,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/****  BUTTON CLICK FUNCTIONS  ****/
+    /****  BUTTON CLICK FUNCTIONS  ****/
 
     /**
      * Runs on the taps/clicks of the |< button
@@ -298,7 +271,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/****  FILE MANAGEMENT CONTROLLERS  ****/
+    /****  FILE MANAGEMENT CONTROLLERS  ****/
 
     /**
      * Automatically saves after so many new characters have been entered
@@ -464,7 +437,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/****  VIEW CONTROLLERS  ****/
+    /****  VIEW CONTROLLERS  ****/
 
 //*//   ALL/MANY VIEW ELEMENTS   //*//
     fun setApplicationColor(){
@@ -537,7 +510,7 @@ class MainActivity : AppCompatActivity() {
         editText.setOnTouchListener(object : View.OnTouchListener {
 
             // Could make this a field member on your activity
-            internal var gesture = GestureDetector(this@MainActivity, object : GestureDetector.SimpleOnGestureListener() {
+            internal var gesture = GestureDetector(this@EditControllerActivity, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
                     scroller.fling(0, editText.scrollY, 0, (-velocityY).toInt(), 0, 0, 0, editText.lineCount * editText.lineHeight)
                     return super.onFling(e1, e2, velocityX, velocityY)
@@ -701,7 +674,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-//*//   SPINNER FUNCTIONS   //*//
+    //*//   SPINNER FUNCTIONS   //*//
     private var _spinnerAdapter: ArrayAdapter<SpannableString>? = null
     /**
      * Updates spinner formatting and opens the file selection spinner
