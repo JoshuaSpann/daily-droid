@@ -28,6 +28,7 @@ class Config{
     var verbosePopups = true
 
     var advancedUI = false
+    var viewHiddenFiles = false
 
     var appColor: String = ""
     var autoLogCalls: Boolean = false

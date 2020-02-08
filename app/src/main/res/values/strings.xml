@@ -30,6 +30,8 @@
     <string name="pref_general__autosave_desc">Allows auto-saving whenever new characters are entered.</string>
     <string name="pref_general__autosave_number">Autosave After</string>
     <string name="pref_general__autosave_number_desc">Save after adding this many characters.</string>
+    <string name="pref_general__files_hidden_view">Hidden Files</string>
+    <string name="pref_general__files_hidden_view_desc">Enable viewing of hidden files</string>
     <string name="pref_general__logging">Logging</string>
     <string name="pref_general__log_calls">Auto-Log Calls</string>
     <string name="pref_general__log_calls_desc">Auto-logs incoming and outgoing calls from native call logs.</string>

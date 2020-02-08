@@ -487,6 +487,7 @@ class MainActivity : AppCompatActivity() {
                         && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
                 if (preferenceKey == "verbose_popups") config.verbosePopups = preference.value as Boolean
                 if (preferenceKey == "ui_advanced") config.advancedUI = preference.value as Boolean
+                if (preferenceKey == "files_hidden") config.viewHiddenFiles = preference.value as Boolean
             }
         }
         // NOTE: Call preferences are stored in the CallReciever Class //
@@ -504,7 +505,8 @@ class MainActivity : AppCompatActivity() {
                 "markdown_enabled_bln",
                 "fancy_scroll_enabled_bln",
                 "verbose_popups_bln",
-                "ui_advanced_bln"
+                "ui_advanced_bln",
+                "files_hidden_bln"
         )
         var preferenceNamesGlobal = mutableListOf<String>()
 
