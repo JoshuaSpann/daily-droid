@@ -194,7 +194,7 @@ class Utils{
      */
     fun getFileColorIntFromPreferences(context: Context, config: Config, strFileName: String): Int {
         var color = Colors.App.CURRENT_PRIMARY
-        val str: String? = config.getPreferenceValue(context, "dailydroid__"+strFileName) as String?
+        val str: String? = config.getPreferenceValue(context, "${config.colorpreferencePrefix}strFileName") as String?
 
         if(!str.isNullOrEmpty()) {
             color = Color.parseColor("#"+str)

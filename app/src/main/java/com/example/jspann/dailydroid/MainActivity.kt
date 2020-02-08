@@ -420,8 +420,6 @@ class MainActivity : AppCompatActivity() {
 
 /****  PREFERENCES, SETTINGS, AND APP DATA  ****/
 
-    private val _preferencePrefix = "daily_droid__pref_"
-
     /**
      * Gets all preferences and writes them as JSON to the given file
      */
@@ -450,7 +448,7 @@ class MainActivity : AppCompatActivity() {
         var preferences: MutableList<PreferencesModel> = mutableListOf<PreferencesModel>()
 
         for (name in preferenceNames) {
-            var preferenceVal = config.getPreferenceValue(this, "$_preferencePrefix$name")
+            var preferenceVal = config.getPreferenceValue(this, "${config.preferencePrefix}$name")
             preferences.add(PreferencesModel("$name", preferenceVal))
         }
 
@@ -495,7 +493,7 @@ class MainActivity : AppCompatActivity() {
         for (prefernceName in preferenceNames) {
             var name = prefernceName
             if (getAsGlobal == true) {
-                name = "$_preferencePrefix$name"
+                name = "${config.preferencePrefix}$name"
                 utils.popup(applicationContext, name)
             }
             preferenceNamesGlobal.add(name)
@@ -533,9 +531,32 @@ class MainActivity : AppCompatActivity() {
             preferncesString += currentLine
         }
 
+        preferncesString += ", \"files\":${preferencesMappedFileColorsGet()}"
+
         preferncesString += "]"
 
         return preferncesString
+    }
+
+    private fun preferencesMappedFileColorsGet() :String {
+        var fileColorsString = "["
+        val files = utils.getListOfAllFilenamesInDir(_strDirPath)
+
+        for (files_i in 0..files.size-1) {
+            val filename = files[files_i]
+
+            val curColorPrefixName = "${config.colorpreferencePrefix}$filename"
+            val fileColor = config.getPreferenceValue(this, curColorPrefixName) as String?
+
+            var curLineString = "{\"filename\":\"$filename\", \"color\":\"$fileColor\"}"
+            if (files_i < files.size-1) curLineString += ", "
+
+            fileColorsString += curLineString
+            //if(!fileColor.isNullOrEmpty())
+        }
+        fileColorsString += "]"
+
+        return fileColorsString
     }
 
     /**
@@ -575,19 +596,13 @@ class MainActivity : AppCompatActivity() {
 
         var color = resources.getColor(R.color.colorPrimary)
         var accentColor = Color.parseColor(String.format("#%06X", 0xBBBBCC and resources.getColor(R.color.colorAccent)))
-        val str: String? = config.getPreferenceValue(this, "dailydroid__"+_strCurrentFileName) as String?
+        val str: String? = config.getPreferenceValue(this, "${config.colorpreferencePrefix}$_strCurrentFileName") as String?
 
         if(!str.isNullOrEmpty()) {
             color = Color.parseColor("#"+str)
             val hexColor = String.format("#%06X", 0xBBBBCC and color)
             accentColor = Color.parseColor(hexColor)
         }
-
-        /*
-        var color = utils.getFileColorIntFromPreferences(this, this.config, this._strCurrentFileName)
-        var hexColor = String.format("#%06X", 0xBBBBCC and color)
-        var accentColor = Color.parseColor(hexColor)
-        */
 
         Colors.App.CURRENT_PRIMARY = color
         Colors.App.CURRENT_ACCENT = accentColor

@@ -39,7 +39,7 @@ class ColorSelectorActivity : AppCompatActivity() {
         for(button: Button in buttons){
 
             button.setOnClickListener{
-                val MainActivity__strFileName: String = "dailydroid__"+intent.getStringExtra("currentSelectedFile")
+                val MainActivity__strFileName: String = config.colorpreferencePrefix+intent.getStringExtra("currentSelectedFile")
 
                 if(button.id == R.id.btn_default){
                     config.removePreference(this,MainActivity__strFileName)

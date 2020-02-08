@@ -22,6 +22,10 @@ import android.preference.PreferenceManager
 class Config{
     private val utils = Utils()
 
+    val appPrefix = "daily_droid__"
+    val preferencePrefix = "${appPrefix}pref_"
+    val colorpreferencePrefix = "${appPrefix}color_"
+
     var appColor: String = ""
     var autoLogCalls: Boolean = false
     var currentFile: String = ""
