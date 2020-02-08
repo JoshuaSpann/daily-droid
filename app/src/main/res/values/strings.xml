@@ -8,6 +8,8 @@
 <resources>
     <string name="app_name">&appname;</string>
     <string name="title_activity_settings">Settings</string>
+
+    <string name="app_notify_file_saved">File saved to: </string>
     <string name="app_menu_item__color_change">Color</string>
     <string name="app_menu_item__export_preferences">Export Data</string>
     <string name="app_menu_item__new_file">New</string>

@@ -207,7 +207,7 @@ class Markdown {
      */
     private fun setHashtagSpans(spannableString: SpannableString) : SpannableString {
         var spannableString = spannableString
-        val r = "\\#[\\S]+"
+        val r = "\\#[^#|\\s]+"
         val p = Pattern.compile(r)
         val m =p.matcher(spannableString)
 

@@ -432,6 +432,7 @@ class MainActivity : AppCompatActivity() {
         try {
             File(_strDirPath).mkdir()
             utils.file_Write(preferencesFile, preferncesString)
+            utils.popup(this, "${resources.getString(R.string.app_notify_file_saved)} $_strDirPath$strFileName")
         } catch (e: Exception) {
             Log.d("JSDEV: ", "ERROR WRITING PREFS: ${e.toString()}\n\t_strDirPath= "+_strDirPath)
             utils.popup(applicationContext, e)
