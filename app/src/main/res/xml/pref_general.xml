@@ -30,6 +30,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_general__popups"
+        android:key="pref_key_popup_settings">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="daily_droid__pref_verbose_popups_bln"
+        android:summary="@string/pref_general__popups_verbose_desc"
+        android:title="@string/pref_general__popups_verbose" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/pref_general__files"
         android:key="daily_droid__pref_files_settings">
         <!--ListPreference

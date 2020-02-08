@@ -25,6 +25,7 @@ class Config{
     val appPrefix = "daily_droid__"
     val preferencePrefix = "${appPrefix}pref_"
     val colorpreferencePrefix = "${appPrefix}color_"
+    var verbosePopups = true
 
     var appColor: String = ""
     var autoLogCalls: Boolean = false

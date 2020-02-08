@@ -40,7 +40,6 @@ import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.*
-import android.text.style.BackgroundColorSpan
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.inputmethod.InputMethodManager
@@ -260,6 +259,7 @@ class MainActivity : AppCompatActivity() {
     fun button_toolbar_save__click(view: View) {
         this.saveToFile()
         this.setEditTextToFileContents(_strCurrentFileName)
+        if (config.verbosePopups) utils.popup(this, "${resources.getString(R.string.app_notify_file_saved)}")
     }
 
     /**
@@ -432,7 +432,7 @@ class MainActivity : AppCompatActivity() {
         try {
             File(_strDirPath).mkdir()
             utils.file_Write(preferencesFile, preferncesString)
-            utils.popup(this, "${resources.getString(R.string.app_notify_file_saved)} $_strDirPath$strFileName")
+            if (config.verbosePopups) utils.popup(this, "${resources.getString(R.string.app_notify_file_saved_to)} $_strDirPath$strFileName")
         } catch (e: Exception) {
             Log.d("JSDEV: ", "ERROR WRITING PREFS: ${e.toString()}\n\t_strDirPath= "+_strDirPath)
             utils.popup(applicationContext, e)
@@ -472,6 +472,7 @@ class MainActivity : AppCompatActivity() {
                 if (preferenceKey == "fancy_scroll_enabled"
                         && preference.value as Boolean === true
                         && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
+                if (preferenceKey == "verbose_popups") config.verbosePopups = preference.value as Boolean
             }
         }
         // NOTE: Call preferences are stored in the CallReciever Class //
@@ -487,7 +488,8 @@ class MainActivity : AppCompatActivity() {
                 "autosave_enabled_bln",
                 "autosave_number_num",
                 "markdown_enabled_bln",
-                "fancy_scroll_enabled_bln"
+                "fancy_scroll_enabled_bln",
+                "verbose_popups_bln"
         )
         var preferenceNamesGlobal = mutableListOf<String>()
 

@@ -43,14 +43,14 @@ class ColorSelectorActivity : AppCompatActivity() {
 
                 if(button.id == R.id.btn_default){
                     config.removePreference(this,MainActivity__strFileName)
-                    utils.popup(this,"Color Reset to Default")
+                    if (config.verbosePopups) utils.popup(this,"Color Reset to Default")
                     this.finish()
                 }
                 else {
                     val strButtonColor: String = Integer.toHexString((button.background as ColorDrawable).color)
                     try {
                         config.setPreference(this, MainActivity__strFileName, strButtonColor)
-                        utils.popup(this, "Color Set")
+                        if (config.verbosePopups) utils.popup(this, "Color Set")
                     } catch (e: Exception) {
                         utils.popup(applicationContext, e)
                     }

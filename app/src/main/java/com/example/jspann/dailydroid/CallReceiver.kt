@@ -99,7 +99,7 @@ class CallReceiver : BroadcastReceiver() {
                     logCallToTodaysFile(strIncomingCallLog)
                 }
 
-                Toast.makeText(context, "Incoming Call Ringing", Toast.LENGTH_SHORT).show()
+                if (config.verbosePopups) Toast.makeText(context, "Incoming Call Ringing", Toast.LENGTH_SHORT).show()
             }
 
             TelephonyManager.CALL_STATE_OFFHOOK ->
@@ -111,7 +111,7 @@ class CallReceiver : BroadcastReceiver() {
                     val strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Called "+utils.getContactName(number,context)
                     logCallToTodaysFile(strOutgoingCallLog)
 
-                    Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
+                    if (config.verbosePopups) Toast.makeText(context, "Outgoing Call Started", Toast.LENGTH_SHORT).show()
                 }
                 else {
                     val strOutgoingCallLog = "\n - "+utils.getCurrentTimeStampAsString()+":  Finished call. "
@@ -123,11 +123,11 @@ class CallReceiver : BroadcastReceiver() {
                 if (lastState == TelephonyManager.CALL_STATE_RINGING) {
                     //Ring but no pickup-  a miss
                     logCallToTodaysFile(" missed. ")
-                    Toast.makeText(context, "Ringing but no pickup" + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
+                    if (config.verbosePopups) Toast.makeText(context, "Ringing but no pickup" + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
                 } else if (isIncoming) {
-                    Toast.makeText(context, "Incoming $savedNumber Call time $callStartTime", Toast.LENGTH_SHORT).show()
+                    if (config.verbosePopups) Toast.makeText(context, "Incoming $savedNumber Call time $callStartTime", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "outgoing " + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
+                    if (config.verbosePopups) Toast.makeText(context, "outgoing " + savedNumber + " Call time " + callStartTime + " Date " + java.util.Date(), Toast.LENGTH_SHORT).show()
                 }
 
         }

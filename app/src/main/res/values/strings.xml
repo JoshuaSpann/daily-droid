@@ -9,11 +9,12 @@
     <string name="app_name">&appname;</string>
     <string name="title_activity_settings">Settings</string>
 
-    <string name="app_notify_file_saved">File saved to: </string>
+    <string name="app_notify_file_saved">File saved</string>
+    <string name="app_notify_file_saved_to">File saved to:  </string>
     <string name="app_menu_item__color_change">Color</string>
     <string name="app_menu_item__export_preferences">Export Data</string>
     <string name="app_menu_item__new_file">New</string>
-    <string name="app_menu_item__open_file">New</string>
+    <string name="app_menu_item__open_file">Open</string>
     <string name="app_menu_item__save_file">Save</string>
     <string name="app_menu_item__settings">Settings</string>
 
@@ -32,6 +33,9 @@
     <string name="pref_general__logging">Logging</string>
     <string name="pref_general__log_calls">Auto-Log Calls</string>
     <string name="pref_general__log_calls_desc">Auto-logs incoming and outgoing calls from native call logs.</string>
+    <string name="pref_general__popups">Popups</string>
+    <string name="pref_general__popups_verbose">Verbose Popups</string>
+    <string name="pref_general__popups_verbose_desc">Toggle popups on certain actions like saving files, changing call status, etc.</string>
     <string name="pref_general__files">Files</string>
     <string name="pref_general__app_color">App Color</string>
     <string name="pref_general__markdown">Markdown Styles</string>
