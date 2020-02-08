@@ -877,7 +877,7 @@ class MainActivity : AppCompatActivity() {
         // Assign visual styling to spinner //
         (_spinnerAdapter!!).setDropDownViewResource(R.layout.spinner_item)
         (_spinner!!).adapter = _spinnerAdapter
-        (_spinner!!).prompt = "Open File"
+        (_spinner!!).prompt = getString(R.string.prompt_file_open)
     }
 
 

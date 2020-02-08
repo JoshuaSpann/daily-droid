@@ -11,6 +11,7 @@
 
     <string name="app_notify_file_saved">File saved</string>
     <string name="app_notify_file_saved_to">File saved to:  </string>
+
     <string name="app_menu_item__color_change">Color</string>
     <string name="app_menu_item__export_preferences">Export Data</string>
     <string name="app_menu_item__new_file">New</string>
@@ -44,6 +45,8 @@
     <string name="pref_general__markdown_desc">Enable use of markdown styles to render markdown in text.</string>
     <string name="pref_general__scroll">Fancy Scroll</string>
     <string name="pref_general__scroll_desc">Use a faster, smoother, animated scroll</string>
+
+    <string name="prompt_file_open">Open File</string>
 
     <!-- Theme Settings -->
     <string name="pref_themes__darkmode">Dark Mode</string>
