@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onRestart() {
         super.onRestart()
-        loadPreferences()
+        preferencesLoad()
         setApplicationColor()
         resetEditTextToGivenValue()
 
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onResume() {
         super.onResume()
-        loadPreferences()
+        preferencesLoad()
         setApplicationColor()
         resetEditTextToGivenValue()
 
@@ -417,38 +417,71 @@ class MainActivity : AppCompatActivity() {
         _intEditTextStartLength = (_editText!!).length()
     }
 
+
+/****  PREFERENCES, SETTINGS, AND APP DATA  ****/
+
+    private val _preferencePrefix = "daily_droid__pref_"
+
     /**
-     * Check for preferences and enable them if they're set (Will be set once user opens Menu.Settings.General for the 1st time)
+     * Gets all preferences and writes them as JSON to the given file
      */
-    private fun loadPreferences() {
-        var daily_droid__pref_autosave_enabled = config.getPreferenceValue(this, "daily_droid__pref_autosave_enabled")
-        var daily_droid__pref_autosave_number = config.getPreferenceValue(this, "daily_droid__pref_autosave_number")
-        var daily_droid__pref_markdown_enabled = config.getPreferenceValue(this, "daily_droid__pref_markdown_enabled")
-        var daily_droid__pref_fancy_scroll_enabled = config.getPreferenceValue(this, "daily_droid__pref_fancy_scroll_enabled")
+    private fun preferencesExport(strFileName: String = ".dailydroid.preferences") {
+        var preferences = preferencesGet()
+        var preferncesString = preferencesToJSONString(preferences)
 
-        // Check for Autosave preferences //
-        if (daily_droid__pref_autosave_enabled !== null) {
-            _blnPerformAutoSave = daily_droid__pref_autosave_enabled as Boolean
+        var preferencesFile = File(_strDirPath, strFileName)
 
-            if (daily_droid__pref_autosave_number !== null) {
-                _intAutoSaveTrigger = daily_droid__pref_autosave_number.toString().toInt()
-            }
-        }
-
-        // Check for Markdown preferences //
-        if (daily_droid__pref_markdown_enabled !== null) {
-            _isMarkdownEnabled = daily_droid__pref_markdown_enabled as Boolean
-        }
-
-        // Fancy scrolling //
-        if (daily_droid__pref_fancy_scroll_enabled !== null) {
-            if (daily_droid__pref_fancy_scroll_enabled as Boolean === true && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
+        try {
+            File(_strDirPath).mkdir()
+            utils.file_Write(preferencesFile, preferncesString)
+        } catch (e: Exception) {
+            Log.d("JSDEV: ", "ERROR WRITING PREFS: ${e.toString()}\n\t_strDirPath= "+_strDirPath)
+            utils.popup(applicationContext, e)
         }
 
         // NOTE: Call preferences are stored in the CallReciever Class //
     }
 
-    private val _preferencePrefix = "daily_droid__pref_"
+    /**
+     * Gets all preferences/values into a data model and returns as an array
+     */
+    private fun preferencesGet() : MutableList<PreferencesModel> {
+        var preferenceNames = preferenceNamesGet()
+        var preferences: MutableList<PreferencesModel> = mutableListOf<PreferencesModel>()
+
+        for (name in preferenceNames) {
+            var preferenceVal = config.getPreferenceValue(this, "$_preferencePrefix$name")
+            preferences.add(PreferencesModel("$name", preferenceVal))
+        }
+
+        return preferences
+    }
+
+    /**
+     * Check for preferences and enable them if they're set (Will be set once user opens Menu.Settings.General for the 1st time)
+     */
+    private fun preferencesLoad() {
+        var preferences = preferencesGet()
+
+        for (preference in preferences) {
+            var preferenceKey = preference.key.substring(0,preference.key.length-4)
+            if (preference.value !== null) {
+                Log.d("PREFERENCE KEY:", preference.key)
+                if (preferenceKey == "autosave_enabled") _blnPerformAutoSave = preference.value as Boolean
+                if (preferenceKey == "autosave_number") _intAutoSaveTrigger = preference.value.toString().toInt()
+                if (preferenceKey == "markdown_enabled") _isMarkdownEnabled = preference.value as Boolean
+                if (preferenceKey == "fancy_scroll_enabled"
+                        && preference.value as Boolean === true
+                        && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
+            }
+        }
+        // NOTE: Call preferences are stored in the CallReciever Class //
+    }
+
+    /**
+     * Returns the preference and setting names with option for global (android ecosystem name)
+     *   or shortened name without dailyDroid prefix (default)
+     */
     private fun preferenceNamesGet(getAsGlobal:Boolean = false) : MutableList<String>
     {
         var preferenceNames = mutableListOf<String>(
@@ -465,29 +498,15 @@ class MainActivity : AppCompatActivity() {
                 name = "$_preferencePrefix$name"
                 utils.popup(applicationContext, name)
             }
-
             preferenceNamesGlobal.add(name)
         }
-
         return preferenceNamesGlobal
-    }
-
-    private fun preferencesGet() : MutableList<PreferencesModel> {
-        var preferenceNames = preferenceNamesGet()
-        var preferences: MutableList<PreferencesModel> = mutableListOf<PreferencesModel>()
-
-        for (name in preferenceNames) {
-            var preferenceVal = config.getPreferenceValue(this, "$_preferencePrefix$name")
-            preferences.add(PreferencesModel("$name", preferenceVal))
-        }
-
-        return preferences
     }
 
     /**
      * Iterates through preferenes and converts them to JSON
      */
-    private fun preferencesToString(preferences:MutableList<PreferencesModel>) : String {
+    private fun preferencesToJSONString(preferences:MutableList<PreferencesModel>) : String {
         var preferncesString = "["
 
         for (preferences_i in 0..preferences.size-1) {
@@ -498,7 +517,7 @@ class MainActivity : AppCompatActivity() {
 
             if (preferenceVal != null) {
                 if (c_preferenceType == "bln") preferenceVal as Boolean
-                if (c_preferenceType == "num") preferenceVal = preferenceVal as Number
+                if (c_preferenceType == "num") preferenceVal = (preferenceVal as String).toInt()
                 if (c_preferenceType == "str") preferenceVal = "\"${preferenceVal as String}\""
             }
 
@@ -520,24 +539,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Gets all preferences and writes them as JSON to the given file
+     * Gets the data type as a string from the preference name's extension
      */
-    private fun preferencesExport(strFileName: String = ".dailydroid.preferences") {
-        var preferences = preferencesGet()
-        var preferncesString = preferencesToString(preferences)
-
-        var preferencesFile = File(_strDirPath, strFileName)
-
-        try {
-            File(_strDirPath).mkdir()
-            utils.file_Write(preferencesFile, preferncesString)
-        } catch (e: Exception) {
-            Log.d("JSDEV: ", "ERROR WRITING PREFS: ${e.toString()}\n\t_strDirPath= "+_strDirPath)
-            utils.popup(applicationContext, e)
-        }
-
-        // NOTE: Call preferences are stored in the CallReciever Class //
-    }
     private fun preferenceTypeGet(preference: PreferencesModel) : String {
         var preferenceType = preference.key.substring(preference.key.length-3, preference.key.length)
         return preferenceType
@@ -548,7 +551,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun properties_Setup(){
 
-        this.loadPreferences()
+        this.preferencesLoad()
 
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)

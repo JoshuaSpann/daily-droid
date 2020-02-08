@@ -5,13 +5,13 @@
         android:key="pref_key_autosave_settings">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="daily_droid__pref_autosave_enabled"
+            android:key="daily_droid__pref_autosave_enabled_bln"
             android:summary="@string/pref_general__autosave_desc"
             android:title="@string/pref_general__autosave" />
         <EditTextPreference
             android:defaultValue="0"
             android:inputType="number"
-            android:key="daily_droid__pref_autosave_number"
+            android:key="daily_droid__pref_autosave_number_num"
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -24,7 +24,7 @@
         android:key="daily_droid__pref_logging_settings">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="daily_droid__pref_autolog_calls_enabled"
+            android:key="daily_droid__pref_autolog_calls_enabled_bln"
             android:summary="@string/pref_general__log_calls_desc"
             android:title="@string/pref_general__log_calls" />
     </PreferenceCategory>
@@ -44,18 +44,18 @@
             android:defaultValue="-1"
             android:entries="@array/pref_example_color_titles"
             android:entryValues="@array/list_preference_color_values"
-            android:key="daily_droid__pref_app_color"
+            android:key="daily_droid__pref_app_color_str"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_general__app_color" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="daily_droid__pref_markdown_enabled"
+            android:key="daily_droid__pref_markdown_enabled_bln"
             android:summary="@string/pref_general__markdown_desc"
             android:title="@string/pref_general__markdown" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="daily_droid__pref_fancy_scroll_enabled"
+            android:key="daily_droid__pref_fancy_scroll_enabled_bln"
             android:summary="@string/pref_general__scroll_desc"
             android:title="@string/pref_general__scroll" />
     </PreferenceCategory>
