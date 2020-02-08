@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
     android:id="@+id/menuitem_open"
-    android:title="Open" />
+    android:title="@string/app_menu_item__open_file" />
     <item
         android:id="@+id/menuitem_add"
         android:icon="@drawable/ic_add_black_24dp"
-        android:title="New" />
+        android:title="@string/app_menu_item__new_file" />
     <!--item
         android:id="@+id/menuitem_save"
         android:icon="@drawable/ic_save_black_24dp"
-        android:title="Save" /-->
+        android:title="@string/app_menu_item__save_file" /-->
     <item
         android:id="@+id/menuitem_changecolor"
-        android:title="Color" />
+        android:title="@string/app_menu_item__color_change" />
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/menuitem_settings"
-        android:title="Settings" />
+        android:title="@string/app_menu_item__settings" />
+
+    <item android:id="@+id/menuitem_export_settings"
+        android:title= "@string/app_menu_item__export_preferences" />
 </menu>

@@ -190,6 +190,9 @@ class MainActivity : AppCompatActivity() {
             R.id.menuitem_settings -> {
                 launchSettingsActivity()
             }
+            R.id.menuitem_export_settings -> {
+                this.preferencesExport()
+            }
         }
         return blnRetItem
     }
@@ -443,6 +446,101 @@ class MainActivity : AppCompatActivity() {
         }
 
         // NOTE: Call preferences are stored in the CallReciever Class //
+    }
+
+    private val _preferencePrefix = "daily_droid__pref_"
+    private fun preferenceNamesGet(getAsGlobal:Boolean = false) : MutableList<String>
+    {
+        var preferenceNames = mutableListOf<String>(
+                "autosave_enabled_bln",
+                "autosave_number_num",
+                "markdown_enabled_bln",
+                "fancy_scroll_enabled_bln"
+        )
+        var preferenceNamesGlobal = mutableListOf<String>()
+
+        for (prefernceName in preferenceNames) {
+            var name = prefernceName
+            if (getAsGlobal == true) {
+                name = "$_preferencePrefix$name"
+                utils.popup(applicationContext, name)
+            }
+
+            preferenceNamesGlobal.add(name)
+        }
+
+        return preferenceNamesGlobal
+    }
+
+    private fun preferencesGet() : MutableList<PreferencesModel> {
+        var preferenceNames = preferenceNamesGet()
+        var preferences: MutableList<PreferencesModel> = mutableListOf<PreferencesModel>()
+
+        for (name in preferenceNames) {
+            var preferenceVal = config.getPreferenceValue(this, "$_preferencePrefix$name")
+            preferences.add(PreferencesModel("$name", preferenceVal))
+        }
+
+        return preferences
+    }
+
+    /**
+     * Iterates through preferenes and converts them to JSON
+     */
+    private fun preferencesToString(preferences:MutableList<PreferencesModel>) : String {
+        var preferncesString = "["
+
+        for (preferences_i in 0..preferences.size-1) {
+            val preference = preferences[preferences_i]
+            val preferenceKey = preference.key.substring(0, preference.key.length-4)
+            var preferenceVal: Any? = preference.value
+            var c_preferenceType = preferenceTypeGet(preference)
+
+            if (preferenceVal != null) {
+                if (c_preferenceType == "bln") preferenceVal as Boolean
+                if (c_preferenceType == "num") preferenceVal = preferenceVal as Number
+                if (c_preferenceType == "str") preferenceVal = "\"${preferenceVal as String}\""
+            }
+
+            var name = "\"name\""
+            var type = "\"type\""
+            var value = "\"value\""
+
+            var currentLine = "{$name:\"$preferenceKey\", $type:\"$c_preferenceType\", $value:$preferenceVal}"
+            if (preferences_i < preferences.size-1) {
+                currentLine = "$currentLine,"
+            }
+
+            preferncesString += currentLine
+        }
+
+        preferncesString += "]"
+
+        return preferncesString
+    }
+
+    /**
+     * Gets all preferences and writes them as JSON to the given file
+     */
+    private fun preferencesExport(strFileName: String = ".dailydroid.preferences") {
+        var preferences = preferencesGet()
+        var preferncesString = preferencesToString(preferences)
+
+        var preferencesFile = File(_strDirPath, strFileName)
+
+        try {
+            File(_strDirPath).mkdir()
+            utils.file_Write(preferencesFile, preferncesString)
+        } catch (e: Exception) {
+            Log.d("JSDEV: ", "ERROR WRITING PREFS: ${e.toString()}\n\t_strDirPath= "+_strDirPath)
+            utils.popup(applicationContext, e)
+        }
+
+        // NOTE: Call preferences are stored in the CallReciever Class //
+    }
+    private fun preferenceTypeGet(preference: PreferencesModel) : String {
+        var preferenceType = preference.key.substring(preference.key.length-3, preference.key.length)
+        return preferenceType
     }
 
     /**
