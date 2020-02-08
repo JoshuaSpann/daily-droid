@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/appBackground"
     tools:context="com.example.jspann.dailydroid.MainActivity">
 
     <Spinner
@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/debug_text"
         android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/appBackground"
         android:spinnerMode="dialog"
         android:visibility="invisible" />
 
@@ -39,37 +40,39 @@
         android:layout_below="@+id/textView_Title"
         android:layout_centerHorizontal="true"
         android:text="TextView"
-        android:textSize="8sp"
         android:textColor="@color/colorAccent"
+        android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="350sp"
         android:layout_height="2dip"
         android:layout_below="@+id/debug_text"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorAccent"
-        android:id="@+id/view" />
+        android:background="@color/colorAccent" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/debug_text"
-        android:layout_marginBottom="30dp"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="2dip"
+        android:layout_marginBottom="30dp"
         android:layout_toEndOf="@id/toolbar3"
         android:ems="10"
+        android:textColor="@color/appText"
+        android:textColorHighlight="@color/colorPrimary"
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
+        android:textIsSelectable="true"
         app:layout_constraintEnd_toStartOf="@id/toolbar3"
         app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textIsSelectable="true"/>
-        <!--android:textCursorDrawable="@null"/>-->
+        app:layout_constraintStart_toStartOf="parent" />
+    <!--android:textCursorDrawable="@null"/>-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar3"
@@ -110,14 +113,14 @@
             <ImageButton
                 android:id="@+id/button_toolbar_startoftext"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorNone"
                 android:onClick="button_toolbar_startoftext__click"
                 android:src="@drawable/ic_first_page_black_24dp"
                 android:text="SOF"
-                android:tint="@android:color/primary_text_dark"
+                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -125,15 +128,15 @@
             <ImageButton
                 android:id="@+id/button_toolbar_timestamp"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="2sp"
+                android:layout_weight="1"
                 android:background="@color/colorNone"
                 android:onClick="button_toolbar_timestamp__click"
                 android:src="@drawable/ic_timer_black_24dp"
                 android:text="Stamp"
-                android:tint="@android:color/primary_text_dark"
+                android:tint="@color/appForeground"
                 app:layout_constraintEnd_toStartOf="@+id/button_save"
                 app:layout_constraintStart_toEndOf="@+id/button_new"
                 app:layout_constraintTop_toBottomOf="@+id/editText" />
@@ -141,15 +144,15 @@
             <ImageButton
                 android:id="@+id/button_toolbar_save"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="2sp"
+                android:layout_weight="1"
                 android:background="@color/colorNone"
                 android:onClick="button_toolbar_save__click"
                 android:src="@drawable/ic_save_black_24dp"
                 android:text="Save"
-                android:tint="@android:color/primary_text_dark"
+                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_new"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -157,14 +160,14 @@
             <ImageButton
                 android:id="@+id/button_toolbar_endoftext"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorNone"
                 android:onClick="button_toolbar_endoftext__click"
                 android:src="@drawable/ic_last_page_black_24dp"
                 android:text="EOF"
-                android:tint="@android:color/primary_text_dark"
+                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -172,14 +175,14 @@
             <ImageButton
                 android:id="@+id/button_toolbar_refreshtext"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorNone"
                 android:onClick="button_toolbar_refreshtext__click"
                 android:src="@drawable/ic_refresh_black_24dp"
                 android:text="Refresh Text"
-                android:tint="@android:color/primary_text_dark"
+                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />

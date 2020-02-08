@@ -4,6 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="appBackground">@color/colorText</color>
+    <color name="appForeground">@color/colorText</color>
+    <color name="appText">@color/colorTextLight</color>
+    <!--color name="appOverlay"></color-->
+
+    <color name="colorBlack">#000</color>
     <color name="colorBlueBright">#0df</color>
     <color name="colorBlueDark">#09c</color>
     <color name="colorBlueLight">#33b5e5</color>
