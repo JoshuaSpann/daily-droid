@@ -15,7 +15,7 @@
             android:key="daily_droid__pref_ui_settings">
             <SwitchPreference
                 android:defaultValue="true"
-                android:key="daily_droid__pref_ui_simple_enabled"
+                android:key="daily_droid__pref_ui_advanced_bln"
                 android:summary="@string/pref_themes__ui_mode_desc"
                 android:title="@string/pref_themes__ui_mode" />
         </PreferenceCategory>

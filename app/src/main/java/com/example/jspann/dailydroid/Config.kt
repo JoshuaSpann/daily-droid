@@ -27,6 +27,8 @@ class Config{
     val colorpreferencePrefix = "${appPrefix}color_"
     var verbosePopups = true
 
+    var advancedUI = false
+
     var appColor: String = ""
     var autoLogCalls: Boolean = false
     var currentFile: String = ""

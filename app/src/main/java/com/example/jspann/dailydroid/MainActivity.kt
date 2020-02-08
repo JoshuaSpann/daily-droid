@@ -164,11 +164,24 @@ class MainActivity : AppCompatActivity() {
 /****  APP BAR MENU CONTROLLERS  ****/
 
     /**
-     * Populates options menu with items from resource XML
+     * ONCE_ONLY: Populates options menu with items from resource XML
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean{
         menuInflater.inflate(R.menu.menu, menu)
         return true
+    }
+
+    /**
+     * Every time the options menu is opened.
+     * Sets certain options' visibility by Advanced UI pref status
+     */
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (config.advancedUI != null) {
+            (menu!!).findItem(R.id.menuitem_open).setVisible(config.advancedUI)
+            (menu!!).findItem(R.id.menuitem_save).setVisible(config.advancedUI)
+            (menu!!).findItem(R.id.menuitem_export_settings).setVisible(config.advancedUI)
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     /**
@@ -465,7 +478,7 @@ class MainActivity : AppCompatActivity() {
         for (preference in preferences) {
             var preferenceKey = preference.key.substring(0,preference.key.length-4)
             if (preference.value !== null) {
-                Log.d("PREFERENCE KEY:", preference.key)
+                Log.d("PREFERENCE KEY:", preferenceKey)
                 if (preferenceKey == "autosave_enabled") _blnPerformAutoSave = preference.value as Boolean
                 if (preferenceKey == "autosave_number") _intAutoSaveTrigger = preference.value.toString().toInt()
                 if (preferenceKey == "markdown_enabled") _isMarkdownEnabled = preference.value as Boolean
@@ -473,6 +486,7 @@ class MainActivity : AppCompatActivity() {
                         && preference.value as Boolean === true
                         && (_editText !== null)) addFlingScrollingToEditText((_editText!!))
                 if (preferenceKey == "verbose_popups") config.verbosePopups = preference.value as Boolean
+                if (preferenceKey == "ui_advanced") config.advancedUI = preference.value as Boolean
             }
         }
         // NOTE: Call preferences are stored in the CallReciever Class //
@@ -489,7 +503,8 @@ class MainActivity : AppCompatActivity() {
                 "autosave_number_num",
                 "markdown_enabled_bln",
                 "fancy_scroll_enabled_bln",
-                "verbose_popups_bln"
+                "verbose_popups_bln",
+                "ui_advanced_bln"
         )
         var preferenceNamesGlobal = mutableListOf<String>()
 
