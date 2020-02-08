@@ -855,10 +855,11 @@ class MainActivity : AppCompatActivity() {
         var items: MutableList<SpannableString> = mutableListOf()
 
         for (i in 0 until p_strItems.size) {
+            if ((p_strItems[i]!!).startsWith(".") && !config.viewHiddenFiles) continue
             if ((p_strItems[i]!!).contains(".")) {
-                var fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, p_strItems[i].toString(), config)
+                val fileNameSpannableStr = utils.getFilenameStringFormattedWithPropertiesColor(this, p_strItems[i].toString(), config)
                 if (fileNameSpannableStr.toString() == _strCurrentFileName) {
-                    var activeFileSpan = android.text.style.StyleSpan(android.graphics.Typeface.BOLD_ITALIC)
+                    val activeFileSpan = android.text.style.StyleSpan(android.graphics.Typeface.BOLD_ITALIC)
                     fileNameSpannableStr.setSpan(activeFileSpan, 0, fileNameSpannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
                 items.add(fileNameSpannableStr)
