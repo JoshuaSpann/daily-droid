@@ -48,6 +48,9 @@ class Markdown {
         spannableString = setStrikethroughSpans(spannableString)
         spannableString = setHorizontalRuleSpans(spannableString)
 
+        // Hashtags
+        spannableString = setHashtagSpans(spannableString)
+
         return spannableString
     }
 
@@ -194,6 +197,25 @@ class Markdown {
             val bgSpan = BackgroundColorSpan(Colors.Markdown.CODE_BACKGROUND)
             spannableString.setSpan(colorSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(bgSpan, iHighlightLocs[i][0], iHighlightLocs[i][1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return spannableString
+    }
+
+    /**
+     * Formats SpannableString that matches a hashtag value (#...)
+     */
+    private fun setHashtagSpans(spannableString: SpannableString) : SpannableString {
+        var spannableString = spannableString
+        val r = "\\#[\\S]+"
+        val p = Pattern.compile(r)
+        val m =p.matcher(spannableString)
+
+        while (m.find()) {
+            val colorSpan = ForegroundColorSpan(Colors.Markdown.HYPERLINK)
+            val styleSpan = StyleSpan(Typeface.BOLD_ITALIC)
+            spannableString.setSpan(colorSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(styleSpan, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         return spannableString
