@@ -724,7 +724,7 @@ class MainActivity : AppCompatActivity() {
             val hexColor = String.format("#%06X", 0xFFBBBBCC.toInt() and color)
             val accentColor = Color.parseColor(hexColor)
 
-            return markdown.formatFromString(text, color, accentColor)
+            return markdown.formatFromString(text, color, accentColor, config)
         }
 
         return SpannableString(text)

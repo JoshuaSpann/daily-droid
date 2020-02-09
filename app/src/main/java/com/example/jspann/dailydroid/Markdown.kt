@@ -19,13 +19,13 @@ class Markdown {
     /**
      * Formats a String as a SpannableString based off of its Markdown Content
      */
-    public fun formatFromString(text: String, color: Int = Colors.App.PRIMARY, accentColor: Int = Colors.App.ACCENT): SpannableString {
+    public fun formatFromString(text: String, color: Int = Colors.App.PRIMARY, accentColor: Int = Colors.App.ACCENT, config:Config = Config()): SpannableString {
         var spannableString = SpannableString(text)
         this.HeadingColors.primary = color
         this.HeadingColors.accent = accentColor
 
         // Default EditText Color ro Darker Gray //
-        spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (!config.darkThemeEnabled) spannableString.setSpan(ForegroundColorSpan(Colors.Markdown.TEXT_BODY),0, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         // Bolds and Italics //
         spannableString = setItalicSpans(spannableString)
