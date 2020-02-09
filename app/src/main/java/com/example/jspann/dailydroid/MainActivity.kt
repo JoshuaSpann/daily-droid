@@ -92,11 +92,11 @@ class MainActivity : AppCompatActivity() {
      * Main activity creation
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        ////super.onCreate(savedInstanceState)
         preferencesLoad()
         themeSet()
 
         setContentView(R.layout.activity_main)
+        super.onCreate(savedInstanceState)
 
         checkPermissions()
         properties_Setup()
@@ -126,8 +126,6 @@ class MainActivity : AppCompatActivity() {
         setApplicationColor()
 
         showKeyboardOnEditTextClick((_editText!!))
-
-        super.onCreate(savedInstanceState)
     }
 
     /**
@@ -136,19 +134,18 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         preferencesLoad()
         themeSet()
+        super.onRestart()
         setApplicationColor()
         resetEditTextToGivenValue()
 
         // Pull back up the soft keyboard automatically //
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        super.onRestart()
     }
 
     /**
      * Activates When Leaving or Suspending App
      */
     override fun onPause() {
-        themeSet()
         super.onPause()
         setApplicationColor()
         resetEditTextToGivenValue()
@@ -160,12 +157,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         preferencesLoad()
         themeSet()
+        super.onResume()
         setApplicationColor()
         resetEditTextToGivenValue()
 
         // Pull back up the soft keyboard automatically //
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        super.onResume()
     }
 
 
@@ -228,6 +225,7 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
+
     /**
      * Checks that the Base, Needed Permissions to Run the App are Granted, if not then Request them
      */
@@ -498,9 +496,9 @@ class MainActivity : AppCompatActivity() {
             var preferenceKey = preference.key.substring(0,preference.key.length-4)
             if (preference.value !== null) {
                 Log.d("PREFERENCE KEY:", preferenceKey)
-                if (preferenceKey == "autosave_enabled") _blnPerformAutoSave = preference.value as Boolean
-                if (preferenceKey == "autosave_number") _intAutoSaveTrigger = preference.value.toString().toInt()
-                if (preferenceKey == "markdown_enabled") _isMarkdownEnabled = preference.value as Boolean
+                if (preferenceKey == "autosave_enabled") config.performAutoSave = preference.value as Boolean
+                if (preferenceKey == "autosave_number") config.autoSaveTrigger = preference.value.toString().toInt()
+                if (preferenceKey == "markdown_enabled") config.isMarkdownEnabled = preference.value as Boolean
                 if (preferenceKey == "fancy_scroll_enabled"
                         && preference.value as Boolean === true
                         && (_editText !== null)) addFlingScrollingToEditText((_editText!!))

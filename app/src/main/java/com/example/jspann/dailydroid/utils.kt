@@ -15,6 +15,7 @@ import android.provider.ContactsContract
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import java.util.regex.Pattern
@@ -204,6 +205,43 @@ class Utils{
 
         return color
     }
+
+    /*
+    TODO - NEED APPLICATIONCONTEXT PASSED IN, THEN USE FOR THESE TO WORK INDIE OF ACTIVITY
+    fun preferencesGet() : MutableList<PreferencesModel> {
+        var preferenceNames = preferenceNamesGet()
+        var preferences: MutableList<PreferencesModel> = mutableListOf<PreferencesModel>()
+
+        for (name in preferenceNames) {
+            var preferenceVal = config.getPreferenceValue(applicationC, "${config.preferencePrefix}$name")
+            preferences.add(PreferencesModel("$name", preferenceVal))
+        }
+
+        return preferences
+    }
+
+    var config = Config()
+    fun preferencesLoad() {
+        var preferences = preferencesGet()
+
+        for (preference in preferences) {
+            var preferenceKey = preference.key.substring(0,preference.key.length-4)
+            if (preference.value !== null) {
+                Log.d("PREFERENCE KEY:", preferenceKey)
+                if (preferenceKey == "autosave_enabled") config.performAutoSave = preference.value as Boolean
+                if (preferenceKey == "autosave_number") config.autoSaveTrigger = preference.value.toString().toInt()
+                if (preferenceKey == "markdown_enabled") config.isMarkdownEnabled = preference.value as Boolean
+
+                if (preferenceKey == "verbose_popups") config.verbosePopups = preference.value as Boolean
+                if (preferenceKey == "ui_advanced") config.advancedUI = preference.value as Boolean
+                if (preferenceKey == "files_hidden") config.viewHiddenFiles = preference.value as Boolean
+                if (preferenceKey == "ui_theme_dark") config.darkThemeEnabled = preference.value as Boolean
+
+            }
+        }
+        // NOTE: Call preferences are stored in the CallReciever Class //
+    }
+    */
 
     /**
      * Applies file coloring to string if set in preferences

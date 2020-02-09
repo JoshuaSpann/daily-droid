@@ -20,6 +20,7 @@ import android.view.MenuItem
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatDelegate
 
 
 /**
@@ -33,14 +34,28 @@ import android.support.v4.content.ContextCompat
  * for more information on developing a Settings UI.
  */
 class SettingsActivity : AppCompatPreferenceActivity() {
+    var config = Config()
     val utils = Utils()
     val _REQUEST_PERMISSION_READ_CONTACTS = 2
     val _REQUEST_PERMISSION_READ_PHONE_STATE = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //TODO: utils.preferencesLoad()
+        //TODO:AFTERABOVE: themeSet()
         super.onCreate(savedInstanceState)
         checkPermissions()
         //setupActionBar()
+    }
+
+    private fun themeSet() {
+        if (config.darkThemeEnabled) {
+            setTheme(R.style.AppThemeDark)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+        else {
+            setTheme(R.style.AppTheme)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     /**

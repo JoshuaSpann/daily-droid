@@ -30,6 +30,9 @@ class Config{
     var advancedUI = false
     var viewHiddenFiles = false
     var darkThemeEnabled = false
+    var performAutoSave = true
+    var autoSaveTrigger = 0
+    var isMarkdownEnabled = true
 
     var appColor: String = ""
     var autoLogCalls: Boolean = false
