@@ -12,10 +12,25 @@
         <item name="android:textColor">@color/appText</item>
 
         <!-- SPINNER, MENU ITEMS & BOTTOM ACTION BAR -->
-        <item name="android:backgroundTint">@color/appBackground</item>
+        <!-- This costs colordrawable backgrounds but sets the spinner background
+        <item name="android:backgroundTint">@color/appBackground</item-->
+        <!--
+        API:
+            colorBackgroundFloating
+        BUPKISS:
+            panelBackground
+            backgroundSplit
+            backgroundStacked
+            colorBackground
+            headerBackground
+            popupBackground
+            keyBackground
+            selectableItemBackground
+        -->
+        <item name="android:selectableItemBackground">@color/appBackground</item>
 
-        <!-- MENU ITEMS >
-        <item name="android:itemBackground">@color/appBackground</item-->
+        <!-- MENU ITEMS -->
+        <item name="android:itemBackground">@color/appBackground</item>
 
         <!-- SETTINGS ACTIVITY FRAGMENTS -->
         <item name="android:textColorPrimary">@color/appText</item>
