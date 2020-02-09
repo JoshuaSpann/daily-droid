@@ -39,6 +39,7 @@ import android.os.Build
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatDelegate
 import android.text.*
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -91,7 +92,10 @@ class MainActivity : AppCompatActivity() {
      * Main activity creation
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        ////super.onCreate(savedInstanceState)
+        preferencesLoad()
+        themeSet()
+
         setContentView(R.layout.activity_main)
 
         checkPermissions()
@@ -122,25 +126,29 @@ class MainActivity : AppCompatActivity() {
         setApplicationColor()
 
         showKeyboardOnEditTextClick((_editText!!))
+
+        super.onCreate(savedInstanceState)
     }
 
     /**
      * Activates When App is Restarted and Has Focus Returned to It
      */
     override fun onRestart() {
-        super.onRestart()
         preferencesLoad()
+        themeSet()
         setApplicationColor()
         resetEditTextToGivenValue()
 
         // Pull back up the soft keyboard automatically //
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        super.onRestart()
     }
 
     /**
      * Activates When Leaving or Suspending App
      */
     override fun onPause() {
+        themeSet()
         super.onPause()
         setApplicationColor()
         resetEditTextToGivenValue()
@@ -150,13 +158,14 @@ class MainActivity : AppCompatActivity() {
      * Activates When Paused App Has Focus Returned to It
      */
     override fun onResume() {
-        super.onResume()
         preferencesLoad()
+        themeSet()
         setApplicationColor()
         resetEditTextToGivenValue()
 
         // Pull back up the soft keyboard automatically //
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        super.onResume()
     }
 
 
@@ -209,6 +218,16 @@ class MainActivity : AppCompatActivity() {
         return blnRetItem
     }
 
+    private fun themeSet() {
+        if (config.darkThemeEnabled) {
+            setTheme(R.style.AppThemeDark)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+        else {
+            setTheme(R.style.AppTheme)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
     /**
      * Checks that the Base, Needed Permissions to Run the App are Granted, if not then Request them
      */
@@ -594,9 +613,6 @@ class MainActivity : AppCompatActivity() {
      * Loads preferences and sets all view widgets to be modified
      */
     private fun properties_Setup(){
-
-        this.preferencesLoad()
-
         _debug_text = (findViewById(R.id.debug_text))
         _editText = (findViewById<View>(R.id.editText) as EditText)
         _intEditTextStartLength = (_editText!!).length()
