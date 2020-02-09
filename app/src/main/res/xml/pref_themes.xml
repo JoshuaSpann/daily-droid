@@ -4,8 +4,8 @@
             android:title="Dark Mode"
             android:key="daily_droid__pref_key_darkmode_settings">
             <SwitchPreference
-                android:defaultValue="true"
-                android:key="daily_droid__pref_darkmode_enabled"
+                android:defaultValue="false"
+                android:key="daily_droid__pref_ui_theme_dark_bln"
                 android:summary="@string/pref_themes__darkmode_desc"
                 android:title="@string/pref_themes__darkmode" />
         </PreferenceCategory>

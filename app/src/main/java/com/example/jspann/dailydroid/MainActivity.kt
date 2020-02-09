@@ -488,6 +488,8 @@ class MainActivity : AppCompatActivity() {
                 if (preferenceKey == "verbose_popups") config.verbosePopups = preference.value as Boolean
                 if (preferenceKey == "ui_advanced") config.advancedUI = preference.value as Boolean
                 if (preferenceKey == "files_hidden") config.viewHiddenFiles = preference.value as Boolean
+                if (preferenceKey == "ui_theme_dark") config.darkThemeEnabled = preference.value as Boolean
+
             }
         }
         // NOTE: Call preferences are stored in the CallReciever Class //
@@ -506,7 +508,8 @@ class MainActivity : AppCompatActivity() {
                 "fancy_scroll_enabled_bln",
                 "verbose_popups_bln",
                 "ui_advanced_bln",
-                "files_hidden_bln"
+                "files_hidden_bln",
+                "ui_theme_dark_bln"
         )
         var preferenceNamesGlobal = mutableListOf<String>()
 

@@ -29,6 +29,7 @@ class Config{
 
     var advancedUI = false
     var viewHiddenFiles = false
+    var darkThemeEnabled = false
 
     var appColor: String = ""
     var autoLogCalls: Boolean = false
