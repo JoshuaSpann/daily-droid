@@ -6,14 +6,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- GENERAL BACKGROUNDS & TEXT -->
         <item name="android:windowBackground">@color/appBackground</item>
         <item name="android:textColor">@color/appText</item>
 
-        <item name="android:panelBackground">@color/appBackground</item>
+        <!-- SPINNER, MENU ITEMS & BOTTOM ACTION BAR -->
+        <item name="android:backgroundTint">@color/appBackground</item>
 
-        <item name="android:itemBackground">@color/appBackground</item>
+        <!-- MENU ITEMS >
+        <item name="android:itemBackground">@color/appBackground</item-->
+
+        <!-- SETTINGS ACTIVITY FRAGMENTS -->
         <item name="android:textColorPrimary">@color/appText</item>
         <item name="android:textColorSecondary">@color/appText</item>
+
+        <!-- ICONS -->
         <item name="android:tint">@color/appText</item>
     </style>
 
