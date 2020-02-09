@@ -7,7 +7,6 @@
     <color name="appBackground">@color/colorText</color>
     <color name="appForeground">@color/colorText</color>
     <color name="appText">@color/colorTextLight</color>
-    <!--color name="appOverlay"></color-->
 
     <color name="colorBlack">#000</color>
     <color name="colorBlueBright">#0df</color>

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBackground"
     tools:context="com.example.jspann.dailydroid.MainActivity">
 
     <Spinner
@@ -14,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/debug_text"
         android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/appBackground"
         android:spinnerMode="dialog"
         android:visibility="invisible" />
 
@@ -120,7 +118,6 @@
                 android:onClick="button_toolbar_startoftext__click"
                 android:src="@drawable/ic_first_page_black_24dp"
                 android:text="SOF"
-                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -136,7 +133,6 @@
                 android:onClick="button_toolbar_timestamp__click"
                 android:src="@drawable/ic_timer_black_24dp"
                 android:text="Stamp"
-                android:tint="@color/appForeground"
                 app:layout_constraintEnd_toStartOf="@+id/button_save"
                 app:layout_constraintStart_toEndOf="@+id/button_new"
                 app:layout_constraintTop_toBottomOf="@+id/editText" />
@@ -152,7 +148,6 @@
                 android:onClick="button_toolbar_save__click"
                 android:src="@drawable/ic_save_black_24dp"
                 android:text="Save"
-                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_new"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -167,7 +162,6 @@
                 android:onClick="button_toolbar_endoftext__click"
                 android:src="@drawable/ic_last_page_black_24dp"
                 android:text="EOF"
-                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
@@ -182,7 +176,6 @@
                 android:onClick="button_toolbar_refreshtext__click"
                 android:src="@drawable/ic_refresh_black_24dp"
                 android:text="Refresh Text"
-                android:tint="@color/appForeground"
                 app:layout_constraintStart_toEndOf="@+id/button_toolbar_save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />

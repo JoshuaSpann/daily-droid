@@ -9,9 +9,11 @@
     <string name="app_name">&appname;</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- POPUP NOTIFICATIONS (TOASTS) -->
     <string name="app_notify_file_saved">File saved</string>
     <string name="app_notify_file_saved_to">File saved to:  </string>
 
+    <!-- MAIN MENU ITEMS -->
     <string name="app_menu_item__color_change">Color</string>
     <string name="app_menu_item__export_preferences">Export Data</string>
     <string name="app_menu_item__new_file">New</string>

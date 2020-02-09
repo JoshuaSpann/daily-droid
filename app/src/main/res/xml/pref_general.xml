@@ -1,12 +1,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/pref_general__autosave"
-        android:key="pref_key_autosave_settings">
+        android:background="@color/appBackground"
+        android:key="pref_key_autosave_settings"
+        android:textColor="@color/appText"
+        android:title="@string/pref_general__autosave">
         <SwitchPreference
+            android:background="@color/appBackground"
             android:defaultValue="true"
             android:key="daily_droid__pref_autosave_enabled_bln"
             android:summary="@string/pref_general__autosave_desc"
+            android:textColor="@color/appText"
             android:title="@string/pref_general__autosave" />
         <EditTextPreference
             android:defaultValue="0"
@@ -15,13 +19,14 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="@string/pref_general__autosave_number"
-            android:summary="@string/pref_general__autosave_number_desc"/>
+            android:summary="@string/pref_general__autosave_number_desc"
+            android:title="@string/pref_general__autosave_number" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_general__logging"
-        android:key="daily_droid__pref_logging_settings">
+        android:key="daily_droid__pref_logging_settings"
+        android:textColor="@color/appText"
+        android:title="@string/pref_general__logging">
         <SwitchPreference
             android:defaultValue="true"
             android:key="daily_droid__pref_autolog_calls_enabled_bln"

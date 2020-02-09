@@ -6,7 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--item name="android:statusBarColor">@android:color/transparent</item-->
+        <item name="android:windowBackground">@color/appBackground</item>
+        <item name="android:textColor">@color/appText</item>
+
+        <item name="android:panelBackground">@color/appBackground</item>
+
+        <item name="android:itemBackground">@color/appBackground</item>
+        <item name="android:textColorPrimary">@color/appText</item>
+        <item name="android:textColorSecondary">@color/appText</item>
+        <item name="android:tint">@color/appText</item>
     </style>
 
 </resources>

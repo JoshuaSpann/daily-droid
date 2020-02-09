@@ -47,7 +47,7 @@ import android.view.MotionEvent
 import android.view.GestureDetector
 import android.widget.Scroller
 import android.widget.TextView
-
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -876,6 +876,7 @@ class MainActivity : AppCompatActivity() {
 
         // Assign visual styling to spinner //
         (_spinnerAdapter!!).setDropDownViewResource(R.layout.spinner_item)
+
         (_spinner!!).adapter = _spinnerAdapter
         (_spinner!!).prompt = getString(R.string.prompt_file_open)
     }

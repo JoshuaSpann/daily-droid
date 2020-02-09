@@ -260,9 +260,11 @@
         android:id="@+id/btn_default"
         android:layout_width="92dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/appForeground"
         android:text="None"
+        android:textColor="@color/appText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
