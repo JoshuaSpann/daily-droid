@@ -1,8 +1,8 @@
 <!DOCTYPE resources[
     <!ENTITY appname "Daily Droid">
-    <!ENTITY appversion "3.0">
+    <!ENTITY appversion "4.0">
     <!ENTITY appauthor "Joshua Spann">
-    <!ENTITY appbuildno "12211444">
+    <!ENTITY appbuildno "20020011">
     ]>
 
 <resources>

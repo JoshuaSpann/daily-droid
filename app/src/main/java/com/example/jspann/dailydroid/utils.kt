@@ -254,7 +254,7 @@ class Utils{
         val fileNameSpannableStr = SpannableString(strFileDisplayName)
         var colorSpan = ForegroundColorSpan(Colors.GRAY)
 
-        val currentFileColorPref = config.getPreferenceValue(context, "dailydroid__"+strFileName)
+        val currentFileColorPref = config.getPreferenceValue(context, config.colorpreferencePrefix+strFileName)
         if (currentFileColorPref !== null) {
             val fileColor = currentFileColorPref.toString()
             colorSpan = ForegroundColorSpan(Color.parseColor("#"+fileColor))
